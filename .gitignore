@@ -1,0 +1,12 @@
+.*
+*.pdf
+
+.*.sw*
+.nfs*
+
+*.fls
+*.fdb_latexmk
+*.aux
+*.log
+*.out
+

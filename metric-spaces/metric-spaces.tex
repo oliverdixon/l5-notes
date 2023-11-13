@@ -1,0 +1,53 @@
+\documentclass{article}
+
+\usepackage[a4paper]{geometry}
+\usepackage{fancyhdr, anyfontsize, gitinfo2}
+\usepackage[en-GB]{datetime2}
+\usepackage[
+    colorlinks,
+    allcolors = blue
+]{hyperref}
+
+\title{Metric Spaces}
+\author{Oliver Dixon}
+\date{Semester 1, 2023/24}
+\newcommand\modulelink{\href{https://www.york.ac.uk/students/studying/manage/%
+    programmes/module-catalogue/module/MAT00051I/}{MAT00051I}}
+\newcommand\authoremail{\href{mailto: Oliver Dixon <od641@york.ac.uk>}
+    {od641@york.ac.uk}}
+\newcommand\sourceslink{\href{https://github.com/oliverdixon/l5-notes/%
+    metric-spaces}{github.com/oliverdixon/l5-notes/metric-spaces}}
+
+\begin{document}
+\begin{titlepage}
+    \newgeometry{top=1.5in, bottom=1in, right=1in, left=1in}
+    \begin{flushright}
+        \makeatletter
+        \begingroup
+            \fontsize{50}{50}\selectfont
+            \slshape \sffamily \@title
+        \endgroup
+        \vfill
+        \begingroup
+            \LARGE \obeylines
+            \setlength{\parskip}{.5em}
+            Typeset by \@author
+            Based on \modulelink
+            Semester I, University of York, 2023/24
+        \endgroup
+        \makeatother
+    \end{flushright}
+    \vfill
+    \begin{center}
+        \large
+        \centering
+        \begin{tabular}{r|l}
+            Compilation Date & \today \\
+            Author Contact & \authoremail \\
+            Sources Link & \sourceslink \\
+            Last Commit Hash & \gitHash
+        \end{tabular}
+    \end{center}
+\end{titlepage}
+\end{document}
+
