@@ -1,24 +1,87 @@
+% METRIC SPACES NOTES
+% OLIVER DIXON, 2023
+
 \documentclass{article}
 
 \usepackage[a4paper]{geometry}
-\usepackage{fancyhdr, anyfontsize, gitinfo2}
 \usepackage[en-GB]{datetime2}
+\usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, thmtools,
+    tcolorbox, xparse, titletoc, titlesec}
+\usepackage[dirty=\ (dirty)]{gitinfo2}
 \usepackage[
     colorlinks,
     allcolors = blue
 ]{hyperref}
+\usepackage[nameinlink]{cleveref}
+
+% BEGIN DOCUMENT METADATA
 
 \title{Metric Spaces}
 \author{Oliver Dixon}
 \date{Semester 1, 2023/24}
-\newcommand\modulelink{\href{https://www.york.ac.uk/students/studying/manage/%
-    programmes/module-catalogue/module/MAT00051I/}{MAT00051I}}
-\newcommand\authoremail{\href{mailto: Oliver Dixon <od641@york.ac.uk>}
-    {od641@york.ac.uk}}
-\newcommand\sourceslink{\href{https://github.com/oliverdixon/l5-notes/%
-    metric-spaces}{github.com/oliverdixon/l5-notes/metric-spaces}}
+\newcommand\internalname{metric-spaces}
+\newcommand\modulecode{MAT00051I}
+
+% END DOCUMENT METADATA
+
+\tcbuselibrary{skins,theorems,breakable}
+\newcommand\fclower[2]{\relax\lowercase{#1}#2}
+
+% \newtoctheorem: create a new tcolorbox-powered theorem-like environment which
+% will be included as a subsection in the table of contents.
+%
+%   #1: display name (e.g. Definition)
+%   #2: environment name (e.g. definition)
+%   #3: colour of the bounding box, according to xcolor (e.g. red)
+%
+\makeatletter
+\newcommand\newtoctheorem[3]{
+    \newtcbtheorem[number within=section]{aux:#2}{#1}{
+        enhanced,
+        colback=white, colframe=#3, colbacktitle=white, coltitle=black,
+        boxed title style={size=small,colframe=white},
+        fonttitle=\bfseries,
+        rounded corners=all,
+        toptitle=1ex, bottomtitle=1ex, top=2ex, bottom=2ex,
+        titlerule=1pt,
+        title={#1},
+        description delimiters parenthesis,
+        description font=\normalfont,
+        separator sign none,
+        breakable
+    }{#2}
+    \NewDocumentEnvironment{#2}{m+m}
+        {
+            \expandafter\csname aux:#2\endcsname{##1}{##2}
+            \addcontentsline{toc}{subsection}{#1 \ref{#2:##2}: ##1}
+            \ignorespaces
+        }
+        {\expandafter\csname endaux:#2\endcsname}
+    \crefname{tcb@cnt@aux:#2}{\fclower{#1}\relax}{\fclower{#1}\relax s}
+    \Crefname{tcb@cnt@aux:#2}{#1}{#1s}
+}
+\makeatother
+
+\renewcommand*\contentsname{Lecture Summaries}
+\titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
+\titleformat{\section}{\centering\scshape\LARGE}{}{0pt}{}
+
+\newtoctheorem{Definition}{definition}{black}
+\newtoctheorem{Example}{example}{blue}
+\newtoctheorem{Theorem}{theorem}{red}
+
+\newtagform{noparen}{}{}
+\usetagform{noparen}
+\creflabelformat{equation}{#2#1#3}
+\crefname{equation}{equation}{equations}
+\Crefname{equation}{Equation}{Equations}
+\numberwithin{equation}{section}
+\numberwithin{enumi}{section}
+
+\urlstyle{same}
 
 \begin{document}
+\pagenumbering{roman}
 \begin{titlepage}
     \newgeometry{top=1.5in, bottom=1in, right=1in, left=1in}
     \begin{flushright}
@@ -32,8 +95,11 @@
             \LARGE \obeylines
             \setlength{\parskip}{.5em}
             Typeset by \@author
-            Based on \modulelink
-            Semester I, University of York, 2023/24
+            Based on \href{https://www.york.ac.uk/students/studying/manage/%
+                programmes/module-catalogue/module/\modulecode/}{\modulecode}
+            \vskip\baselineskip
+            University of York
+            Semester I, 2023/24
         \endgroup
         \makeatother
     \end{flushright}
@@ -43,11 +109,96 @@
         \centering
         \begin{tabular}{r|l}
             Compilation Date & \today \\
-            Author Contact & \authoremail \\
-            Sources Link & \sourceslink \\
-            Last Commit Hash & \gitHash
+            Author Contact & \href{mailto: Oliver Dixon <od641@york.ac.uk>}%
+                {od641@york.ac.uk} \\
+            Sources Link & \url{https://github.com/oliverdixon/l5-notes/%
+                \internalname} \\
+            Latest Commit Hash & \href{https://github.com/oliverdixon/l5-notes/%
+                commit/\gitHash}{\gitHash}\gitDirty \\
+            York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
+                \internalname}
         \end{tabular}
     \end{center}
 \end{titlepage}
+\stepcounter{page}
+\restoregeometry
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\section{Lecture I}
+Lecture One introduces the concept of a \emph{metric} as a generalisation of the
+notion of distance between two points in a set. Three \emph{canonical metrics}
+on $\mathbb{R}^N$ are presented; these are then generalised further, and a short
+proof verifies the compliance of the generalised metric with the relevant
+axioms.
+\begin{definition}{Metric}{metric}
+    Suppose that $ X $ is a set, and $ d \colon X \times X \to [0, \infty)
+    \subset \mathbb{R} $. Then, $ d $ is a \emph{metric} on $ X $ if and only if
+    the following properties hold for $ a, b, c \in X $:
+    \begin{enumerate}
+        \item \emph{Positivity.} $ d(a, b) \geq 0 $;
+        \item \emph{Equality.} $ d(a, b) = 0 \iff a = b $;
+        \item \emph{Symmetry.} $ d(a, b) = d(b, a) $;
+        \item \emph{Triangularity.} $ d(a, b) \leq d(a, c) + d(b, c) $
+            \label{itm:triangle-inequality}.
+    \end{enumerate}
+\end{definition}
+\begin{definition}{Canonical Metrics on \texorpdfstring{$\mathbb{R}^N$}{an
+        N-dimensional real vector space}}{canon-metrics}
+    We can consider three metrics on $ \mathbb{R}^N $: $ d_1 $, $ d_2 $, and
+    $ d_\infty $, each of which have a domain of $ \mathbb{R}^N \times
+    \mathbb{R}^N $ and a codomain of $ [0, \infty) $:
+    \begin{align}
+        d_1(x, y) &= \sum_{i=1}^N \vert x_i - y_i \vert \\
+        d_2(x, y) &= \left[\sum_{i=1}^N (x_i - y_i)^2\right]^{1/2}
+            \label{eqn:d2-metric} \\[.8em]
+        d_\infty(x, y) &= \max_{1 \leq i \leq N} \vert x_i - y_i \vert
+    \end{align}
+\end{definition}
+\begin{theorem}{The Generalised Metric is a Metric}{general-dp-metric}
+    We can generalise the $d_2$ metric from \cref{eqn:d2-metric} to any $ p
+    \in \mathbb{N} $, such that $ d_p \colon \mathbb{R}^N \times \mathbb{R}^N
+    \to [0, \infty) $, where
+    \begin{equation}
+        d_p(x, y) = \left[\sum_{i=1}^N \vert x_i - y_i \vert^p\right]^{1/p}.
+        \label{eqn:dp-metric}
+    \end{equation}
+    To show that $ d_p $ is a metric on $ \mathbb{R}^N $, we must verify that $
+    d_p $ is in compliance with the constraints described in
+    \cref{definition:metric}. The positivity, equality, and symmetry axioms are
+    easy to show, so we will focus on the triangularity property here, proving
+    it by demonstrating a reduction to \emph{Minkowski's Theorem}.
+
+    Let $ a_k $ and $ b_k $ be such that
+    \begin{align}
+        d_p(x, z) &\eqcolon \left[\sum_{k=1}^N \vert a_k \vert^p\right]^{1/p} \\
+        d_p(y, z) &\eqcolon \left[\sum_{k=1}^N \vert b_k \vert^p\right]^{1/p}.
+    \end{align}
+    Then, note that $ d_p(x, y) $ (as defined in \cref{eqn:dp-metric}) can be
+    written in terms of $ a_k $ and $ b_k $, since $ a_k = x_k - z_k $ and $ b_k
+    = y_k - z_k $ for $ k = 1, \ldots, N $:
+    \begin{equation}
+        d_p(x, y) = \left[\sum_{k=1}^N \vert a_k + b_k \vert^p\right]^{1/p}.
+    \end{equation}
+    The triangle inequality, as stated in \cref{itm:triangle-inequality},
+    requires that
+    \begin{equation}
+        \left[\sum_{k=1}^N \vert a_k + b_k \vert^p\right]^{1/p} \leq
+        \left[\sum_{k=1}^N \vert a_k \vert^p\right]^{1/p} +
+        \left[\sum_{k=1}^N \vert b_k \vert^p\right]^{1/p}.
+    \end{equation}
+    This inequality is equivalent to the well-known Minkowski's Theorem; thus,
+    $ d_p $ satisfies the triangle inequality over $ x, y, z \in \mathbb{R}^N $.
+\end{theorem}
+\section{Lecture II}
+\section{Lecture III}
+\section{Lecture IV}
+\section{Lecture V}
+\section{Lecture VI}
+\section{Lecture VII}
+\section{Lecture VIII}
+\section{Lecture IX}
+\section{Lecture X}
+\section{Lecture XI}
 \end{document}
 
