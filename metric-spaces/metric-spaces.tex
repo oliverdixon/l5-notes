@@ -6,7 +6,7 @@
 \usepackage[a4paper]{geometry}
 \usepackage[en-GB]{datetime2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, thmtools,
-    tcolorbox, xparse, titletoc, titlesec}
+    tcolorbox, xparse, titletoc, titlesec, lastpage}
 \usepackage[dirty=\ (dirty)]{gitinfo2}
 \usepackage[
     colorlinks,
@@ -24,6 +24,7 @@
 
 % END DOCUMENT METADATA
 
+\urlstyle{same}
 \tcbuselibrary{skins,theorems,breakable}
 \newcommand\fclower[2]{\relax\lowercase{#1}#2}
 
@@ -62,9 +63,12 @@
 }
 \makeatother
 
-\renewcommand*\contentsname{Lecture Summaries}
+\renewcommand\contentsname{\thispagestyle{plain} Lecture Summaries}
 \titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
-\titleformat{\section}{\centering\scshape\LARGE}{}{0pt}{}
+\titleformat{\section}{
+    \thispagestyle{sectionstart}
+    \centering\scshape\LARGE}
+    {}{0pt}{}
 
 \newtoctheorem{Definition}{definition}{black}
 \newtoctheorem{Example}{example}{blue}
@@ -78,10 +82,30 @@
 \numberwithin{equation}{section}
 \numberwithin{enumi}{section}
 
-\urlstyle{same}
+\let\Sectionmark\sectionmark
+\def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
+\renewcommand\headrulewidth{0pt}
+\renewcommand\footrulewidth{\headrulewidth}
+\makeatletter
+\fancypagestyle{sectionstart}{%
+	\fancyhf{}
+    \fancyhead[L]{\itshape \@title}
+    \fancyhead[R]{\itshape \@date}
+    \fancyfoot[L]{\itshape \@author}
+    \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
+}
+\fancypagestyle{mainbody}{%
+	\fancyhf{}
+    \fancyhead[L]{\itshape \@title: \@date}
+    \fancyhead[R]{\itshape Notes from \sectionname}
+    \fancyfoot[L]{\itshape \@author}
+    \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
+}
+\makeatother
 
 \begin{document}
 \pagenumbering{roman}
+\pagestyle{empty}
 \begin{titlepage}
     \newgeometry{top=1.5in, bottom=1in, right=1in, left=1in}
     \begin{flushright}
@@ -125,6 +149,7 @@
 \tableofcontents
 \clearpage
 \pagenumbering{arabic}
+\pagestyle{mainbody}
 \section{Lecture I}
 Lecture One introduces the concept of a \emph{metric} as a generalisation of the
 notion of distance between two points in a set. Three \emph{canonical metrics}
@@ -190,15 +215,5 @@ axioms.
     This inequality is equivalent to the well-known Minkowski's Theorem; thus,
     $ d_p $ satisfies the triangle inequality over $ x, y, z \in \mathbb{R}^N $.
 \end{theorem}
-\section{Lecture II}
-\section{Lecture III}
-\section{Lecture IV}
-\section{Lecture V}
-\section{Lecture VI}
-\section{Lecture VII}
-\section{Lecture VIII}
-\section{Lecture IX}
-\section{Lecture X}
-\section{Lecture XI}
 \end{document}
 
