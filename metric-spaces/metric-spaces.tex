@@ -19,14 +19,14 @@
 \title{Metric Spaces}
 \author{Oliver Dixon}
 \date{Semester 1, 2023/24}
-\newcommand\internalname{metric-spaces}
-\newcommand\modulecode{MAT00051I}
+\newcommand*\internalname{metric-spaces}
+\newcommand*\modulecode{MAT00051I}
 
 % END DOCUMENT METADATA
 
 \urlstyle{same}
 \tcbuselibrary{skins,theorems,breakable}
-\newcommand\fclower[2]{\relax\lowercase{#1}#2}
+\newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 
 % \newtoctheorem: create a new tcolorbox-powered theorem-like environment which
 % will be included as a subsection in the table of contents.
@@ -36,7 +36,7 @@
 %   #3: colour of the bounding box, according to xcolor (e.g. red)
 %
 \makeatletter
-\newcommand\newtoctheorem[3]{
+\newcommand*\newtoctheorem[3]{
     \newtcbtheorem[number within=section]{aux:#2}{#1}{
         enhanced,
         colback=white, colframe=#3, colbacktitle=white, coltitle=black,
@@ -46,7 +46,6 @@
         toptitle=1ex, bottomtitle=1ex, top=2ex, bottom=2ex,
         titlerule=1pt,
         title={#1},
-        description delimiters parenthesis,
         description font=\normalfont,
         separator sign none,
         breakable
@@ -63,7 +62,8 @@
 }
 \makeatother
 
-\renewcommand\contentsname{\thispagestyle{plain} Lecture Summaries}
+\renewcommand*\qedsymbol{\hfill\ensuremath{\Box}}
+\renewcommand*\contentsname{\thispagestyle{plain} Lecture Summaries}
 \titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
 \titleformat{\section}{
     \thispagestyle{sectionstart}
@@ -84,8 +84,8 @@
 
 \let\Sectionmark\sectionmark
 \def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
-\renewcommand\headrulewidth{0pt}
-\renewcommand\footrulewidth{\headrulewidth}
+\renewcommand*\headrulewidth{0pt}
+\renewcommand*\footrulewidth{\headrulewidth}
 \makeatletter
 \fancypagestyle{sectionstart}{%
 	\fancyhf{}
@@ -214,6 +214,90 @@ axioms.
     \end{equation}
     This inequality is equivalent to the well-known Minkowski's Theorem; thus,
     $ d_p $ satisfies the triangle inequality over $ x, y, z \in \mathbb{R}^N $.
+    $ \qedsymbol $
+\end{theorem}
+\section{Lecture II}
+Lecture II introduces the concept of the \emph{supremum} and \emph{infimum} as
+properties of any subset of the reals. The sets of \emph{bounded} and
+\emph{continous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1]) $
+respectively, and we prove that the ``sup-metric'' $ d_\infty $ forms a metric
+on $ B([0, 1]) $.
+\begin{definition}{Supremum and Infimum}{sup-inf}
+    If $ S \subset \mathbb{R} $ is a set, then $ \sup S $ is defined to be the
+    \emph{least upper bound} of $ S $. This is defined to be the smallest $ b
+    \in \mathbb{R} $ such that $ x \leq b $ for all $ x \in S $. The infimum of
+    $ S $, $ \inf S $, is defined analogously as the \emph{greatest lower
+    bound}.
+\end{definition}
+\begin{definition}{The \texorpdfstring{$ \ell^\infty $}{Ell-Infinity}
+        Set of Bounded Sequences}{ell-infinity}
+    Consider $ \mathbb{R}^\mathbb{N} $: the set of all sequences of reals. We
+    cannot work with this entire space, since many real sequences are unbounded,
+    and the $ d_1 $ and $ d_2 $ canonical metrics give rise to non-finite sums.
+    Therefore, we consider the set $ \ell^\infty $ as the \emph{set of
+    all bounded real sequences}:
+    \begin{equation}
+        X \in \ell^\infty \iff \exists M > 0 \text{ such that }
+            \vert X_n \vert \leq M \text { for all } n \in \mathbb{N}.
+    \end{equation}
+    Then, the infinity metric is defined in terms of the supremum, since a
+    sequence with infinite terms mightn't possess a maximum:
+    \begin{equation}
+        d_\infty(X, Y) = \sup\left\{\vert X_i - Y_i \vert \colon
+            i \in \mathbb{N}\right\}
+    \end{equation}
+    for $ X, Y \in \ell^\infty $.
+\end{definition}
+\begin{definition}{The Set of Bounded Functions}{bounded-functions-set}
+    $ B([0,1]) $ is the \emph{set of all bounded functions} $ f $ such that
+    $ f \colon [0, 1] \to \mathbb{R} $.
+\end{definition}
+\begin{definition}{The Set of Continuous Functions}{cts-functions-set}
+    $ C([0,1]) $ is the \emph{set of all continuous functions} $ f $ such that
+    $ f \colon [0, 1] \to \mathbb{R} $.
+\end{definition}
+\begin{theorem}{The set of bounded functions with the infinity metric forms a
+        metric space}{bounded-is-metric}
+    We claim that $ B([0, 1],\, d_\infty) $ forms a metric space. As is routine,
+    we must verify that $ d_\infty : B([0, 1]) \times B([0, 1]) \to [0, \infty)
+    $ satisfies the metric axioms described in \cref{definition:metric} for all
+    $ f, g, h \in B([0, 1]) $.
+    \begin{itemize}
+        \item Since $ f-g $ is a bounded function, there exists an $ M \geq 0 $
+            for which $ f(t) - g(t) \leq M $ for all $ t \in [0, 1] $. Thus,
+            $ \sup{\vert f(t) - g(t) \vert \colon t \in [0, 1]} \geq 0 $, and
+            $ d_\infty(f, g) \geq 0 $ for all $ f, g \in B([0, 1]) $.
+        \item If $ f = g $, then $ \vert f(t) - g(t) \vert = 0 $ for all $ t \in
+            [0, 1] $, so $ d_\infty(f, g) = \sup\{0, 0, \ldots\} = 0 $.
+            Furthermore, if $ d_\infty(f, g) = 0 $, then we know that $
+            \sup\left\{ \vert f(t) - g(t) \vert \colon t \in [0, 1] \right\} = 0
+            $. We know that $ \vert f(t) - g(t) \vert \geq 0 $, so $ \vert f(t)
+            - g(t) \vert = 0 $ follows immediately, from which we can conclude
+            that $ f(t) = g(t) $ for all $ t \in [0, 1] $, hence $ f = g $.
+            Thus, $ d_\infty(f, g) = 0 \iff f = g $.
+        \item By the symmetry of the standard metric on $ \mathbb{R} $, the
+            symmetry of $ d_\infty $ on $ B([0, 1]) $ follows immediately:
+            \begin{align}
+                d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
+                    t \in [0, 1] \right\} \\
+                &= \sup\left\{ \vert g(t) - f(t) \vert \colon t \in [0, 1]
+                    \right\} \\
+                &= d_\infty(g, f).
+            \end{align}
+        \item By the triangle inequality on $ \mathbb{R} $,
+            \begin{align}
+                d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
+                    t \in [0, 1] \right\} \\
+                &= \sup\left\{ \vert f(t) - h(t) + h(t) - g(t) \vert \colon
+                    t \in [0, 1] \right\} \\
+                &\leq \sup\left\{ \vert f(t) - h(t) \vert \colon t \in [0, 1]
+                    \right\} + \sup\left\{ \vert h(t) - g(t) \vert \colon t \in
+                    [0, 1] \right\} \\
+                &= d_\infty(f, h) + d_\infty(h, g),
+            \end{align}
+            hence $ d_\infty $ possesses the property of triangularity on $
+            B([0, 1]) $. $ \qedsymbol $
+    \end{itemize}
 \end{theorem}
 \end{document}
 
