@@ -6,8 +6,7 @@
 \usepackage[a4paper]{geometry}
 \usepackage[en-GB]{datetime2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, thmtools,
-    tcolorbox, xparse, titletoc, titlesec, lastpage}
-\usepackage[dirty=\ (dirty)]{gitinfo2}
+    tcolorbox, xparse, titletoc, titlesec, lastpage, gitinfo2}
 \usepackage[
     colorlinks,
     allcolors = blue
@@ -131,7 +130,7 @@
             Sources Link & \url{https://github.com/oliverdixon/l5-notes/%
                 \internalname} \\
             Latest Commit Hash & \href{https://github.com/oliverdixon/l5-notes/%
-                commit/\gitHash}{\gitHash}\gitDirty \\
+                commit/\gitHash}{\gitHash} \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
                 \internalname}
         \end{tabular}
@@ -306,8 +305,9 @@ on $ B([0, 1]) $.
 
 \section{Lecture III}
 
-Lecture Three introduces the concept of \emph{norms}, \emph{metric subspaces},
-and \emph{isometric maps}, complemented by a simple example.
+Lecture Three introduces the concept of \emph{norms} as generalisations of the
+absolute value function, \emph{metric subspaces}, and \emph{isometric maps},
+complemented by a simple example.
 \begin{definition}{Norm}{norm}
     A \emph{norm} is an abstraction of the absolute value. Suppose that $ V $ is
     a normable vector space. Then $ \vert\vert\cdot\vert\vert \colon V \to
@@ -341,6 +341,133 @@ and \emph{isometric maps}, complemented by a simple example.
     \mathrm{i}b \in \mathbb{C} $ such that $ \Re(z) = a $ and $ \Im(z) = b $.
     Notice that $ (a, b) \mapsto a + \mathrm{i}b $ is a bijective map from $
     \mathbb{R}^2 $ to $ \mathbb{C} $, and hence qualifies as an isometry.
+\end{example}
+
+\section{Lecture IV}
+
+Lecture Four begins an investigation into the topology of a metric space. In
+particular, we introduce \emph{open and closed balls}, \emph{interior points},
+\emph{boundary points}, and \emph{exterior points}, and define \emph{open} and
+\emph{closed} sets in terms of these concepts. We take an example metric space
+and rigorously compute its interior, boundary, and exterior, and finally show
+(by example) that considering objects as either subsets or subsets can vastly
+alter their topological properties.
+\begin{definition}{Open and Closed Balls}{balls}
+    Suppose that $ (X, d) $ is a metric space, and that $ x_0 \in X $. For every
+    $ \epsilon > 0 $, we define the \emph{open ball centered at $ x_0 $ with
+    radius $ \epsilon $} to be the set $ B(x_0, \epsilon) = \left\{ x \in X
+    \colon d(x, x_0) < \epsilon \right\} $. Analogously, the \emph{closed ball
+    centered at $ x_0 $ with radius $ \epsilon $} is defined to be the set
+    $ \overline{B}(x_0, \epsilon) = \left\{ x \in X \colon d(x, x_0) \leq
+    \epsilon \right\} $.
+\end{definition}
+\begin{definition}{Interior Points}{interior-points}
+    Let $ A \subset X $. An \emph{interior point} $ y \in X $ of $ A $ is an
+    element for which $ B(y, \epsilon) \subset A $ for some $ \epsilon > 0 $.
+    That is, there is an open ball centred at $ y $ with radius $ \epsilon $
+    that is completely contained within $ A $. The set of all such points is
+    denoted as $ A^o $, and is called \emph{the interior of $ A $}.
+\end{definition}
+\begin{definition}{Boundary Points}{boundary-points}
+    The element $ y \in X $ is a \emph{boundary point} of $ A $ if and only if
+    for any $ \epsilon > 0 $, $ B(y, \epsilon) \cap A \neq \emptyset $ and
+    $ B(y, \epsilon) \cap A^c \neq \emptyset $. That is, any open ball centred
+    at $ y $ always intersects with $ A $ and its complement $ A^c $. The set of
+    all such points is denoted as $ \partial A $, and is called \emph{the
+    boundary of $ A $}.
+\end{definition}
+\begin{definition}{Exterior Points}{exterior-points}
+    The element $ y \in X $ is an \emph{exterior point} of A if and only if for
+    some $ \epsilon > 0 $, $ B(y, \epsilon) \subset A^c $. That is, there exists
+    an open ball centred at $ y $ which intersects only with the complement of
+    $ A $; this can also be interpreted as an interior point of the complement.
+    The set of all such points is denoted as $ A^e $, and is called \emph{the
+    exterior of A}.
+\end{definition}
+\begin{example}{Finding the interior, boundary, and exterior of a
+        set}{int-bound-ext}
+    Consider $ (\mathbb{R}, d) $ with $ A = (0, 1] \subset \mathbb{R} $.
+    Intuitively, we can conjecture that $ A^o = (0, 1) $, $ \partial A = \{0,
+    1\} $, and $ A^e = \mathbb{R} \setminus (0, 1) = (-\infty, 0) \cup (1,
+    \infty) $, however these claims must be proven rigorously by (a) showing
+    that the conjectured points do belong to the relevant set, and (b) showing
+    that the conjectured points are the only elements to belong to the relevant
+    set.
+    \begin{itemize}
+        \item First consider the interior. Take $ x \in (0, 1) $. By
+            \cref{definition:interior-points}, we want to show that there is an
+            $ \epsilon > 0 $ such that $ B(x, \epsilon) \subset (0, 1] = A $.
+            Set $ \epsilon_1 \coloneq x $, and $ \epsilon_2 \coloneq 1-x $.
+            Given that $ 0 < x < 1 $, we can take an $ \epsilon \coloneq
+            \min\{ \epsilon_1, \epsilon_2 \} $. Then, since $ \epsilon/2 <
+            \epsilon_1, \epsilon_2 $,
+            \begin{equation}
+                B(x, \epsilon/2) = \left\{ y \in \mathbb{R} \colon d(x, y) <
+                    \epsilon/2 \right\} \subset A.
+            \end{equation}
+            This proves that $ (0, 1) \subseteq A^o $.
+
+            We now need to eliminate the remaining candidates in $ \mathbb{R}
+            \setminus (0, 1) $ from having possible membership in $ A^o $. The
+            points $ x < 0 $ and $ x > 1 $ can be discarded immediately, since
+            any open ball centred at these points could never lie totally within
+            $ A $, due to their positive radii $ \epsilon $. Finally, we need to
+            show that $ \{0,1\} \not\subset A^o $. Without loss of generality,
+            pick $ x = 1 $, and take an $ \epsilon > 0 $ to consider the open
+            ball $ B(x, \epsilon) $. Any such ball would contain a point that is
+            strictly greater than 1, and hence would contain points outside of $
+            A $. Thus, $ x \not\in A^o $, and $ A^o = (0, 1) $ as claimed.
+        \item Now consider the boundary, as described in
+            \cref{definition:boundary-points}. We claim that $ \{0, 1\} =
+            \partial A $, and first demonstrate that $ \{0, 1\} \subseteq
+            \partial A $.  Without loss of generality, we show that $ 0 \in
+            \partial A $. Let $ \epsilon > 0 $, and consider $ B(0, \epsilon) =
+            (-\epsilon, \epsilon) $. Clearly, since $ \epsilon > 0 $, $
+            (-\epsilon, \epsilon) \cap A \neq \emptyset $ and $ (-\epsilon,
+            \epsilon) \cap A^c \neq \emptyset $; thus, $ 0 $ is a boundary
+            point.
+
+            Now, we show that there are no other boundary points of $ A $ in $
+            \mathbb{R} $. We know that $ \mathbb{R} = A^o \coprod \partial A
+            \coprod A^e $, hence $ A^o \cup \partial A = \emptyset $, thus $ (0,
+            1) \not\subset \partial A $. Without loss of generality for $ x < 0
+            $, consider points $ x > 1 $. Therefore, there exists an $ \epsilon
+            > 0 $ such that $ x = 1 + \epsilon $. Considering $ B(x, \epsilon/2)
+            $, we can see that $ B(x, \epsilon/2) \subset A^c $, which implies
+            that $ B(x, \epsilon/2) \cap A = \emptyset $. Thus, $ \{ 0, 1 \} =
+            \partial A $.
+        \item Finally, consider the exterior, as described in
+            \cref{definition:exterior-points} Recall that $ \mathbb{R} = A^o
+            \coprod A^e \coprod \partial A $. Hence,
+            \begin{align}
+                A^e &= \mathbb{R} \setminus \left( A^o \cup \partial A
+                    \right) \\
+                &= \mathbb{R} \setminus [0, 1] \\
+                &= (-\infty, 0) \cup (1, \infty),
+            \end{align}
+            as conjectured. $ \qedsymbol $
+    \end{itemize}
+\end{example}
+\begin{definition}{Open, Closed, and Clopen Sets}{open-closed-clopen-sets}
+    Let $ (X, d) $ be a metric space. A subset $ A $ of $ X $ is \emph{open} if
+    and only if $ A \cap \partial A = \emptyset $. A subset $ F $ of $ X $ is
+    \emph{closed} if and only if $ \partial F \subseteq F $. Note that a set can
+    be both open and closed: typical examples are the empty set and the entire
+    space; these sets are called \emph{clopen}.
+\end{definition}
+\begin{example}{Subset vs. Subspace}{subset-subspace}
+    Consider $ (\mathbb{R}, d) $ with $ A = (0, 1) \cup (1, 2) $. If $ A $ is
+    considered as a \emph{subset} if $ \mathbb{R} $, then $ \partial A = \{0, 1,
+    2 \} $. Hence, $ A \cap \partial A = \emptyset $, and $ A $ is open by
+    \cref{definition:open-closed-clopen-sets}.
+
+    Further, $ A $ is not closed, since $ \partial A \not\subseteq A $. If $ A $
+    is considered as a \emph{subspace} of $ \mathbb{R} $, then $ \partial A =
+    \emptyset $, since $ \{ 0, 1, 2 \} \not\subseteq A $, and we cannot consider
+    the points outside of the subspace when determining its topology. Hence, $ A
+    $ is closed. But $ A \cap \partial A = \emptyset $, since $ \partial A =
+    \emptyset $; thus $ A $ is also open, and is ultimately clopen when
+    interpreted as a subspace.
 \end{example}
 
 \end{document}
