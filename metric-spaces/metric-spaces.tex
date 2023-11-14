@@ -27,6 +27,7 @@
 \urlstyle{same}
 \tcbuselibrary{skins,theorems,breakable}
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
+\renewcommand*\vec{\mathbf}
 
 % \newtoctheorem: create a new tcolorbox-powered theorem-like environment which
 % will be included as a subsection in the table of contents.
@@ -66,7 +67,6 @@
 \renewcommand*\contentsname{\thispagestyle{plain} Lecture Summaries}
 \titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
 \titleformat{\section}{
-    \thispagestyle{sectionstart}
     \centering\scshape\LARGE}
     {}{0pt}{}
 
@@ -87,17 +87,10 @@
 \renewcommand*\headrulewidth{0pt}
 \renewcommand*\footrulewidth{\headrulewidth}
 \makeatletter
-\fancypagestyle{sectionstart}{%
+\fancypagestyle{mainbody}{
 	\fancyhf{}
     \fancyhead[L]{\itshape \@title}
     \fancyhead[R]{\itshape \@date}
-    \fancyfoot[L]{\itshape \@author}
-    \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
-}
-\fancypagestyle{mainbody}{%
-	\fancyhf{}
-    \fancyhead[L]{\itshape \@title: \@date}
-    \fancyhead[R]{\itshape Notes from \sectionname}
     \fancyfoot[L]{\itshape \@author}
     \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
 }
@@ -150,7 +143,9 @@
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
+
 \section{Lecture I}
+
 Lecture One introduces the concept of a \emph{metric} as a generalisation of the
 notion of distance between two points in a set. Three \emph{canonical metrics}
 on $\mathbb{R}^N$ are presented; these are then generalised further, and a short
@@ -174,10 +169,12 @@ axioms.
     $ d_\infty $, each of which have a domain of $ \mathbb{R}^N \times
     \mathbb{R}^N $ and a codomain of $ [0, \infty) $:
     \begin{align}
-        d_1(x, y) &= \sum_{i=1}^N \vert x_i - y_i \vert \\
-        d_2(x, y) &= \left[\sum_{i=1}^N (x_i - y_i)^2\right]^{1/2}
-            \label{eqn:d2-metric} \\[.8em]
-        d_\infty(x, y) &= \max_{1 \leq i \leq N} \vert x_i - y_i \vert
+        d_1(\vec{x}, \vec{y}) &= \sum_{i=1}^N \vert \vec{x}_i - \vec{y}_i
+            \vert \\
+        d_2(\vec{x}, \vec{y}) &= \left[\sum_{i=1}^N (\vec{x}_i - \vec{y}_i)^2
+            \right]^{1/2} \label{eqn:d2-metric} \\[.8em]
+        d_\infty(\vec{x}, \vec{y}) &= \max_{1 \leq i \leq N} \vert \vec{x}_i -
+            \vec{y}_i \vert
     \end{align}
 \end{definition}
 \begin{theorem}{The Generalised Metric is a Metric}{general-dp-metric}
@@ -185,8 +182,8 @@ axioms.
     \in \mathbb{N} $, such that $ d_p \colon \mathbb{R}^N \times \mathbb{R}^N
     \to [0, \infty) $, where
     \begin{equation}
-        d_p(x, y) = \left[\sum_{i=1}^N \vert x_i - y_i \vert^p\right]^{1/p}.
-        \label{eqn:dp-metric}
+        d_p(\vec{x}, \vec{y}) = \left[\sum_{i=1}^N \vert \vec{x}_i - \vec{y}_i
+            \vert^p\right]^{1/p} \label{eqn:dp-metric}.
     \end{equation}
     To show that $ d_p $ is a metric on $ \mathbb{R}^N $, we must verify that $
     d_p $ is in compliance with the constraints described in
@@ -194,29 +191,36 @@ axioms.
     easy to show, so we will focus on the triangularity property here, proving
     it by demonstrating a reduction to \emph{Minkowski's Theorem}.
 
-    Let $ a_k $ and $ b_k $ be such that
+    Let $ \vec{a}_k $ and $ \vec{b}_k $ be such that
     \begin{align}
-        d_p(x, z) &\eqcolon \left[\sum_{k=1}^N \vert a_k \vert^p\right]^{1/p} \\
-        d_p(y, z) &\eqcolon \left[\sum_{k=1}^N \vert b_k \vert^p\right]^{1/p}.
+        d_p(\vec{x}, \vec{z}) &\eqcolon \left[\sum_{k=1}^N \vert \vec{a}_k
+            \vert^p\right]^{1/p} \\
+        d_p(\vec{y}, \vec{z}) &\eqcolon \left[\sum_{k=1}^N \vert \vec{b}_k
+            \vert^p\right]^{1/p}.
     \end{align}
-    Then, note that $ d_p(x, y) $ (as defined in \cref{eqn:dp-metric}) can be
-    written in terms of $ a_k $ and $ b_k $, since $ a_k = x_k - z_k $ and $ b_k
-    = y_k - z_k $ for $ k = 1, \ldots, N $:
+    Then, note that $ d_p(\vec{x}, \vec{y}) $ (as defined in
+    \cref{eqn:dp-metric}) can be
+    written in terms of $ \vec{a}_k $ and $ \vec{b}_k $, since $ \vec{a}_k =
+    \vec{x}_k - \vec{z}_k $ and $ \vec{b}_k = \vec{y}_k - \vec{z}_k $ for
+    $ k = 1, \ldots, N $:
     \begin{equation}
-        d_p(x, y) = \left[\sum_{k=1}^N \vert a_k + b_k \vert^p\right]^{1/p}.
+        d_p(\vec{x}, \vec{y}) = \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k
+            \vert^p\right]^{1/p}.
     \end{equation}
     The triangle inequality, as stated in \cref{itm:triangle-inequality},
     requires that
     \begin{equation}
-        \left[\sum_{k=1}^N \vert a_k + b_k \vert^p\right]^{1/p} \leq
-        \left[\sum_{k=1}^N \vert a_k \vert^p\right]^{1/p} +
-        \left[\sum_{k=1}^N \vert b_k \vert^p\right]^{1/p}.
+        \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k \vert^p\right]^{1/p} \leq
+        \left[\sum_{k=1}^N \vert \vec{a}_k \vert^p\right]^{1/p} +
+        \left[\sum_{k=1}^N \vert \vec{b}_k \vert^p\right]^{1/p}.
     \end{equation}
     This inequality is equivalent to the well-known Minkowski's Theorem; thus,
-    $ d_p $ satisfies the triangle inequality over $ x, y, z \in \mathbb{R}^N $.
-    $ \qedsymbol $
+    $ d_p $ satisfies the triangle inequality over $ \vec{x}, \vec{y}, \vec{z}
+    \in \mathbb{R}^N $. $ \qedsymbol $
 \end{theorem}
+
 \section{Lecture II}
+
 Lecture II introduces the concept of the \emph{supremum} and \emph{infimum} as
 properties of any subset of the reals. The sets of \emph{bounded} and
 \emph{continous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1]) $
@@ -299,5 +303,45 @@ on $ B([0, 1]) $.
             B([0, 1]) $. $ \qedsymbol $
     \end{itemize}
 \end{theorem}
+
+\section{Lecture III}
+
+Lecture Three introduces the concept of \emph{norms}, \emph{metric subspaces},
+and \emph{isometric maps}, complemented by a simple example.
+\begin{definition}{Norm}{norm}
+    A \emph{norm} is an abstraction of the absolute value. Suppose that $ V $ is
+    a normable vector space. Then $ \vert\vert\cdot\vert\vert \colon V \to
+    \mathbb{R} $ is such that, for all $ \vec{x}, \vec{y} \in V $,
+    \begin{enumerate}
+        \item $ \vert\vert \vec{x} \vert\vert \geq 0 $;
+        \item $ \vert\vert \vec{x} \vert\vert = 0 \iff \vec{x} = \vec{0} $;
+        \item $ \vert\vert \lambda \vec{x} \vert\vert = \vert \lambda \vert
+            \vert\vert \vec{x} \vert\vert $ for all $ \lambda \in \mathbb{R} $;
+        \item $ \vert\vert \vec{x} + \vec{y} \vert\vert \leq \vert\vert \vec{x}
+            \vert\vert + \vert\vert \vec{y} \vert\vert $.
+    \end{enumerate}
+    $ V $ equipped with $ \vert\vert \cdot \vert\vert $ is a \emph{normed
+    space}. Note that any norm can give rise to a metric; such a metric is
+    sometimes called the \emph{metric induced by the norm}.
+\end{definition}
+\begin{definition}{Metric Subspace}{metric-subspace}
+    Suppose that $ (X, d) $ and $ (Y, e) $ are metric spaces. We say that $ X $
+    is a \emph{metric subspace} of $ Y $ if $ X \subseteq Y $ and $ d $ is a
+    restriction of $ e $ to $ X \times X $.
+\end{definition}
+\begin{definition}{Isometric Map}{isometric-map}
+    Suppose that $ (X, d) $ and $ (Y, e) $ are metric spaces, and that $ \phi
+    \colon X \to Y $ is surjective. Then $ \phi $ is called an \emph{isometric
+    map} if and only if $ e(\phi(a), \phi(b)) = d(a, b) $ for all $ a, b \in X
+    $. This will later be used to define the most rigid definition of
+    ``sameness'' for metric spaces.
+\end{definition}
+\begin{example}{Complex Isometry}{complex-isometry}
+    Each $ (a, b) \in \mathbb{R} $ is associated with a unique $ z = a +
+    \mathrm{i}b \in \mathbb{C} $ such that $ \Re(z) = a $ and $ \Im(z) = b $.
+    Notice that $ (a, b) \mapsto a + \mathrm{i}b $ is a bijective map from $
+    \mathbb{R}^2 $ to $ \mathbb{C} $, and hence qualifies as an isometry.
+\end{example}
+
 \end{document}
 
