@@ -9,4 +9,7 @@
 *.aux
 *.log
 *.out
+*.loe
+*.theorems
+*.toc
 
