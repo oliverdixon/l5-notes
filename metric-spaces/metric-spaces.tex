@@ -3,10 +3,16 @@
 
 \documentclass{article}
 
-\usepackage[a4paper]{geometry}
+\usepackage[
+    a4paper,
+    top=1.5in,
+    bottom=1.5in,
+    left=1in,
+    right=1in
+]{geometry}
 \usepackage[en-GB]{datetime2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, thmtools,
-    tcolorbox, xparse, titletoc, titlesec, lastpage, gitinfo2}
+    tcolorbox, titletoc, titlesec, lastpage, gitinfo2}
 \usepackage[
     colorlinks,
     allcolors = blue
@@ -17,7 +23,7 @@
 
 \title{Metric Spaces}
 \author{Oliver Dixon}
-\date{Semester 1, 2023/24}
+\date{Semester I, 2023/24}
 \newcommand*\internalname{metric-spaces}
 \newcommand*\modulecode{MAT00051I}
 
@@ -27,6 +33,10 @@
 \tcbuselibrary{skins,theorems,breakable}
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 \renewcommand*\vec{\mathbf}
+
+\setlength\parskip{.8em}
+\setlength\parindent{0pt}
+\renewcommand*\baselinestretch{1.2}
 
 % \newtoctheorem: create a new tcolorbox-powered theorem-like environment which
 % will be included as a subsection in the table of contents.
@@ -39,6 +49,8 @@
 \newcommand*\newtoctheorem[3]{
     \newtcbtheorem[number within=section]{aux:#2}{#1}{
         enhanced,
+        parbox=false,
+        before upper=\hspace{-3.5pt},
         colback=white, colframe=#3, colbacktitle=white, coltitle=black,
         boxed title style={size=small,colframe=white},
         fonttitle=\bfseries,
@@ -50,24 +62,46 @@
         separator sign none,
         breakable
     }{#2}
-    \NewDocumentEnvironment{#2}{m+m}
-        {
-            \expandafter\csname aux:#2\endcsname{##1}{##2}
-            \addcontentsline{toc}{subsection}{#1 \ref{#2:##2}: ##1}
-            \ignorespaces
-        }
-        {\expandafter\csname endaux:#2\endcsname}
+    \NewDocumentEnvironment{#2}{m+m}{
+        \expandafter\csname aux:#2\endcsname{##1}{##2}
+        \addcontentsline{toc}{subsection}{#1 \ref*{#2:##2}: ##1}
+        \ignorespaces
+    }{\expandafter\csname endaux:#2\endcsname}
     \crefname{tcb@cnt@aux:#2}{\fclower{#1}\relax}{\fclower{#1}\relax s}
     \Crefname{tcb@cnt@aux:#2}{#1}{#1s}
 }
 \makeatother
 
 \renewcommand*\qedsymbol{\hfill\ensuremath{\Box}}
-\renewcommand*\contentsname{\thispagestyle{plain} Lecture Summaries}
 \titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
-\titleformat{\section}{
-    \centering\scshape\LARGE}
-    {}{0pt}{}
+\renewcommand*\contentsname{
+    \thispagestyle{plain} \centering \normalfont \scshape \LARGE%
+    Lecture Summaries%
+}
+
+% \lecture: start a new lecture section, with a description and Panopto link.
+%
+%   #1: lecture display name
+%   #2: Panopto video/folder URL suffix (or empty if no recording)
+%   #3: lecture summary paragraph
+%   #4: date of live delivery
+%
+\newcommand\lecture[4]{
+    \addcontentsline{toc}{section}{#1}
+    \stepcounter{section}
+    \vskip\baselineskip
+    \begingroup
+        \setlength\tabcolsep{0pt}
+        \textsc{\LARGE #1} \hfill
+        \ifstrempty{#2}{\raisebox{3pt}{\itshape No recording}}{%
+            \raisebox{3pt}{\itshape #4} \hspace*{8pt}
+            \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
+                {\fbox{\centering\includegraphics[width=12pt]{../panopto}}}
+        }%
+    \endgroup
+    \par #3
+    \vskip.5\baselineskip
+}
 
 \newtoctheorem{Definition}{definition}{black}
 \newtoctheorem{Example}{example}{blue}
@@ -99,30 +133,32 @@
 \pagenumbering{roman}
 \pagestyle{empty}
 \begin{titlepage}
-    \newgeometry{top=1.5in, bottom=1in, right=1in, left=1in}
     \begin{flushright}
         \makeatletter
         \begingroup
             \fontsize{50}{50}\selectfont
             \slshape \sffamily \@title
+            \LARGE
+            \vskip\baselineskip
+            Consolidated Lecture Notes
         \endgroup
         \vfill
         \begingroup
             \LARGE \obeylines
-            \setlength{\parskip}{.5em}
-            Typeset by \@author
-            Based on \href{https://www.york.ac.uk/students/studying/manage/%
-                programmes/module-catalogue/module/\modulecode/}{\modulecode}
+            \setlength\parskip{.5em}
+            Collated and Typeset by \@author
+            Based on the %
+            \href{https://www.york.ac.uk/students/studying/manage/%
+                programmes/module-catalogue/module/\modulecode/}{\modulecode} %
+            Lecture Series
             \vskip\baselineskip
             University of York
-            Semester I, 2023/24
+            \@date
         \endgroup
         \makeatother
     \end{flushright}
     \vfill
     \begin{center}
-        \large
-        \centering
         \begin{tabular}{r|l}
             Compilation Date & \today \\
             Author Contact & \href{mailto: Oliver Dixon <od641@york.ac.uk>}%
@@ -137,19 +173,22 @@
     \end{center}
 \end{titlepage}
 \stepcounter{page}
-\restoregeometry
-\tableofcontents
+\begingroup
+    \setlength{\parskip}{0pt}
+    \tableofcontents
+\endgroup
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
 
-\section{Lecture I}
+\lecture{Lecture I}{Viewer.aspx?id=c3a52a78-486e-4e1d-88fc-b083009b9766}{
+    Lecture One introduces the concept of a \emph{metric} as a generalisation of
+    the notion of distance between two points in a set. Three \emph{canonical
+    metrics} on $\mathbb{R}^N$ are presented; these are then generalised
+    further, and a short proof verifies the compliance of the generalised metric
+    with the relevant axioms.
+}{\DTMdisplaydate{2023}{09}{26}{Tuesday}}
 
-Lecture One introduces the concept of a \emph{metric} as a generalisation of the
-notion of distance between two points in a set. Three \emph{canonical metrics}
-on $\mathbb{R}^N$ are presented; these are then generalised further, and a short
-proof verifies the compliance of the generalised metric with the relevant
-axioms.
 \begin{definition}{Metric}{metric}
     Suppose that $ X $ is a set, and $ d \colon X \times X \to [0, \infty)
     \subset \mathbb{R} $. Then, $ d $ is a \emph{metric} on $ X $ if and only if
@@ -218,13 +257,14 @@ axioms.
     \in \mathbb{R}^N $. $ \qedsymbol $
 \end{theorem}
 
-\section{Lecture II}
+\lecture{Lecture II}{Viewer.aspx?id=e35adcae-8b46-4472-8b19-b085009bdfe1}{
+    Lecture II introduces the concept of the \emph{supremum} and \emph{infimum}
+    as properties of any subset of the reals. The sets of \emph{bounded} and
+    \emph{continous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1]) $
+    respectively, and we prove that the ``sup-metric'' $ d_\infty $ forms a
+    metric on $ B([0, 1]) $.
+}{\DTMdisplaydate{2023}{09}{28}{Thursday}}
 
-Lecture II introduces the concept of the \emph{supremum} and \emph{infimum} as
-properties of any subset of the reals. The sets of \emph{bounded} and
-\emph{continous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1]) $
-respectively, and we prove that the ``sup-metric'' $ d_\infty $ forms a metric
-on $ B([0, 1]) $.
 \begin{definition}{Supremum and Infimum}{sup-inf}
     If $ S \subset \mathbb{R} $ is a set, then $ \sup S $ is defined to be the
     \emph{least upper bound} of $ S $. This is defined to be the smallest $ b
@@ -303,11 +343,12 @@ on $ B([0, 1]) $.
     \end{itemize}
 \end{theorem}
 
-\section{Lecture III}
+\lecture{Lecture III}{Viewer.aspx?id=afbe7e12-8494-4fe3-b73f-b08a009bdc46}{
+    Lecture Three introduces the concept of \emph{norms} as generalisations of
+    the absolute value function, \emph{metric subspaces}, and \emph{isometric
+    maps}, complemented by a simple example.
+}{\DTMdisplaydate{2023}{10}{03}{Tuesday}}
 
-Lecture Three introduces the concept of \emph{norms} as generalisations of the
-absolute value function, \emph{metric subspaces}, and \emph{isometric maps},
-complemented by a simple example.
 \begin{definition}{Norm}{norm}
     A \emph{norm} is an abstraction of the absolute value. Suppose that $ V $ is
     a normable vector space. Then $ \vert\vert\cdot\vert\vert \colon V \to
@@ -343,15 +384,16 @@ complemented by a simple example.
     \mathbb{R}^2 $ to $ \mathbb{C} $, and hence qualifies as an isometry.
 \end{example}
 
-\section{Lecture IV}
+\lecture{Lecture IV}{Viewer.aspx?id=3a47174e-ed9d-413d-b309-b08c009bdb8e}{
+    Lecture Four begins an investigation into the topology of a metric space. In
+    particular, we introduce \emph{open and closed balls}, \emph{interior
+    points}, \emph{boundary points}, and \emph{exterior points}, and define
+    \emph{open} and \emph{closed} sets in terms of these concepts. We take an
+    example metric space and rigorously compute its interior, boundary, and
+    exterior, and finally show (by example) that considering objects as either
+    subsets or subsets can vastly alter their topological properties.
+}{\DTMdisplaydate{2023}{10}{05}{Thursday}}
 
-Lecture Four begins an investigation into the topology of a metric space. In
-particular, we introduce \emph{open and closed balls}, \emph{interior points},
-\emph{boundary points}, and \emph{exterior points}, and define \emph{open} and
-\emph{closed} sets in terms of these concepts. We take an example metric space
-and rigorously compute its interior, boundary, and exterior, and finally show
-(by example) that considering objects as either subsets or subsets can vastly
-alter their topological properties.
 \begin{definition}{Open and Closed Balls}{balls}
     Suppose that $ (X, d) $ is a metric space, and that $ x_0 \in X $. For every
     $ \epsilon > 0 $, we define the \emph{open ball centered at $ x_0 $ with
@@ -437,8 +479,9 @@ alter their topological properties.
             that $ B(x, \epsilon/2) \cap A = \emptyset $. Thus, $ \{ 0, 1 \} =
             \partial A $.
         \item Finally, consider the exterior, as described in
-            \cref{definition:exterior-points} Recall that $ \mathbb{R} = A^o
-            \coprod A^e \coprod \partial A $. Hence,
+            \cref{definition:exterior-points}. Recall that the entire space can
+            be expressed as a disjoint union, e.g. $ \mathbb{R} = A^o \coprod
+            A^e \coprod \partial A $. Hence,
             \begin{align}
                 A^e &= \mathbb{R} \setminus \left( A^o \cup \partial A
                     \right) \\
@@ -469,6 +512,99 @@ alter their topological properties.
     \emptyset $; thus $ A $ is also open, and is ultimately clopen when
     interpreted as a subspace.
 \end{example}
+
+\lecture{Lecture V}{Viewer.aspx?id=dbcb156d-d828-454f-929d-b091009bf65b}{
+    TODO Description
+}{\DTMdisplaydate{2023}{10}{10}{Tuesday}}
+
+\begin{theorem}{A subset is open if and only if its complement is
+        closed}{open-subset-closed-complement}
+    We claim that $ A \subseteq X $ is open $ \iff $ its complement $ A^c $ is
+    closed. This can be proven by unravelling the definitions of open and closed
+    sets (\cref{definition:open-closed-clopen-sets}) and boundary points
+    (\cref{definition:boundary-points}). First, suppose that $ A $ is open. If
+    $ A = \emptyset $, then $ A^c = X $. The entire space is known to be clopen,
+    and thus closed. If $ A \neq \emptyset $, then $ A \cap \partial A =
+    \emptyset $, and $ \partial A \subseteq A^c $.
+    We can now see a useful equality by using the fact that $ \left(A^c\right)^c
+    = A $:
+    \begin{align}
+        \partial \left(A^c\right) &= \left\{ y \in X \colon \forall \epsilon > 0
+            \, B(y, \epsilon) \cap A^c \neq \emptyset \land B(x, \epsilon) \cap
+            \left(A^c\right)^c \neq \emptyset \right\} \\
+        &= \left\{ y \in X \colon \forall \epsilon > 0 \, B(y, \epsilon) \cap
+            A^c \neq \emptyset \land B(x, \epsilon) \cap A \neq \emptyset
+            \right\} \\
+        &= \partial A.
+    \end{align}
+    Since $ \partial A \subseteq A^c $, and $ \partial A = \partial
+    \left(A^c\right) $, we know that $ \partial \left(A^c\right) \subseteq A^c
+    $. Hence, $ A^c $ is closed.
+
+    Next, assume that $ A^c $ is closed, hence $ \partial \left(A^c\right)
+    \subseteq A^c $. Given that $ \partial A = \partial \left(A^c\right) $, $
+    \partial A \subseteq A^c $. Since $ A^c \cap A = \emptyset $, we know that $
+    \partial A \cap A = \emptyset $, and thus $ A $ is open. $ \qedsymbol $
+\end{theorem}
+\begin{definition}{The topology of a metric space}{topology}
+    The \emph{topology} of a metric space $ (X, d) $ is denoted as $ T_d $, and
+    is defined to be \emph{the collection of all open subsets of $ X $}. Note
+    that since $ T_d \subseteq \mathcal{P}(X) $, for any set $ X $, $ \emptyset,
+    X \in T_d $, so $ T_d \neq \emptyset $.
+\end{definition}
+\begin{theorem}{Equivalence between openness and the existence of open balls}
+        {openness-open-balls}
+    If $ A \subseteq X $ is open, then every point of $ A $ is an interior point
+    of A. Equivalently, $ A $ is open $ \iff \forall x \in A\, \exists \epsilon
+    > 0 $ such that $ B (x, \epsilon) \subseteq A $.
+
+    First assume that $ A $ is open. By definition, $ A \cap \partial A =
+    \emptyset $. If $ A = \emptyset $, then there exists no points to select,
+    and the universal quantifier cannot select any points for $ x $. If $ A \neq
+    \emptyset $, then there must be at least one $ \epsilon > 0 $ such that $
+    B(x, \epsilon) \subseteq A $ or $ B(x, \epsilon) \subseteq A^c $ for any $ x
+    \in A $. But, since $ x \in A $, it is not possible that $ B(x, \epsilon) $
+    is entirely contained within $ A^c $, since $ x \in B(x, \epsilon) $. Hence,
+    $ B(x, \epsilon) \subseteq A^c $, as required.
+
+    Next, suppose that $ \forall x \in A\, \exists \epsilon > 0 $ such that $ B
+    (x, \epsilon) \subseteq A $. Take any $ x \in A $. Immediately, we can see
+    that $ x \not\in \partial A $, since $ B(x, \epsilon) \cap A^c = \emptyset
+    $, because $ B(x, \epsilon) \subseteq A $. Hence, $ A $ is open.
+
+    $ \qedsymbol $
+\end{theorem}
+\begin{theorem}{The open ball is open}{open-ball-open}
+    We claim that, for any point $ x \in X $, there is an open ball $ B(x,
+    \epsilon) $ with $ \epsilon > 0 $ such that $ B(x, \epsilon) $ is in the
+    topology induced by $ d $. This is equivalent to the statement
+    \begin{equation}
+        \forall x \in X\, \exists \epsilon > 0 \text{ such that }
+            B(x, \epsilon) \in T_d.
+    \end{equation}
+    For any $ x \in X $, we take $ y \in B(x, \epsilon) $. If $ y=x $, then the
+    desired result follows immediately, since $ B(x, \epsilon) \subseteq B(x,
+    \epsilon) $. Assume that $ x \neq y $, and set $ \Delta \coloneq d(x, y) > 0
+    $. Thus, $ 0 < \Delta < \epsilon $, since $ y \in B(x, \epsilon) $. Let $
+    \epsilon^\prime \coloneq \min\{\Delta, \epsilon-\Delta\} $, and observe that
+    $ B(y, \epsilon^\prime/2) \subset B(x, \epsilon) $.
+
+    We wanted to show that $ d(x, z) < \epsilon $ for all $ z \in B(y,
+    \epsilon^\prime/2) $. That is, any point in the $ y $-ball lies within the
+    $ x $-ball. We have shown that $ B(y, \epsilon^\prime/2) \subset B(x,
+    \epsilon) $, and hence $ B(y, \epsilon^\prime/2) $ is open. By the triangle
+    inequality on $ d $,
+    \begin{align}
+        d(x, z) &\leq d(x, y) + d(y, z) \\
+        &< \Delta + \epsilon^\prime/2 \\
+        &= \Delta + \min\{ \Delta, \epsilon - \Delta \}/2 \\
+        &\leq \Delta + (\epsilon-\Delta)/2 \\
+        &< \Delta + \epsilon - \Delta \\
+        &= \epsilon,
+    \end{align}
+    thus $ d(x, z) < \epsilon $ for arbitrary $ z \in B(y, \epsilon^\prime/2) $.
+    Hence, $ B(y, \epsilon^\prime/2) \subset B(x, \epsilon) $. $ \qedsymbol $
+\end{theorem}
 
 \end{document}
 
