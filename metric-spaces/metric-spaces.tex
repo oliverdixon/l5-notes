@@ -1,6 +1,10 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 
+% Panopto branding information:
+% https://company-32474.frontify.com/d/Nch796CKUfjy/
+%   2016-brand-style-guide#/basics/logo/vector-files
+
 \documentclass{article}
 
 \usepackage[
@@ -12,7 +16,7 @@
 ]{geometry}
 \usepackage[en-GB]{datetime2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, thmtools,
-    tcolorbox, titletoc, titlesec, lastpage, gitinfo2}
+    tcolorbox, titletoc, titlesec, lastpage, gitinfo2, tocloft, enumitem}
 \usepackage[
     colorlinks,
     allcolors = blue
@@ -36,6 +40,7 @@
 
 \setlength\parskip{.8em}
 \setlength\parindent{0pt}
+\setlength\cftparskip{0pt}
 \renewcommand*\baselinestretch{1.2}
 
 % \newtoctheorem: create a new tcolorbox-powered theorem-like environment which
@@ -74,10 +79,10 @@
 
 \renewcommand*\qedsymbol{\hfill\ensuremath{\Box}}
 \titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
-\renewcommand*\contentsname{
-    \thispagestyle{plain} \centering \normalfont \scshape \LARGE%
-    Lecture Summaries%
-}
+\titleformat{\section}[runin]{\scshape \LARGE}{}{0pt}{}[\hfill \mbox{}]
+\renewcommand*\contentsname{Lecture Contents}
+\renewcommand*\cfttoctitlefont{\scshape \LARGE \thispagestyle{plain} \hfill}
+\renewcommand*\cftaftertoctitle{\hfill \mbox{}}
 
 % \lecture: start a new lecture section, with a description and Panopto link.
 %
@@ -87,18 +92,12 @@
 %   #4: date of live delivery
 %
 \newcommand\lecture[4]{
-    \addcontentsline{toc}{section}{#1}
-    \stepcounter{section}
-    \vskip\baselineskip
-    \begingroup
-        \setlength\tabcolsep{0pt}
-        \textsc{\LARGE #1} \hfill
-        \ifstrempty{#2}{\raisebox{3pt}{\itshape No recording}}{%
-            \raisebox{3pt}{\itshape #4} \hspace*{8pt}
-            \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
-                {\fbox{\centering\includegraphics[width=12pt]{../panopto}}}
-        }%
-    \endgroup
+    \section{#1}
+    \ifstrempty{#2}{\raisebox{3pt}{\itshape No recording}}{%
+        \raisebox{3pt}{\itshape #4} \hspace*{8pt}
+        \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
+            {\fbox{\centering\includegraphics[width=12pt]{../panopto}}}
+    }%
     \par #3
     \vskip.5\baselineskip
 }
@@ -107,13 +106,22 @@
 \newtoctheorem{Example}{example}{blue}
 \newtoctheorem{Theorem}{theorem}{red}
 
+\setlist{itemindent=1em}
 \newtagform{noparen}{}{}
 \usetagform{noparen}
+
 \creflabelformat{equation}{#2#1#3}
 \crefname{equation}{equation}{equations}
 \Crefname{equation}{Equation}{Equations}
 \numberwithin{equation}{section}
 \numberwithin{enumi}{section}
+
+\newlist{axioms}{enumerate}{1}
+\crefname{axiomsi}{axiom}{axioms}
+\Crefname{axiomsi}{Axiom}{Axioms}
+\newcommand*\setaxiomprefix[1]{
+    \setlist[axioms]{label=#1\arabic*), ref=#1\arabic*}
+}
 
 \let\Sectionmark\sectionmark
 \def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
@@ -163,20 +171,19 @@
             Compilation Date & \today \\
             Author Contact & \href{mailto: Oliver Dixon <od641@york.ac.uk>}%
                 {od641@york.ac.uk} \\
-            Sources Link & \url{https://github.com/oliverdixon/l5-notes/%
-                \internalname} \\
+            Sources Link & \url{https://github.com/oliverdixon/l5-notes/tree/%
+                master/\internalname} \\
             Latest Commit Hash & \href{https://github.com/oliverdixon/l5-notes/%
                 commit/\gitHash}{\gitHash} \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
-                \internalname}
+                \internalname} \\
+            Document Licence & \href{https://github.com/oliverdixon/l5-notes/%
+                blob/master/LICENSE}{MIT Licence}
         \end{tabular}
     \end{center}
 \end{titlepage}
 \stepcounter{page}
-\begingroup
-    \setlength{\parskip}{0pt}
-    \tableofcontents
-\endgroup
+\tableofcontents
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
@@ -193,13 +200,14 @@
     Suppose that $ X $ is a set, and $ d \colon X \times X \to [0, \infty)
     \subset \mathbb{R} $. Then, $ d $ is a \emph{metric} on $ X $ if and only if
     the following properties hold for $ a, b, c \in X $:
-    \begin{enumerate}
+    \setaxiomprefix{M}
+    \begin{axioms}
         \item \emph{Positivity.} $ d(a, b) \geq 0 $;
         \item \emph{Equality.} $ d(a, b) = 0 \iff a = b $;
         \item \emph{Symmetry.} $ d(a, b) = d(b, a) $;
         \item \emph{Triangularity.} $ d(a, b) \leq d(a, c) + d(b, c) $
             \label{itm:triangle-inequality}.
-    \end{enumerate}
+    \end{axioms}
 \end{definition}
 \begin{definition}{Canonical Metrics on \texorpdfstring{$\mathbb{R}^N$}{an
         N-dimensional real vector space}}{canon-metrics}
@@ -258,7 +266,7 @@
 \end{theorem}
 
 \lecture{Lecture II}{Viewer.aspx?id=e35adcae-8b46-4472-8b19-b085009bdfe1}{
-    Lecture II introduces the concept of the \emph{supremum} and \emph{infimum}
+    Lecture Two introduces the concept of the \emph{supremum} and \emph{infimum}
     as properties of any subset of the reals. The sets of \emph{bounded} and
     \emph{continous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1]) $
     respectively, and we prove that the ``sup-metric'' $ d_\infty $ forms a
@@ -353,14 +361,15 @@
     A \emph{norm} is an abstraction of the absolute value. Suppose that $ V $ is
     a normable vector space. Then $ \vert\vert\cdot\vert\vert \colon V \to
     \mathbb{R} $ is such that, for all $ \vec{x}, \vec{y} \in V $,
-    \begin{enumerate}
+    \setaxiomprefix{N}
+    \begin{axioms}
         \item $ \vert\vert \vec{x} \vert\vert \geq 0 $;
         \item $ \vert\vert \vec{x} \vert\vert = 0 \iff \vec{x} = \vec{0} $;
         \item $ \vert\vert \lambda \vec{x} \vert\vert = \vert \lambda \vert
             \vert\vert \vec{x} \vert\vert $ for all $ \lambda \in \mathbb{R} $;
         \item $ \vert\vert \vec{x} + \vec{y} \vert\vert \leq \vert\vert \vec{x}
             \vert\vert + \vert\vert \vec{y} \vert\vert $.
-    \end{enumerate}
+    \end{axioms}
     $ V $ equipped with $ \vert\vert \cdot \vert\vert $ is a \emph{normed
     space}. Note that any norm can give rise to a metric; such a metric is
     sometimes called the \emph{metric induced by the norm}.
