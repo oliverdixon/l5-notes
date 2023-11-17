@@ -33,6 +33,7 @@
 
 % END DOCUMENT METADATA
 
+\newcommand*\subtitle{Consolidated Lecture Notes}
 \urlstyle{same}
 \tcbuselibrary{skins,theorems,breakable}
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
@@ -114,7 +115,6 @@
 \crefname{equation}{equation}{equations}
 \Crefname{equation}{Equation}{Equations}
 \numberwithin{equation}{section}
-\numberwithin{enumi}{section}
 
 \newlist{axioms}{enumerate}{1}
 \crefname{axiomsi}{axiom}{axioms}
@@ -130,7 +130,7 @@
 \makeatletter
 \fancypagestyle{mainbody}{
 	\fancyhf{}
-    \fancyhead[L]{\itshape \@title}
+    \fancyhead[L]{\itshape \@title: \subtitle}
     \fancyhead[R]{\itshape \@date}
     \fancyfoot[L]{\itshape \@author}
     \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
@@ -148,7 +148,7 @@
             \slshape \sffamily \@title
             \LARGE
             \vskip\baselineskip
-            Consolidated Lecture Notes
+            \subtitle
         \endgroup
         \vfill
         \begingroup
@@ -206,7 +206,7 @@
         \item \emph{Equality.} $ d(a, b) = 0 \iff a = b $;
         \item \emph{Symmetry.} $ d(a, b) = d(b, a) $;
         \item \emph{Triangularity.} $ d(a, b) \leq d(a, c) + d(b, c) $
-            \label{itm:triangle-inequality}.
+            \label{axiom:triangle-inequality}.
     \end{axioms}
 \end{definition}
 \begin{definition}{Canonical Metrics on \texorpdfstring{$\mathbb{R}^N$}{an
@@ -253,7 +253,7 @@
         d_p(\vec{x}, \vec{y}) = \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k
             \vert^p\right]^{1/p}.
     \end{equation}
-    The triangle inequality, as stated in \cref{itm:triangle-inequality},
+    The triangle inequality, as stated in \cref{axiom:triangle-inequality},
     requires that
     \begin{equation}
         \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k \vert^p\right]^{1/p} \leq
@@ -400,7 +400,7 @@
     \emph{open} and \emph{closed} sets in terms of these concepts. We take an
     example metric space and rigorously compute its interior, boundary, and
     exterior, and finally show (by example) that considering objects as either
-    subsets or subsets can vastly alter their topological properties.
+    subsets or subspaces can vastly alter their topological properties.
 }{\DTMdisplaydate{2023}{10}{05}{Thursday}}
 
 \begin{definition}{Open and Closed Balls}{balls}
@@ -582,37 +582,6 @@
     $, because $ B(x, \epsilon) \subseteq A $. Hence, $ A $ is open.
 
     $ \qedsymbol $
-\end{theorem}
-\begin{theorem}{The open ball is open}{open-ball-open}
-    We claim that, for any point $ x \in X $, there is an open ball $ B(x,
-    \epsilon) $ with $ \epsilon > 0 $ such that $ B(x, \epsilon) $ is in the
-    topology induced by $ d $. This is equivalent to the statement
-    \begin{equation}
-        \forall x \in X\, \exists \epsilon > 0 \text{ such that }
-            B(x, \epsilon) \in T_d.
-    \end{equation}
-    For any $ x \in X $, we take $ y \in B(x, \epsilon) $. If $ y=x $, then the
-    desired result follows immediately, since $ B(x, \epsilon) \subseteq B(x,
-    \epsilon) $. Assume that $ x \neq y $, and set $ \Delta \coloneq d(x, y) > 0
-    $. Thus, $ 0 < \Delta < \epsilon $, since $ y \in B(x, \epsilon) $. Let $
-    \epsilon^\prime \coloneq \min\{\Delta, \epsilon-\Delta\} $, and observe that
-    $ B(y, \epsilon^\prime/2) \subset B(x, \epsilon) $.
-
-    We wanted to show that $ d(x, z) < \epsilon $ for all $ z \in B(y,
-    \epsilon^\prime/2) $. That is, any point in the $ y $-ball lies within the
-    $ x $-ball. We have shown that $ B(y, \epsilon^\prime/2) \subset B(x,
-    \epsilon) $, and hence $ B(y, \epsilon^\prime/2) $ is open. By the triangle
-    inequality on $ d $,
-    \begin{align}
-        d(x, z) &\leq d(x, y) + d(y, z) \\
-        &< \Delta + \epsilon^\prime/2 \\
-        &= \Delta + \min\{ \Delta, \epsilon - \Delta \}/2 \\
-        &\leq \Delta + (\epsilon-\Delta)/2 \\
-        &< \Delta + \epsilon - \Delta \\
-        &= \epsilon,
-    \end{align}
-    thus $ d(x, z) < \epsilon $ for arbitrary $ z \in B(y, \epsilon^\prime/2) $.
-    Hence, $ B(y, \epsilon^\prime/2) \subset B(x, \epsilon) $. $ \qedsymbol $
 \end{theorem}
 
 \end{document}
