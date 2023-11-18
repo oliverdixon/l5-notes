@@ -1,6 +1,9 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 
+% TODO: Do we need titletoc for \titlecontents? Can't tocloft achieve the same?
+% TODO: Remove common styling elements to a document class: owdnotes.
+
 % Panopto branding information:
 % https://company-32474.frontify.com/d/Nch796CKUfjy/
 %   2016-brand-style-guide#/basics/logo/vector-files
@@ -12,14 +15,14 @@
     top=1.5in,
     bottom=1.5in,
     left=1in,
-    right=1in
+    right=1in,
 ]{geometry}
 \usepackage[en-GB]{datetime2}
-\usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, thmtools,
+\usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb,
     tcolorbox, titletoc, titlesec, lastpage, gitinfo2, tocloft, enumitem}
 \usepackage[
     colorlinks,
-    allcolors = blue
+    allcolors=blue,
 ]{hyperref}
 \usepackage[nameinlink]{cleveref}
 
@@ -43,6 +46,9 @@
 \setlength\parindent{0pt}
 \setlength\cftparskip{0pt}
 \renewcommand*\baselinestretch{1.2}
+
+\newcommand*\iffforward{\par\boxed\Longrightarrow\ }
+\newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
 
 % \newtoctheorem: create a new tcolorbox-powered theorem-like environment which
 % will be included as a subsection in the table of contents.
@@ -82,7 +88,7 @@
 \titlecontents{section}[0pt]{\vskip 1ex}{\bfseries}{\bfseries}{}
 \titleformat{\section}[runin]{\scshape \LARGE}{}{0pt}{}[\hfill \mbox{}]
 \renewcommand*\contentsname{Lecture Contents}
-\renewcommand*\cfttoctitlefont{\scshape \LARGE \thispagestyle{plain} \hfill}
+\renewcommand*\cfttoctitlefont{\scshape \LARGE \hfill}
 \renewcommand*\cftaftertoctitle{\hfill \mbox{}}
 
 % \lecture: start a new lecture section, with a description and Panopto link.
@@ -107,15 +113,12 @@
 \newtoctheorem{Example}{example}{blue}
 \newtoctheorem{Theorem}{theorem}{red}
 
-\setlist{itemindent=1em}
-\newtagform{noparen}{}{}
-\usetagform{noparen}
-
 \creflabelformat{equation}{#2#1#3}
 \crefname{equation}{equation}{equations}
 \Crefname{equation}{Equation}{Equations}
 \numberwithin{equation}{section}
 
+\setlist{itemindent=1em}
 \newlist{axioms}{enumerate}{1}
 \crefname{axiomsi}{axiom}{axioms}
 \Crefname{axiomsi}{Axiom}{Axioms}
@@ -138,8 +141,9 @@
 \makeatother
 
 \begin{document}
+\thispagestyle{empty}
+\pagestyle{plain}
 \pagenumbering{roman}
-\pagestyle{empty}
 \begin{titlepage}
     \begin{flushright}
         \makeatletter
@@ -152,7 +156,7 @@
         \endgroup
         \vfill
         \begingroup
-            \LARGE \obeylines
+            \Large \obeylines
             \setlength\parskip{.5em}
             Collated and Typeset by \@author
             Based on the %
@@ -176,7 +180,7 @@
             Latest Commit Hash & \href{https://github.com/oliverdixon/l5-notes/%
                 commit/\gitHash}{\gitHash} \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
-                \internalname} \\
+                \internalname .pdf} \\
             Document Licence & \href{https://github.com/oliverdixon/l5-notes/%
                 blob/master/LICENSE}{MIT Licence}
         \end{tabular}
@@ -192,11 +196,11 @@
     Lecture One introduces the concept of a \emph{metric} as a generalisation of
     the notion of distance between two points in a set. Three \emph{canonical
     metrics} on $\mathbb{R}^N$ are presented; these are then generalised
-    further, and a short proof verifies the compliance of the generalised metric
-    with the relevant axioms.
+    further, and a short proof verifies the compliance of the generalised
+    Euclidean metric with the relevant axioms.
 }{\DTMdisplaydate{2023}{09}{26}{Tuesday}}
 
-\begin{definition}{Metric}{metric}
+\begin{definition}{Metric Space}{metric}
     Suppose that $ X $ is a set, and $ d \colon X \times X \to [0, \infty)
     \subset \mathbb{R} $. Then, $ d $ is a \emph{metric} on $ X $ if and only if
     the following properties hold for $ a, b, c \in X $:
@@ -208,6 +212,7 @@
         \item \emph{Triangularity.} $ d(a, b) \leq d(a, c) + d(b, c) $
             \label{axiom:triangle-inequality}.
     \end{axioms}
+    The tuple $ (X, d) $ is a \emph{metric space}.
 \end{definition}
 \begin{definition}{Canonical Metrics on \texorpdfstring{$\mathbb{R}^N$}{an
         N-dimensional real vector space}}{canon-metrics}
@@ -224,45 +229,49 @@
     \end{align}
 \end{definition}
 \begin{theorem}{The Generalised Metric is a Metric}{general-dp-metric}
-    We can generalise the $d_2$ metric from \cref{eqn:d2-metric} to any $ p
-    \in \mathbb{N} $, such that $ d_p \colon \mathbb{R}^N \times \mathbb{R}^N
-    \to [0, \infty) $, where
+    Consider the $ d_p $ metric, where $ d_p \colon \mathbb{R}^N \times
+    \mathbb{R}^N \to [0, \infty) $ is a generalisation of the $ d_2 $ Euclidean
+    metric for $ p \in \mathbb{N} $:
     \begin{equation}
-        d_p(\vec{x}, \vec{y}) = \left[\sum_{i=1}^N \vert \vec{x}_i - \vec{y}_i
-            \vert^p\right]^{1/p} \label{eqn:dp-metric}.
+        (\vec{x}, \vec{y}) \mapsto \left[\sum_{i=1}^N \vert \vec{x}_i -
+        \vec{y}_i \vert^p\right]^{1/p} \label{eqn:dp-metric} \text { for all }
+        \vec{x}, \vec{y} \in \mathbb{R}^N.
     \end{equation}
-    To show that $ d_p $ is a metric on $ \mathbb{R}^N $, we must verify that $
-    d_p $ is in compliance with the constraints described in
-    \cref{definition:metric}. The positivity, equality, and symmetry axioms are
-    easy to show, so we will focus on the triangularity property here, proving
-    it by demonstrating a reduction to \emph{Minkowski's Theorem}.
+    Then, $ (\mathbb{R}^N, d_p) $ is a metric space.
+    \begin{proof}
+        To show that $ d_p $ is a metric on $ \mathbb{R}^N $, we must verify
+        that $ d_p $ is in compliance with the constraints enumerated in
+        \cref{definition:metric}. The positivity, equality, and symmetry axioms
+        are easy to show, so we will focus on the triangularity property here,
+        proving it by demonstrating a reduction to \emph{Minkowski's Theorem}.
 
-    Let $ \vec{a}_k $ and $ \vec{b}_k $ be such that
-    \begin{align}
-        d_p(\vec{x}, \vec{z}) &\eqcolon \left[\sum_{k=1}^N \vert \vec{a}_k
-            \vert^p\right]^{1/p} \\
-        d_p(\vec{y}, \vec{z}) &\eqcolon \left[\sum_{k=1}^N \vert \vec{b}_k
-            \vert^p\right]^{1/p}.
-    \end{align}
-    Then, note that $ d_p(\vec{x}, \vec{y}) $ (as defined in
-    \cref{eqn:dp-metric}) can be
-    written in terms of $ \vec{a}_k $ and $ \vec{b}_k $, since $ \vec{a}_k =
-    \vec{x}_k - \vec{z}_k $ and $ \vec{b}_k = \vec{y}_k - \vec{z}_k $ for
-    $ k = 1, \ldots, N $:
-    \begin{equation}
-        d_p(\vec{x}, \vec{y}) = \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k
-            \vert^p\right]^{1/p}.
-    \end{equation}
-    The triangle inequality, as stated in \cref{axiom:triangle-inequality},
-    requires that
-    \begin{equation}
-        \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k \vert^p\right]^{1/p} \leq
-        \left[\sum_{k=1}^N \vert \vec{a}_k \vert^p\right]^{1/p} +
-        \left[\sum_{k=1}^N \vert \vec{b}_k \vert^p\right]^{1/p}.
-    \end{equation}
-    This inequality is equivalent to the well-known Minkowski's Theorem; thus,
-    $ d_p $ satisfies the triangle inequality over $ \vec{x}, \vec{y}, \vec{z}
-    \in \mathbb{R}^N $. $ \qedsymbol $
+        Let $ \vec{a}_k $ and $ \vec{b}_k $ be such that
+        \begin{align}
+            d_p(\vec{x}, \vec{z}) &\eqcolon \left[\sum_{k=1}^N \vert \vec{a}_k
+                \vert^p\right]^{1/p} \\
+            d_p(\vec{y}, \vec{z}) &\eqcolon \left[\sum_{k=1}^N \vert \vec{b}_k
+                \vert^p\right]^{1/p}.
+        \end{align}
+        Then, note that $ d_p(\vec{x}, \vec{y}) $ (as defined in
+        \cref{eqn:dp-metric}) can be
+        written in terms of $ \vec{a}_k $ and $ \vec{b}_k $, since $ \vec{a}_k =
+        \vec{x}_k - \vec{z}_k $ and $ \vec{b}_k = \vec{y}_k - \vec{z}_k $ for
+        $ k = 1, \ldots, N $:
+        \begin{equation}
+            d_p(\vec{x}, \vec{y}) = \left[\sum_{k=1}^N \vert \vec{a}_k +
+            \vec{b}_k \vert^p\right]^{1/p}.
+        \end{equation}
+        The triangle inequality, as stated in \cref{axiom:triangle-inequality},
+        requires that
+        \begin{equation}
+            \left[\sum_{k=1}^N \vert \vec{a}_k + \vec{b}_k \vert^p\right]^{1/p}
+            \leq \left[\sum_{k=1}^N \vert \vec{a}_k \vert^p\right]^{1/p} +
+            \left[\sum_{k=1}^N \vert \vec{b}_k \vert^p\right]^{1/p}.
+        \end{equation}
+        This inequality is equivalent to the well-known Minkowski's Theorem;
+        thus, $ d_p $ satisfies the triangle inequality over $ \vec{x}, \vec{y},
+        \vec{z} \in \mathbb{R}^N $.
+    \end{proof}
 \end{theorem}
 
 \lecture{Lecture II}{Viewer.aspx?id=e35adcae-8b46-4472-8b19-b085009bdfe1}{
@@ -307,48 +316,64 @@
     $ C([0,1]) $ is the \emph{set of all continuous functions} $ f $ such that
     $ f \colon [0, 1] \to \mathbb{R} $.
 \end{definition}
-\begin{theorem}{The set of bounded functions with the infinity metric forms a
-        metric space}{bounded-is-metric}
-    We claim that $ B([0, 1],\, d_\infty) $ forms a metric space. As is routine,
-    we must verify that $ d_\infty : B([0, 1]) \times B([0, 1]) \to [0, \infty)
-    $ satisfies the metric axioms described in \cref{definition:metric} for all
-    $ f, g, h \in B([0, 1]) $.
-    \begin{itemize}
-        \item Since $ f-g $ is a bounded function, there exists an $ M \geq 0 $
-            for which $ f(t) - g(t) \leq M $ for all $ t \in [0, 1] $. Thus,
-            $ \sup{\vert f(t) - g(t) \vert \colon t \in [0, 1]} \geq 0 $, and
-            $ d_\infty(f, g) \geq 0 $ for all $ f, g \in B([0, 1]) $.
-        \item If $ f = g $, then $ \vert f(t) - g(t) \vert = 0 $ for all $ t \in
-            [0, 1] $, so $ d_\infty(f, g) = \sup\{0, 0, \ldots\} = 0 $.
-            Furthermore, if $ d_\infty(f, g) = 0 $, then we know that $
-            \sup\left\{ \vert f(t) - g(t) \vert \colon t \in [0, 1] \right\} = 0
-            $. We know that $ \vert f(t) - g(t) \vert \geq 0 $, so $ \vert f(t)
-            - g(t) \vert = 0 $ follows immediately, from which we can conclude
-            that $ f(t) = g(t) $ for all $ t \in [0, 1] $, hence $ f = g $.
-            Thus, $ d_\infty(f, g) = 0 \iff f = g $.
-        \item By the symmetry of the standard metric on $ \mathbb{R} $, the
-            symmetry of $ d_\infty $ on $ B([0, 1]) $ follows immediately:
-            \begin{align}
-                d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
-                    t \in [0, 1] \right\} \\
-                &= \sup\left\{ \vert g(t) - f(t) \vert \colon t \in [0, 1]
-                    \right\} \\
-                &= d_\infty(g, f).
-            \end{align}
-        \item By the triangle inequality on $ \mathbb{R} $,
-            \begin{align}
-                d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
-                    t \in [0, 1] \right\} \\
-                &= \sup\left\{ \vert f(t) - h(t) + h(t) - g(t) \vert \colon
-                    t \in [0, 1] \right\} \\
-                &\leq \sup\left\{ \vert f(t) - h(t) \vert \colon t \in [0, 1]
-                    \right\} + \sup\left\{ \vert h(t) - g(t) \vert \colon t \in
-                    [0, 1] \right\} \\
-                &= d_\infty(f, h) + d_\infty(h, g),
-            \end{align}
-            hence $ d_\infty $ possesses the property of triangularity on $
-            B([0, 1]) $. $ \qedsymbol $
-    \end{itemize}
+\begin{theorem}{The set of bounded functions\texorpdfstring{ over $[0, 1]$}{}
+    with the sup-metric forms a metric space}{bounded-is-metric}
+    Consider the $ d_\infty $ metric on $ B([0, 1]) $ defined in terms of the
+    supremum, such that the upper bound needn't lie in the set:
+    \begin{equation}
+        d_\infty \colon B([0, 1]) \times B([0, 1]) \to [0, \infty)
+            \text{ such that } (f, g) \mapsto \sup\left\{\vert f(t) - g(t) \vert
+            \colon t \in [0, 1] \right\}.
+    \end{equation}
+    Then, $ \left(B([0, 1]),\, d_\infty\right) $ is a metric space.
+    \begin{proof}
+        We must verify that $ d_\infty : B([0, 1]) \times B([0, 1]) \to [0,
+        \infty) $ satisfies the metric axioms described in
+        \cref{definition:metric} for all $ f, g, h \in B([0, 1]) $.
+        \begin{itemize}
+            \item Since $ f-g $ is a bounded function, there exists an $ M \geq
+                0 $ for which $ f(t) - g(t) \leq M $ for all $ t \in [0, 1] $.
+                Thus, $ \sup\left\{\vert f(t) - g(t) \vert \colon t \in [0,
+                1]\right\} \geq 0 $, and $ d_\infty(f, g) \geq 0 $ for all $ f,
+                g \in B([0, 1]) $.
+            \item \iffforward If $ f = g $, then $ \vert f(t) - g(t) \vert = 0 $
+                for all $ t \in [0, 1] $, so $ d_\infty(f, g) = \sup\{0, 0,
+                \ldots\} = 0 $.
+
+                \iffbackward Furthermore, if $ d_\infty(f, g) = 0 $, then we
+                know that $ \sup\left\{ \vert f(t) - g(t) \vert \colon t \in [0,
+                1] \right\} = 0 $. We know that $ \vert f(t) - g(t) \vert \geq 0
+                $, so $ \vert f(t) - g(t) \vert = 0 $ follows immediately, from
+                which we can conclude that $ f(t) = g(t) $ for all $ t \in [0,
+                1] $, hence $ f = g $.
+
+                Thus, $ d_\infty(f, g) = 0 \iff f = g $.
+            \item By the symmetry of the standard metric on $ \mathbb{R} $, the
+                symmetry of $ d_\infty $ on $ B([0, 1]) $ follows immediately:
+                \begin{align}
+                    d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
+                        t \in [0, 1] \right\} \\
+                    &= \sup\left\{ \vert g(t) - f(t) \vert \colon t \in [0, 1]
+                        \right\} \\
+                    &= d_\infty(g, f).
+                \end{align}
+            \item By the triangularity property of the standard metric on $
+                    \mathbb{R} $,
+                \begin{align}
+                    d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
+                        t \in [0, 1] \right\} \\
+                    &= \sup\left\{ \vert f(t) - h(t) + h(t) - g(t) \vert \colon
+                        t \in [0, 1] \right\} \\
+                    &\leq \sup\left\{ \vert f(t) - h(t) \vert \colon t \in [0,
+                        1] \right\} + \sup\left\{ \vert h(t) - g(t) \vert \colon
+                        t \in [0, 1] \right\} \\
+                    &= d_\infty(f, h) + d_\infty(h, g),
+                \end{align}
+                hence $ d_\infty $ possesses the property of triangularity on $
+                B([0, 1]) $.
+        \end{itemize}
+        Thus, $ \left(B([0,1]), d_\infty\right) $ is a metric space.
+    \end{proof}
 \end{theorem}
 
 \lecture{Lecture III}{Viewer.aspx?id=afbe7e12-8494-4fe3-b73f-b08a009bdc46}{
@@ -528,32 +553,37 @@
 
 \begin{theorem}{A subset is open if and only if its complement is
         closed}{open-subset-closed-complement}
-    We claim that $ A \subseteq X $ is open $ \iff $ its complement $ A^c $ is
-    closed. This can be proven by unravelling the definitions of open and closed
-    sets (\cref{definition:open-closed-clopen-sets}) and boundary points
-    (\cref{definition:boundary-points}). First, suppose that $ A $ is open. If
-    $ A = \emptyset $, then $ A^c = X $. The entire space is known to be clopen,
-    and thus closed. If $ A \neq \emptyset $, then $ A \cap \partial A =
-    \emptyset $, and $ \partial A \subseteq A^c $.
-    We can now see a useful equality by using the fact that $ \left(A^c\right)^c
-    = A $:
-    \begin{align}
-        \partial \left(A^c\right) &= \left\{ y \in X \colon \forall \epsilon > 0
-            \, B(y, \epsilon) \cap A^c \neq \emptyset \land B(x, \epsilon) \cap
-            \left(A^c\right)^c \neq \emptyset \right\} \\
-        &= \left\{ y \in X \colon \forall \epsilon > 0 \, B(y, \epsilon) \cap
-            A^c \neq \emptyset \land B(x, \epsilon) \cap A \neq \emptyset
-            \right\} \\
-        &= \partial A.
-    \end{align}
-    Since $ \partial A \subseteq A^c $, and $ \partial A = \partial
-    \left(A^c\right) $, we know that $ \partial \left(A^c\right) \subseteq A^c
-    $. Hence, $ A^c $ is closed.
+    Consider a set $ A \subseteq X $. Then, $ A $ is open if and only if $ A^c $
+    is closed.
+    \begin{proof}
+        This can be proven by unravelling the definitions of open and closed
+        sets (\cref{definition:open-closed-clopen-sets}) and boundary points
+        (\cref{definition:boundary-points}).
 
-    Next, assume that $ A^c $ is closed, hence $ \partial \left(A^c\right)
-    \subseteq A^c $. Given that $ \partial A = \partial \left(A^c\right) $, $
-    \partial A \subseteq A^c $. Since $ A^c \cap A = \emptyset $, we know that $
-    \partial A \cap A = \emptyset $, and thus $ A $ is open. $ \qedsymbol $
+        \iffforward First, suppose that $ A $ is open.  If $ A = \emptyset $,
+        then $ A^c = X $. The entire space is known to be clopen, and thus
+        closed. If $ A \neq \emptyset $, then $ A \cap \partial A = \emptyset $,
+        and $ \partial A \subseteq A^c $.  We can now see a useful equality by
+        using the fact that $ \left(A^c\right)^c = A $:
+        \begin{align}
+            \partial \left(A^c\right) &= \left\{ y \in X \colon \forall \epsilon
+                > 0 \, B(y, \epsilon) \cap A^c \neq \emptyset \land B(x,
+                \epsilon) \cap \left(A^c\right)^c \neq \emptyset \right\} \\
+            &= \left\{ y \in X \colon \forall \epsilon > 0 \, B(y, \epsilon)
+                \cap A^c \neq \emptyset \land B(x, \epsilon) \cap A \neq
+                \emptyset \right\} \\
+            &= \partial A.
+        \end{align}
+        Since $ \partial A \subseteq A^c $, and $ \partial A = \partial
+        \left(A^c\right) $, we know that $ \partial \left(A^c\right) \subseteq
+        A^c $. Hence, $ A^c $ is closed.
+
+        \iffbackward Next, assume that $ A^c $ is closed, hence $ \partial
+        \left(A^c\right) \subseteq A^c $. Given that $ \partial A = \partial
+        \left(A^c\right) $, $ \partial A \subseteq A^c $. Since $ A^c \cap A =
+        \emptyset $, we know that $ \partial A \cap A = \emptyset $, and thus $
+        A $ is open.
+    \end{proof}
 \end{theorem}
 \begin{definition}{The topology of a metric space}{topology}
     The \emph{topology} of a metric space $ (X, d) $ is denoted as $ T_d $, and
@@ -563,25 +593,31 @@
 \end{definition}
 \begin{theorem}{Equivalence between openness and the existence of open balls}
         {openness-open-balls}
-    If $ A \subseteq X $ is open, then every point of $ A $ is an interior point
-    of A. Equivalently, $ A $ is open $ \iff \forall x \in A\, \exists \epsilon
-    > 0 $ such that $ B (x, \epsilon) \subseteq A $.
+    Let $ A \subseteq X $ be open. Then, every point of $ A $ is an interior
+    point of A. Equivalently, $ A $ is open if and only if there is an open ball
+    around every point in $ A $ that resides within $ A $:
+    \begin{equation}
+        \forall x \in A\, \exists \epsilon > 0 \text{ such that } B (x,
+        \epsilon) \subseteq A.
+    \end{equation}
 
-    First assume that $ A $ is open. By definition, $ A \cap \partial A =
-    \emptyset $. If $ A = \emptyset $, then there exists no points to select,
-    and the universal quantifier cannot select any points for $ x $. If $ A \neq
-    \emptyset $, then there must be at least one $ \epsilon > 0 $ such that $
-    B(x, \epsilon) \subseteq A $ or $ B(x, \epsilon) \subseteq A^c $ for any $ x
-    \in A $. But, since $ x \in A $, it is not possible that $ B(x, \epsilon) $
-    is entirely contained within $ A^c $, since $ x \in B(x, \epsilon) $. Hence,
-    $ B(x, \epsilon) \subseteq A^c $, as required.
+    \begin{proof}
+        \iffforward First assume that $ A $ is open. By definition, $ A \cap
+        \partial A = \emptyset $. If $ A = \emptyset $, then there exists no
+        points to select, and the universal quantifier cannot select any points
+        for $ x $. If $ A \neq \emptyset $, then there must be at least one $
+        \epsilon > 0 $ such that $ B(x, \epsilon) \subseteq A $ or $ B(x,
+        \epsilon) \subseteq A^c $ for any $ x \in A $. But, since $ x \in A $,
+        it is not possible that $ B(x, \epsilon) $ is entirely contained within
+        $ A^c $, since $ x \in B(x, \epsilon) $. Hence, $ B(x, \epsilon)
+        \subseteq A^c $, as required.
 
-    Next, suppose that $ \forall x \in A\, \exists \epsilon > 0 $ such that $ B
-    (x, \epsilon) \subseteq A $. Take any $ x \in A $. Immediately, we can see
-    that $ x \not\in \partial A $, since $ B(x, \epsilon) \cap A^c = \emptyset
-    $, because $ B(x, \epsilon) \subseteq A $. Hence, $ A $ is open.
-
-    $ \qedsymbol $
+        \iffbackward Next, suppose that $ \forall x \in A\, \exists \epsilon > 0
+        $ such that $ B (x, \epsilon) \subseteq A $. Take any $ x \in A $.
+        Immediately, we can see that $ x \not\in \partial A $, since $ B(x,
+        \epsilon) \cap A^c = \emptyset $, because $ B(x, \epsilon) \subseteq A
+        $. Hence, $ A $ is open.
+    \end{proof}
 \end{theorem}
 
 \end{document}
