@@ -1,7 +1,6 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 
-% TODO: Remove common styling elements to a document class: owdnotes.
 % TODO: Remaining lectures:
 %   V
 %   VI
@@ -27,7 +26,8 @@
 ]{geometry}
 \usepackage[en-GB]{datetime2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, tcolorbox,
-    tocloft, titlesec, lastpage, gitinfo2, enumitem}
+    tocloft, titlesec, lastpage, gitinfo2, enumitem, tikz}
+\usepackage[hypcap=false]{caption}
 \usepackage[
     colorlinks,
     allcolors=blue,
@@ -53,12 +53,32 @@
 \setlength\parindent{0pt}
 \setlength\cftparskip{0pt}
 \renewcommand*\baselinestretch{1.2}
+\captionsetup[figure]{justification=centering}
+
+\definecolor{ballfill}{RGB}{242, 242, 242}
+\usetikzlibrary{decorations.pathreplacing}
+\tikzset{
+    every node/.style={transform shape},
+    unitaxes/.pic={
+        \draw[->] (-1.5, 0)--(1.5, 0) node[right] {$x$};
+        \draw[ultra thick] (-1, -.1) -- (-1, .1);
+        \draw[ultra thick] (1, -.1) -- (1, .1);
+        \draw[->] (0, -1.5)--(0, 1.5) node[above] {$y$};
+        \draw[ultra thick] (-.1, 1) -- (.1, 1);
+        \draw[ultra thick] (-.1, -1) -- (.1, -1);
+    },
+    squarespace/.pic={
+        \draw plot[smooth cycle, tension=0.8] coordinates {(2,2)
+            (1.5,0) (2,-2) (0,-1.5) (-2,-2) (-1.5,0) (-2,2) (0,1.5)};
+    }
+}
 
 \newcommand*\iffforward{\par\boxed\Longrightarrow\ }
 \newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
 
-\tcbuselibrary{theorems, breakable}
+\tcbuselibrary{theorems, breakable, skins}
 \tcbset{
+    enhanced,
     parbox=false,
     before upper=\hspace{-3.5pt},
     colback=white, colbacktitle=white, coltitle=black,
@@ -69,6 +89,7 @@
     description font=\normalfont,
     separator sign none,
     breakable,
+    fontlower=\slshape,
 }
 
 % \newtheoremtype: create a new tcolorbox theorem-like environment which will be
@@ -132,6 +153,10 @@
 \crefname{equation}{equation}{equations}
 \Crefname{equation}{Equation}{Equations}
 \numberwithin{equation}{section}
+
+\Crefname{figure}{Figure}{Figures}
+\crefname{figure}{figure}{figures}
+\numberwithin{figure}{section}
 
 \setlist{itemindent=1em}
 \newlist{axioms}{enumerate}{1}
@@ -236,13 +261,55 @@
     \mathbb{R}^N $ and a codomain of $ [0, \infty) $:
     \begin{align}
         d_1(\vec{x}, \vec{y}) &= \sum_{i=1}^N \vert \vec{x}_i - \vec{y}_i
-            \vert \\
+            \vert\label{eqn:d1-metric} \\
         d_2(\vec{x}, \vec{y}) &= \left[\sum_{i=1}^N (\vec{x}_i - \vec{y}_i)^2
             \right]^{1/2} \label{eqn:d2-metric} \\[.8em]
         d_\infty(\vec{x}, \vec{y}) &= \max_{1 \leq i \leq N} \vert \vec{x}_i -
-            \vec{y}_i \vert
+            \vec{y}_i \vert\label{eqn:dinf-metric}
     \end{align}
+    Unless otherwise stated, $ \mathbb{R}^N $ is endowed with $ d_2 $ Euclidean
+    metric. This is consistent with our current understanding of the real line,
+    which uses the absolute value $ \vert x - y \vert $ to denote distance
+    between $ x, y \in \mathbb{R} $.
 \end{definition}
+\begin{example}{Unit Circles in the Three Canonical Spaces}{unit-circles}
+    Using the definitions of the canonical metrics \cref{eqn:d1-metric},
+    \cref{eqn:d2-metric}, and \cref{eqn:dinf-metric} (and a very loose
+    understanding of a \emph{circle}) we can draw the unit ``circles'' generated
+    in $ \mathbb{R}^2 $ under each of these metrics. For instance,
+    \cref{fig:dinf-unit-circle} shows the boundary of the set $ S^1_\infty $,
+    where
+    \begin{equation}
+        S^1_\infty = \left\{ (x, y) \in \mathbb{R}^2 \colon d_\infty(x, y) \leq
+        1 \right\}.
+    \end{equation}
+
+    \begin{minipage}{.3\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {unitaxes};
+            \draw (-1, 0) -- (0, 1) -- (1, 0) -- (0, -1) -- (-1, 0);
+        \end{tikzpicture}
+        \captionof{figure}{Unit Circle in $ d_1 $}
+    \end{minipage}\hfill
+    \begin{minipage}{.3\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {unitaxes};
+            \draw (0, 0) circle[radius=1];
+        \end{tikzpicture}
+        \captionof{figure}{Unit Circle in $ d_2 $}
+    \end{minipage}\hfill
+    \begin{minipage}{.3\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {unitaxes};
+            \draw (-1, 1) -- (1, 1) -- (1, -1) -- (-1, -1) -- (-1, 1);
+        \end{tikzpicture}
+        \captionof{figure}{Unit Circle in $ d_\infty $}%
+        \label{fig:dinf-unit-circle}
+    \end{minipage}
+\end{example}
 \begin{theorem}{The Generalised Metric is a Metric}{general-dp-metric}
     Consider the $ d_p $ metric, where $ d_p \colon \mathbb{R}^N \times
     \mathbb{R}^N \to [0, \infty) $ is a generalisation of the $ d_2 $ Euclidean
@@ -303,6 +370,24 @@
     \in \mathbb{R} $ such that $ x \leq b $ for all $ x \in S $. The infimum of
     $ S $, $ \inf S $, is defined analogously as the \emph{greatest lower
     bound}.
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (setstart) at (-2, 0);
+        \coordinate (setend) at (2, 0);
+        \draw[<->] (-5, 0) -- (5, 0) node[right, xshift=7pt] {$ \mathbb{R} $};
+        \draw[decoration={brace, mirror, raise=7pt}, decorate] (-5, 0) --
+            (setstart) node[pos=0.5, anchor=north, yshift=-14pt]
+            {Lower Bounds of $ S $};
+        \draw[decoration={brace, mirror, raise=7pt}, decorate] (setend) --
+            (5, 0) node[pos=0.5, anchor=north, yshift=-14pt]
+            {Upper Bounds of $ S $};
+        \foreach \i in {-4, ..., 4} \draw[gray] (\i, -.1) -- (\i, .1);
+        \draw[ultra thick, red] (setstart) -- (setend) node[pos=0.5,
+            anchor=north, yshift=-7pt]{Set $ S \subset \mathbb{R} $};
+        \filldraw (setstart) circle (2pt) node[above, yshift=7pt] {$ \inf S $};
+        \filldraw (setend) circle (2pt) node[above, yshift=7pt] {$ \sup S $};
+    \end{tikzpicture}
 \end{definition}
 \begin{definition}{The \texorpdfstring{$ \ell^\infty $}{Ell-Infinity}
         Set of Bounded Sequences}{ell-infinity}
@@ -319,9 +404,8 @@
     sequence with infinite terms mightn't possess a maximum:
     \begin{equation}
         d_\infty(X, Y) = \sup\left\{\vert X_i - Y_i \vert \colon
-            i \in \mathbb{N}\right\}
+            i \in \mathbb{N}\right\} \text { for } X, Y \in \ell^\infty.
     \end{equation}
-    for $ X, Y \in \ell^\infty $.
 \end{definition}
 \begin{definition}{The Set of Bounded Functions}{bounded-functions-set}
     $ B([0,1]) $ is the \emph{set of all bounded functions} $ f $ such that
@@ -392,11 +476,36 @@
 \end{theorem}
 
 \lecture{Lecture III}{Viewer.aspx?id=afbe7e12-8494-4fe3-b73f-b08a009bdc46}{
-    Lecture Three introduces the concept of \emph{norms} as generalisations of
-    the absolute value function, \emph{metric subspaces}, and \emph{isometric
-    maps}, complemented by a simple example.
+    Lecture Three opens with a counterexample to challenge a common
+    misconception. It continues to introduce the concept of \emph{norms} as
+    generalisations of the absolute value function, \emph{metric subspaces}, and
+    \emph{isometric maps}, complemented by a simple example.
 }{\DTMdisplaydate{2023}{10}{03}{Tuesday}}
 
+\begin{example}{Binary Strings}{binary-strings}
+    Despite the examples seen thus far, metric spaces needn't support an
+    associated arithmetic or algebraic structure. For instance, let $ \Sigma =
+    \{ 0, 1 \}^\mathbb{N} $ be the set of binary strings (sequences of zeroes
+    and ones). If $ \sigma = \left(a_n\right)_{n=1}^\infty \in \Sigma $ and $
+    \sigma^\prime = \left(b_n\right)_{n=1}^\infty \in \Sigma $, consider the
+    distance function $ d \colon \Sigma \times \Sigma \to [0, \infty) $ such
+    that
+    \begin{equation}
+        \left(\sigma, \sigma^\prime\right) \mapsto
+        \begin{cases}
+            0 &\text{ if } a_n = b_n \quad \forall n \in \mathbb{N}; \\
+            1/\min\left\{n \colon a_n \neq b_n\right\} &\text{ otherwise.} \\
+        \end{cases}.
+    \end{equation}
+    Despite there being no inherent algebraic structure or ordering on $ \Sigma
+    $, $ d $ is a metric that is inversely proportional with the earliest point
+    at which two given binary strings diverge, thus providing a notion of
+    \emph{distance}.
+    \tcblower
+    This example was adapted from Ben Green's University of Oxford
+    \href{https://courses.maths.ox.ac.uk/course/view.php?id=65}{Metric Spaces
+    and Complex Analysis} Michaelmas 2021 course notes.
+\end{example}
 \begin{definition}{Norm}{norm}
     A \emph{norm} is an abstraction of the absolute value. Suppose that $ V $ is
     a normable vector space. Then $ \vert\vert\cdot\vert\vert \colon V \to
@@ -451,6 +560,33 @@
     centered at $ x_0 $ with radius $ \epsilon $} is defined to be the set
     $ \overline{B}(x_0, \epsilon) = \left\{ x \in X \colon d(x, x_0) \leq
     \epsilon \right\} $.
+
+    \centering
+    \begin{minipage}{.5\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {squarespace};
+            \draw[fill=ballfill, dashed] (0, 0) circle[radius=1] node[above
+                left=1cm]{$ X $};
+            \filldraw (0, 0) circle (1pt) node[left] {$ x_0 $};
+            \draw[->] (0, 0) -- (canvas polar cs:angle=30, radius=1cm)
+                node[anchor=north, pos=0.5, xshift=2pt]{$ \epsilon $};
+        \end{tikzpicture}
+        \captionof{figure}{The open ball $ B(x_0, \epsilon) \subset X $}
+    \end{minipage}\hfill
+    \begin{minipage}{.5\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {squarespace};
+            \draw[fill=ballfill] (0, 0) circle[radius=1] node[above left=1cm]
+                {$ X $};
+            \filldraw (0, 0) circle (1pt) node[left] {$ x_1 $};
+            \draw[->] (0, 0) -- (canvas polar cs:angle=30, radius=1cm)
+                node[anchor=north, pos=0.5, xshift=2pt]{$ \delta $};
+        \end{tikzpicture}
+        \captionof{figure}{The closed ball $ \overline{B}(x_1, \delta)
+            \subset X $}
+    \end{minipage}
 \end{definition}
 \begin{definition}{Interior Points}{interior-points}
     Let $ A \subset X $. An \emph{interior point} $ y \in X $ of $ A $ is an
@@ -475,6 +611,48 @@
     The set of all such points is denoted as $ A^e $, and is called \emph{the
     exterior of A}.
 \end{definition}
+\begin{example}{Illustration of Interior, Boundary, and Exterior Points}
+        {int-bound-ext-graphic}
+    Consider an ambient space $ X $, and the shaded subset $ A \subseteq X $.
+    We can illustrate examples of points from the interior, boundary, and
+    exterior of $ A $.
+
+    \begin{minipage}{.3\linewidth}
+        \centering
+        \begin{tikzpicture}[scale=0.95]
+            \pic at (0, 0) {squarespace};
+            \pic[scale=0.5, every path/.style={fill=ballfill, dashed}] at (0, 0)
+                {squarespace};
+            \filldraw (0, 0) circle (1pt) node[below, yshift=-5pt] {$ x $};
+        \end{tikzpicture}
+        \captionof{figure}{An interior point $ x \in A^o $}
+    \end{minipage}\hfill
+    \begin{minipage}{.3\linewidth}
+        \centering
+        \begin{tikzpicture}[scale=0.95]
+            \pic at (0, 0) {squarespace};
+            \pic[scale=0.5, every path/.style={fill=ballfill, dashed}] at (0, 0)
+                {squarespace};
+            \filldraw (.75, 0) circle (1pt) node[right, xshift=5pt] {$ y $};
+        \end{tikzpicture}
+        \captionof{figure}{A boundary point $ y \in \partial A $}
+    \end{minipage}\hfill
+    \begin{minipage}{.3\linewidth}
+        \centering
+        \begin{tikzpicture}[scale=0.95]
+            \pic at (.2, 0) {squarespace};
+            \pic[scale=0.5, every path/.style={fill=ballfill, dashed}] at (0, 0)
+                {squarespace};
+            \filldraw (1.3, 0) circle (1pt) node[below, yshift=-5pt] {$ z $};
+        \end{tikzpicture}
+        \captionof{figure}{An exterior point $ z \in A^e $}
+    \end{minipage}
+
+    Note that the interior, boundary, and exterior are mutually disjoint and can
+    be placed under the disjoint union operation to form the entire ambient
+    space. This fact is henceforth denoted by ``$ A^o \coprod \partial A \coprod
+    A^e = X $'' for $ A \subseteq X $.
+\end{example}
 \begin{example}{Finding the interior, boundary, and exterior of a
         set}{int-bound-ext}
     Consider $ (\mathbb{R}, d) $ with $ A = (0, 1] \subset \mathbb{R} $.
@@ -546,6 +724,32 @@
     \emph{closed} if and only if $ \partial F \subseteq F $. Note that a set can
     be both open and closed: typical examples are the empty set and the entire
     space; these sets are called \emph{clopen}.
+
+    \centering
+    \begin{minipage}{.5\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {squarespace};
+            \draw[fill=ballfill, dashed] (0, 0) circle[radius=1];
+            \draw (0, 0) circle[radius=1.3] node {$ X^o $} node[above left=1cm]
+                {$ X^e $};
+            \foreach \i in {0, 30, ..., 360} \filldraw
+                (canvas polar cs:angle=\i, radius=1.15cm) circle (1pt);
+        \end{tikzpicture}
+        \captionof{figure}{An open set $ X $ does not contain its boundary
+            points.}
+    \end{minipage}\hfill
+    \begin{minipage}{.5\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {squarespace};
+            \draw[fill=ballfill] (0, 0) circle[radius=1.15] node {$ Y^o $}
+                node[above left=1cm] {$ Y^e $};
+            \foreach \i in {0, 30, ..., 360} \filldraw
+                (canvas polar cs:angle=\i, radius=1.15cm) circle (1pt);
+        \end{tikzpicture}
+        \captionof{figure}{A closed set $ Y $ contains its boundary points.}
+    \end{minipage}
 \end{definition}
 \begin{example}{Subset vs. Subspace}{subset-subspace}
     Consider $ (\mathbb{R}, d) $ with $ A = (0, 1) \cup (1, 2) $. If $ A $ is
@@ -563,7 +767,13 @@
 \end{example}
 
 \lecture{Lecture V}{Viewer.aspx?id=dbcb156d-d828-454f-929d-b091009bf65b}{
-    TODO Description
+    Lecture Five proves multiple important theorems: a set is open if and only
+    if its complement is closed; a set is open if and only if we can place an
+    open ball around every point and stay inside of the set; and an open set can
+    be expressed as a union of open balls. We also introduce the notion of
+    \emph{a topology} $ T_d $ as the collection of all open subsets, and prove
+    theorems related to closure under the familiar union and intersection set
+    operations.
 }{\DTMdisplaydate{2023}{10}{10}{Tuesday}}
 
 \begin{theorem}{A subset is open if and only if its complement is
