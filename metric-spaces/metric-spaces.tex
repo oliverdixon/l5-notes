@@ -1,8 +1,7 @@
-%%% METRIC SPACES NOTES
+% METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 
 % TODO: Remaining lectures:
-%   VI
 %   VII
 %   VIII
 %   IX
@@ -84,7 +83,7 @@
     longspace/.pic={
         \draw plot[smooth cycle, tension=0.8] coordinates {(5,1)
             (5,0) (5,-1) (0,-2) (-5,-1) (-5,0) (-5,1) (0,2)};
-    }
+    },
 }
 
 \newcommand*\iffforward{\par\boxed\Longrightarrow\ }
@@ -749,8 +748,7 @@
             \draw[fill=ballfill, dashed] (0, 0) circle[radius=1];
             \draw (0, 0) circle[radius=1.3] node {$ A^o $} node[above left=1cm]
                 {$ A^e $};
-            \foreach \i in {0, 30, ..., 360} \filldraw
-                (canvas polar cs:angle=\i, radius=1.15cm) circle (1pt);
+            \foreach \i in {0, 30, ..., 360} \filldraw (\i:1.15cm) circle (1pt);
         \end{tikzpicture}
         \captionof{figure}{An open set $ A $ does not contain its boundary
             points.}
@@ -761,8 +759,7 @@
             \pic at (0, 0) {squarespace};
             \draw[fill=ballfill] (0, 0) circle[radius=1.15] node {$ F^o $}
                 node[above left=1cm] {$ F^e $};
-            \foreach \i in {0, 30, ..., 360} \filldraw
-                (canvas polar cs:angle=\i, radius=1.15cm) circle (1pt);
+            \foreach \i in {0, 30, ..., 360} \filldraw (\i:1.15cm) circle (1pt);
         \end{tikzpicture}
         \captionof{figure}{A closed set $ F $ contains its boundary points.}
     \end{minipage}
@@ -1036,6 +1033,159 @@
     \end{tikzpicture}
     \captionof{figure}{We consider the intersection of open sets using the
         smallest open ball $ B(x, \epsilon) $.}
+\end{theorem}
+\begin{theorem}{Summary of \texorpdfstring{$ T_d $}{Open Set} Properties}
+        {summary-open-set}
+    Let $ (X, d) $ be a metric space, and let $ T_d $ be the topology induced by
+    $ d $. Then,
+    \setaxiomprefix{T}
+    \begin{axioms}
+        \item $ \emptyset, X \in T_d $;
+        \item For any collection of open sets $ \Lambda \subseteq T_d $,
+            $ \bigcup_{\Omega \in \Lambda} \Omega \in T_d $ is open
+            (\cref{theorem:open-union-open});\label{axiom:open-union-open}
+        \item For any finite collection of open sets $ \Omega_1, \ldots,
+            \Omega_N \in T_d $, $ \bigcap_{i=1}^N \Omega_i \in T_d $ is open
+            (\cref{theorem:open-intersection-open}).
+    \end{axioms}
+\end{theorem}
+
+\lecture{Lecture VI}{Viewer.aspx?id=ed63db50-27cd-4d84-8e60-b093009be8af}{
+    Lecture Six continues to cover the topology induced by a metric by deriving
+    the corresponding properties of closed sets. We introduce the concept of
+    \emph{topological equivalence} as weaker method of determining ``sameness''
+    between metric spaces. We finally define the \emph{closure} of a set, and
+    prove that the closure is closed.
+}{\DTMdisplaydate{2023}{10}{12}{Tuesday}}
+
+\begin{theorem}{Summary of Closed Set Properties}{summary-closed-set}
+    We can easily derive a dual of \cref{theorem:summary-open-set} for arbitrary
+    and finite collections of \emph{closed} sets.
+    \setaxiomprefix{F}
+    \begin{axioms}
+        \item For any collection of closed sets $ \mathcal{F} $,
+            \begin{equation}
+                \text{For all } F \in \mathcal{F} \text{, } \underbrace{F^c \in
+                T_d}_\mathrm{\Cref{theorem:open-subset-closed-complement}}
+                \implies\underbrace{\bigcup_{F \in \mathcal{F}} \left( F^c
+                \right) \in T_d}_\mathrm{\Cref{axiom:open-union-open}} \implies
+                \bigcap_{F \in \mathcal{F}} F \text { is closed,}
+            \end{equation}
+            since $ \left(\bigcap_{F \in \mathcal{F}}\right)^c =
+            \bigcup_{F \in \mathcal{F}} \left( F^c \right) \in T_d $ by De
+            Morgan's laws.
+        \item Similarly, for any finite collection of closed sets $ F_1, \ldots,
+            F_N $,
+            \begin{equation}
+                \left( \bigcup_{i=1}^N F_i \right)^c = \bigcap_{i=1}^N F_i^c \in
+                T_d \implies \bigcup_{i=1}^N F_i \text{ is closed.}
+            \end{equation}
+    \end{axioms}
+\end{theorem}
+\begin{definition}{Topological Equivalence}{topological-equivalence}
+    Let $ d $ and $ d^* $ be metrics on a set $ X $. Then, $ (X, d) $ and $ (X,
+    d^*) $ are \emph{(topologically) equivalent} if and only if $ T_d = T_{d^*}
+    $; that is, $ d $ and $ d^* $ induce the same topologies.
+\end{definition}
+\begin{theorem}{Determining Topological Equivalence}{determining-top-eq}
+    Let $ X $ be a set and let $ d $ and $ d^* $ be metrics on $ X $. Then, $
+    T_d = T_{d^*} $ if and only if there exists a scalar $ \lambda > 0 $ for
+    which
+    \begin{equation}
+        \frac{1}{\lambda} d(x, y) \leq d^*(x, y) \leq \lambda d(x, y)
+    \end{equation}
+    for all $ x, y \in X $.
+\end{theorem}
+\begin{example}{\texorpdfstring{$ \mathbb{R}^2 $}{The plane} is topologically
+        equivalent under the \texorpdfstring{$ d_1 $, $ d_2 $, and $ d_\infty
+        $}{standard} metrics}{plane-top-eq}
+    TODO
+\end{example}
+\begin{definition}{Closure}{closure}
+    Let $ (X, d) $ be a metric space and $ A \subseteq X $. Then the
+    \emph{closure} of $ A $, denoted by $ \overline{A} $, is defined to be $
+    \overline{A} = A \cup \partial A $.
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (leftball) at (0, 0);
+        \coordinate (rightball) at (9, 0);
+        \coordinate (leftbound) at (2, 0);
+        \coordinate (rightbound) at (7, 0);
+        \pic at (leftball) {squarespace};
+        \draw[fill=ballfill, dotted] (leftball) circle[radius=1] node {$ A $}
+            node [above left=1cm] {$ X $};
+        \foreach \i in {0, 30, ..., 360} \filldraw (leftball)++(\i:1cm)
+            circle (1pt);
+        \pic at (rightball) {squarespace};
+        \draw[fill=ballfill] (rightball) circle[radius=1] node
+            {$ \overline{A} $} node [above left=1cm] {$ X $};
+        \foreach \i in {0, 30, ..., 360} \filldraw (rightball)++(\i:1cm) circle
+            (1pt);
+        \draw[->, thick] (leftbound) -- (rightbound) node [above, pos=.5,
+            yshift=7pt] {$ A \mapsto A \cup \partial A = \overline{A} $} node
+            [below, pos=.5, yshift=-7pt] {Closure Operation on $ A $};
+    \end{tikzpicture}
+    \captionof{figure}{Encapsulating the boundary of an open set $ A $ is the
+    most `efficient' way of generating a closed set $ \overline{A} $ with the
+    same interior $ A^o $.}
+\end{definition}
+\begin{theorem}{The closure is closed}{closure-closed}
+    For an open set $ A \subseteq X $, the closure $ \overline{A} $ is closed.
+    \begin{proof}
+        By \cref{theorem:open-subset-closed-complement}, $ \overline{A} $ is
+        closed if and only if $ \left(\overline{A}\right)^c $ is open. If $
+        \left(\overline{A}\right)^c = \emptyset $, then we are done since the
+        empty set is known to be open; thus we assume that $
+        \left(\overline{A}\right)^c \neq \emptyset $. To prove the openness of
+        this non-empty set, we consider an arbitrary point $ x \in
+        \left(\overline{A}\right)^c $ and construct an $ \epsilon > 0 $ such
+        that $ B(x, \epsilon) \subseteq \left(\overline{A}\right)^c $.
+
+        Since $ \overline{A} = A \cup \partial A $, $ x \not\in A $ and $ x
+        \not\in \partial A $. We can use rules from first-order logic combined
+        with De Morgan's laws to negate the definition of a boundary point shown
+        in \cref{definition:boundary-points}:
+        \begin{align}
+            x \in \left(\partial A\right)^c &= \left\{ y \in X \colon \forall
+                \epsilon > 0 \, B(y, \epsilon) \cap A \neq \emptyset \land B(y,
+                \epsilon) \cap A^c \neq \emptyset \right\}^c \\
+            &= \left\{ y \in X \colon \forall \epsilon > 0 \, B(y, \epsilon)
+                \cap A = \emptyset \lor B(y, \epsilon) \cap A^c = \emptyset
+                \right\} \\
+            &= \left\{ y \in X \colon \forall \epsilon > 0 \, B(y, \epsilon)
+                \subseteq A^c \lor B(y, \epsilon) \subseteq A \right\}
+        \end{align}
+        Since $ x \not\in A $, $ B(x, \epsilon) \subseteq A^c $ is the only
+        possibility. Now suppose that there exists a $ y \in B(x, \epsilon) $
+        such that $ y \in \partial A $. By definition, for all $ \delta > 0 $,
+        \begin{equation}
+            B(y, \delta) \cap A \neq \emptyset \land B(y, \delta) \cap A^c \neq
+            \emptyset.
+        \end{equation}
+
+        Hence, $ \overline{A} $ is closed.
+    \end{proof}
+    \centering
+    \begin{tikzpicture}
+        \coordinate (apos) at (-2.2, 0);
+        \coordinate (xpos) at (2.2, 0);
+        \coordinate (ypos) at (1.9, .7);
+        \pic at (0, 0) {longspace};
+        \node at (0, 0) {$ X $};
+        \draw[fill=ballfill] (apos) circle (1.5cm) node {$ \overline{A} $};
+        \draw[dashed] (xpos) circle (1.5cm);
+        \filldraw (xpos) circle (1pt) node[below, yshift=-3pt] {$ x $};
+        \draw (xpos) -- ++(320:1.5cm) node[right, pos=.5, yshift=3pt]
+            {$ \epsilon $};
+        \draw[dashed] (ypos) circle (.6cm);
+        \filldraw (ypos) circle (1pt) node[below] {$ y $} node[above]
+            {$ \delta $};
+        \draw (ypos) -- ++(140:.6cm);
+    \end{tikzpicture}
+    \captionof{figure}{The open ball $ B(x, \epsilon) $ lies entirely within the
+        complement of the closure of $ A $, within which $ B(y, \delta) $ is
+        nested.}
 \end{theorem}
 \end{document}
 
