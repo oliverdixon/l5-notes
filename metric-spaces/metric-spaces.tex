@@ -56,7 +56,7 @@
 \captionsetup[figure]{justification=centering}
 
 \definecolor{ballfill}{RGB}{242, 242, 242}
-\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.pathreplacing, calc}
 \tikzset{
     every node/.style={transform shape},
     unitaxes/.pic={
@@ -70,6 +70,10 @@
     squarespace/.pic={
         \draw plot[smooth cycle, tension=0.8] coordinates {(2,2)
             (1.5,0) (2,-2) (0,-1.5) (-2,-2) (-1.5,0) (-2,2) (0,1.5)};
+    },
+    longspace/.pic={
+        \draw plot[smooth cycle, tension=0.8] coordinates {(5,1)
+            (5,0) (5,-1) (0,-2) (-5,-1) (-5,0) (-5,1) (0,2)};
     }
 }
 
@@ -166,6 +170,7 @@
     \setlist[axioms]{label=#1\arabic*), ref=#1\arabic*}
 }
 
+\renewcommand*\thesection{\Roman{section}}
 \let\Sectionmark\sectionmark
 \def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
 \renewcommand*\headrulewidth{0pt}
@@ -569,8 +574,8 @@
             \draw[fill=ballfill, dashed] (0, 0) circle[radius=1] node[above
                 left=1cm]{$ X $};
             \filldraw (0, 0) circle (1pt) node[left] {$ x_0 $};
-            \draw[->] (0, 0) -- (canvas polar cs:angle=30, radius=1cm)
-                node[anchor=north, pos=0.5, xshift=2pt]{$ \epsilon $};
+            \draw (0, 0) -- ++(30:1cm) node[anchor=north, pos=0.5, xshift=2pt]
+                {$ \epsilon $};
         \end{tikzpicture}
         \captionof{figure}{The open ball $ B(x_0, \epsilon) \subset X $}
     \end{minipage}\hfill
@@ -581,8 +586,8 @@
             \draw[fill=ballfill] (0, 0) circle[radius=1] node[above left=1cm]
                 {$ X $};
             \filldraw (0, 0) circle (1pt) node[left] {$ x_1 $};
-            \draw[->] (0, 0) -- (canvas polar cs:angle=30, radius=1cm)
-                node[anchor=north, pos=0.5, xshift=2pt]{$ \delta $};
+            \draw (0, 0) -- ++(30:1cm) node[anchor=north, pos=0.5, xshift=2pt]
+                {$ \delta $};
         \end{tikzpicture}
         \captionof{figure}{The closed ball $ \overline{B}(x_1, \delta)
             \subset X $}
@@ -731,24 +736,24 @@
         \begin{tikzpicture}
             \pic at (0, 0) {squarespace};
             \draw[fill=ballfill, dashed] (0, 0) circle[radius=1];
-            \draw (0, 0) circle[radius=1.3] node {$ X^o $} node[above left=1cm]
-                {$ X^e $};
+            \draw (0, 0) circle[radius=1.3] node {$ A^o $} node[above left=1cm]
+                {$ A^e $};
             \foreach \i in {0, 30, ..., 360} \filldraw
                 (canvas polar cs:angle=\i, radius=1.15cm) circle (1pt);
         \end{tikzpicture}
-        \captionof{figure}{An open set $ X $ does not contain its boundary
+        \captionof{figure}{An open set $ A $ does not contain its boundary
             points.}
     \end{minipage}\hfill
     \begin{minipage}{.5\linewidth}
         \centering
         \begin{tikzpicture}
             \pic at (0, 0) {squarespace};
-            \draw[fill=ballfill] (0, 0) circle[radius=1.15] node {$ Y^o $}
-                node[above left=1cm] {$ Y^e $};
+            \draw[fill=ballfill] (0, 0) circle[radius=1.15] node {$ F^o $}
+                node[above left=1cm] {$ F^e $};
             \foreach \i in {0, 30, ..., 360} \filldraw
                 (canvas polar cs:angle=\i, radius=1.15cm) circle (1pt);
         \end{tikzpicture}
-        \captionof{figure}{A closed set $ Y $ contains its boundary points.}
+        \captionof{figure}{A closed set $ F $ contains its boundary points.}
     \end{minipage}
 \end{definition}
 \begin{example}{Subset vs. Subspace}{subset-subspace}
@@ -844,6 +849,165 @@
         $. Hence, $ A $ is open.
     \end{proof}
 \end{theorem}
+\begin{theorem}{The open ball is open}{open-ball-open}
+    For any $ x \in X $ and any $ \epsilon > 0 $, $ B(x, \epsilon) \in T_d $.
+    Since $ T_d $ is defined to be a collection of open sets, this statement is
+    equivalent to the claim that ``\emph{the open ball is open}''.
+    \begin{proof}
+        Take an $ x \in X $ and construct the open ball $ B(x, \epsilon) $, for
+        a fixed $ \epsilon > 0 $. Take $ y \in B(x, \epsilon) $ and let $ \Delta
+        \coloneq d(x, y) $. If $ x=y $, then $ B(x, \epsilon) = B(y, \epsilon)
+        \subseteq B(x, \epsilon) $, there is nothing to do; therefore, we assume
+        that $ x \neq y $, thus $ \Delta > 0 $ and $ 0 < \Delta < \epsilon $.
+        Let $ \epsilon^\prime \coloneq \min\left\{ \Delta, \epsilon-\Delta
+        \right\} $ and consider $ B(y, \epsilon^\prime/2) $.
 
+        To show the openness of the open ball, it is sufficient to show that $
+        B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $. By the triangle
+        inequality on $ d $, for any $ z \in B(y, \epsilon^\prime/2) $,
+
+        \begin{minipage}{.45\linewidth}
+            \begin{align}
+                d(x, z) &\leq d(x, y) + d(y, z) \\
+                &\leq \Delta + \epsilon^\prime/2 \\
+                &= \Delta + \min\left\{\Delta, \epsilon-\Delta\right\}/2 \\
+                &\leq \Delta + (\epsilon-\Delta)/2 \\
+                &< \Delta + \epsilon - \Delta \\
+                &= \epsilon
+            \end{align}
+        \end{minipage}\hfill
+        \begin{minipage}{.5\linewidth}
+            \centering
+            \begin{tikzpicture}
+                \coordinate (xpoint) at (0, 0);
+                \coordinate (ypoint) at (0, 1.5);
+                \draw[dashed] (xpoint) circle (3cm);
+                \draw (xpoint) -- ++(-30:3cm) node[anchor=south, pos=0.5,
+                    xshift=3pt, yshift=3pt] {$ \epsilon $};
+                \filldraw (xpoint) circle (1pt) node[left, xshift=-3pt]{$ x $};
+                \filldraw (ypoint) circle (1pt) node[right, xshift=3pt]{$ y $};
+                \draw (xpoint) -- (ypoint);
+                \draw[dashed] (ypoint) circle (1cm);
+                \draw (ypoint) -- ++(120:1cm) node[left, pos=.5, yshift=-3pt]
+                    {$ \frac{\epsilon^\prime}{2} $};
+                \node at (-.75, -1.3) {$ \left[\,\Delta = d(x, y)\,\right] $};
+            \end{tikzpicture}
+        \end{minipage}
+
+        Thus, $ z \in B(x, \epsilon) $ for all $ z \in B(y, \epsilon^\prime/2)
+        $. Therefore, $ B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $, and
+        open balls are open.
+    \end{proof}
+\end{theorem}
+\begin{theorem}{Elements of the topology are unions of open balls}
+        {topology-open-balls}
+    If $ A \in T_d $ and $ A \neq \emptyset $, then $ A $ is a union of open
+    balls.
+    \begin{proof}
+        Suppose that $ A \neq \emptyset $ and is open. Take any $ x \in A $, and
+        we know by \cref{theorem:openness-open-balls} that there exists an $
+        \epsilon > 0 $ such that $ B(x, \epsilon) \subseteq A $. Then, we claim
+        that
+        \begin{equation}
+            A = \bigcup_{x \in A} B\left(x, \epsilon(x)\right)
+            \underbrace{\iff \left[
+                A \subseteq \bigcup_{x \in A} B\left(x, \epsilon(x)\right)
+                    \,\land\, A \supseteq \bigcup_{x \in A} B\left(x,
+                    \epsilon(x)\right)
+                \right]}_{\text{true by the principle of double-inclusion}}.
+        \end{equation}
+        The leftmost conjunctive on the right-hand-side is clearly true: by
+        placing an open ball of strictly positive radius around every point in $
+        A $, the entire set will be covered, since $ x \in B(x, \epsilon) $ for
+        any $ x $ and $ \epsilon > 0 $. The rightmost conjunctive is also true,
+        since each individual ball is wholly contained within $ A $, and taking
+        the union of all such interior balls cause any elements to ``escape''
+        the set in which they reside. Hence, $ A $ is the union of the open
+        balls centered about every point in $ A $.
+    \end{proof}
+\end{theorem}
+\begin{theorem}{Any union of open sets is open}{open-union-open}
+    Take \emph{any} (finite, countably infinite, or uncountable) collection of
+    open sets $ \Lambda \subseteq T_d $. Then, for any $ \Lambda $,
+    \begin{equation}
+        \bigcup_{\Omega \in \Lambda} \Omega \in T_d \text { is open.}
+    \end{equation}
+    \begin{proof}
+        Take $ x \in \bigcup_{\Omega \in \Lambda} \Omega $. Thus, there exists
+        an open $ \Omega(x) $ such that $ x \in \Omega(x) $. By
+        \cref{definition:open-closed-clopen-sets}, there exists an $ \epsilon >
+        0 $ such that $ B(x, \epsilon) \subseteq \Omega(x) $. By transitivity,
+        $ B(x, \epsilon) \subseteq \bigcup_{\Omega \in \Lambda} \Omega $, and
+        every union of open sets is open by \cref{theorem:topology-open-balls}.
+    \end{proof}
+\end{theorem}
+\begin{example}{Non-finite open sets are not closed under intersection}
+        {non-finite-intersection-counterexample}
+    Take $ (\mathbb{R}, d) $ and consider $ I_n \coloneq \left(-1/n, 1/n\right)
+    $. Under infinite intersection, we calculate the singleton:
+    \begin{equation}
+        \bigcap_{n=1}^\infty I_n = \{0\}.
+    \end{equation}
+    It is known that all singletons are not open---since any $ B(x, \epsilon) $
+    with $ \epsilon > 0 $ would exceed the bounds of $ \{x\} $---despite each
+    individual $ I_n $ being open. Thus, the union property shown in
+    \cref{theorem:open-union-open} does not apply with such generality to
+    intersections.
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (linestart) at (-5, 0);
+        \coordinate (lineend) at (5, 0);
+        \draw[<->] (linestart) -- (lineend) node[right, xshift=7pt]
+            {$ \mathbb{R} $};
+        \draw (0, .2) -- (0, -.2) node[above, yshift=15pt] {$ 0 $};
+        \foreach \i in {1, ..., 4}{
+            \draw (-5+\i, .2) arc[start angle=90, end angle=270, radius=.2]
+                node[above, xshift=-5pt, yshift=13pt] {$ -\frac{1}{\i} $};
+            \draw (5-\i, .2) arc[start angle=90, end angle=-90, radius=.2]
+                node[above, xshift=3pt, yshift=13pt] {$ \frac{1}{\i} $};
+            \draw[<->] (-5+\i, -\i*.5-.5) -- (5-\i, -\i*.5-.5);
+            \draw[dotted] (-5+\i, -\i*.5-.5) -- (-5+\i, 0);
+            \draw[dotted] (5-\i, -\i*.5-.5) -- (5-\i, 0);
+            \node at (5, -\i*.5-.5) {$ I_\i $};
+        }
+    \end{tikzpicture}
+\end{example}
+\begin{theorem}{Any finite intersection of open sets is closed}
+        {open-intersection-open}
+    Take \emph{any finite} collection of open sets $ \Omega_1, \ldots, \Omega_N
+    \in T_d $. Then,
+    \begin{equation}
+        \bigcap_{i=1}^N \Omega_i \in T_d \text{ is open.}
+    \end{equation}
+    \begin{proof}
+        If $ \bigcap_{i=1}^N \Omega_i = \emptyset $, then there is nothing
+        further to show, since $ \emptyset $ is known to be open and thus a
+        member of all topologies $ T_d $. We now assume that the intersection is
+        non-empty, from which we take an element $ x $. Thus, there exists an $
+        \epsilon_i > 0 $ for which $ B(x, \epsilon_i) \subseteq \Omega_i $. Let
+        $ \epsilon \coloneq \min\left\{ \epsilon_1, \ldots, \epsilon_N \right\}
+        $; then, $ B(x, \epsilon) \subseteq B(x, \epsilon_i) \subseteq \Omega_i
+        $ for any choice of $ i = 1, \ldots, N $. Therefore,
+        \begin{equation}
+            B(x, \epsilon) \in \bigcap_{i=1}^N \Omega_i,
+        \end{equation}
+        since $ B(x, \epsilon) $ is a member of \emph{every} $ \Omega_i $. Hence
+        we can place an open ball with positive radius around any point and stay
+        within the intersection; it is therefore open.
+    \end{proof}
+    \centering
+    \begin{tikzpicture}
+        \pic at (0, 0) {longspace};
+        \foreach \i in {.8, .6, .4}{
+            \pic[scale=\i, every path/.style={fill=ballfill, dashed}] at (0, 0)
+                {longspace};
+        }
+        \pic[scale=.2, every path/.style={fill=lightgray, dashed}] at (0, 0)
+            {longspace} node {$ \bigcap $};
+    \end{tikzpicture}
+    \captionof{figure}{We consider the intersection of open sets using the
+        smallest open ball $ B(x, \epsilon) $.}
+\end{theorem}
 \end{document}
 
