@@ -1,4 +1,4 @@
-% METRIC SPACES NOTES
+%%% METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 
 % TODO: Remaining lectures:
@@ -10,9 +10,8 @@
 %   XI
 %   XII
 
-% Panopto branding information:
-% https://company-32474.frontify.com/d/Nch796CKUfjy/
-%   2016-brand-style-guide#/basics/logo/vector-files
+% Video camera vector graphic adapted under CC0 from SVGRepo:
+% https://www.svgrepo.com/svg/475018/video-call
 
 \documentclass{article}
 
@@ -32,8 +31,9 @@
     firstpageonly,
 ]{draftwatermark}
 \usepackage[en-GB]{datetime2}
+\usepackage[missing=master]{gitinfo2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, tcolorbox,
-    tocloft, titlesec, lastpage, gitinfo2, enumitem, tikz}
+    tocloft, titlesec, lastpage, enumitem, tikz}
 \usepackage[hypcap=false]{caption}
 \usepackage[
     colorlinks,
@@ -57,13 +57,7 @@
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 \renewcommand*\vec{\mathbf}
 \DraftwatermarkOptions{text={Warning: Incomplete notes; do not redistribute.
-    Check for %
-    \begingroup
-        \hypersetup{allcolors=black}%
-        \textsl{\href{\githublink}{GitHub updates}}
-    \endgroup
-    periodically.}
-}
+    Check for \href{\githublink}{GitHub updates} periodically.}}
 
 \setlength\parskip{.8em}
 \setlength\parindent{0pt}
@@ -155,11 +149,13 @@
 %   #4: date of live delivery
 %
 \newcommand\lecture[4]{
-    \section{#1}
-    \ifstrempty{#2}{\raisebox{3pt}{\itshape No recording}}{%
-        \raisebox{3pt}{\itshape #4} \hspace*{8pt}
-        \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
-            {\fbox{\centering\includegraphics[width=12pt]{../panopto}}}
+    \section{#1}\hfill
+    \raisebox{3pt}{
+        \ifstrempty{#2}{\textit{No recording}}{
+            \textit{#4}\hspace*{8pt}
+            \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
+                {\fbox{\centering\includegraphics[width=13pt]{../panopto}}}
+        }%
     }%
     \par #3
     \vskip.5\baselineskip
@@ -236,12 +232,13 @@
             Compilation Date & \today \\
             Author Contact & \href{mailto: Oliver Dixon <od641@york.ac.uk>}%
                 {od641@york.ac.uk} \\
-            Sources Link & \url{\githublink tree/master/\internalname} \\
-            Latest Commit Hash & \href{\githublink commit/\gitHash}{\gitHash} \\
+            Sources Link & \url{\githublink tree/\gitBranch/\internalname} \\
+            Latest Commit Hash & \href{\githublink commit/\gitHash}{\gitHash}
+                (\gitBranch) \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
                 \internalname .pdf} \\
-            Document Licence & \href{\githublink blob/master/LICENSE}
-                {MIT Licence} (All rights reserved on draft copies)
+            Document Licence & \href{\githublink blob/\gitBranch/LICENSE}
+                {MIT Licence} (all rights reserved on draft copies)
         \end{tabular}
     \end{center}
 \end{titlepage}
@@ -845,23 +842,40 @@
         \epsilon) \subseteq A.
     \end{equation}
 
-    \begin{proof}
-        \iffforward First assume that $ A $ is open. By definition, $ A \cap
-        \partial A = \emptyset $. If $ A = \emptyset $, then there exists no
-        points to select, and the universal quantifier cannot select any points
-        for $ x $. If $ A \neq \emptyset $, then there must be at least one $
-        \epsilon > 0 $ such that $ B(x, \epsilon) \subseteq A $ or $ B(x,
-        \epsilon) \subseteq A^c $ for any $ x \in A $. But, since $ x \in A $,
-        it is not possible that $ B(x, \epsilon) $ is entirely contained within
-        $ A^c $, since $ x \in B(x, \epsilon) $. Hence, $ B(x, \epsilon)
-        \subseteq A^c $, as required.
+    \begin{minipage}{\dimexpr.6\linewidth-2em-2.5pt}
+        \begin{proof}
+            \iffforward First assume that $ A $ is open. By definition, $ A \cap
+            \partial A = \emptyset $. If $ A = \emptyset $, then there exists no
+            points to select, and the universal quantifier cannot select any
+            points for $ x $. If $ A \neq \emptyset $, then there must be at
+            least one $ \epsilon > 0 $ such that $ B(x, \epsilon) \subseteq A $
+            or $ B(x, \epsilon) \subseteq A^c $ for any $ x \in A $. But, since
+            $ x \in A $, it is not possible that $ B(x, \epsilon) $ is entirely
+            contained within $ A^c $, since $ x \in B(x, \epsilon) $. Hence, $
+            B(x, \epsilon) \subseteq A^c $, as required.
 
-        \iffbackward Next, suppose that $ \forall x \in A\, \exists \epsilon > 0
-        $ such that $ B (x, \epsilon) \subseteq A $. Take any $ x \in A $.
-        Immediately, we can see that $ x \not\in \partial A $, since $ B(x,
-        \epsilon) \cap A^c = \emptyset $, because $ B(x, \epsilon) \subseteq A
-        $. Hence, $ A $ is open.
-    \end{proof}
+            \iffbackward Next, suppose that $ \forall x \in A\, \exists \epsilon
+            > 0 $ such that $ B (x, \epsilon) \subseteq A $. Take any $ x \in A
+            $.  Immediately, we can see that $ x \not\in \partial A $, since $
+            B(x, \epsilon) \cap A^c = \emptyset $, because $ B(x, \epsilon)
+            \subseteq A $. Hence, $ A $ is open.
+        \end{proof}
+    \end{minipage}\hspace*{2em}%
+    \begin{minipage}{.4\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \coordinate (x1point) at (1, 1);
+            \coordinate (x2point) at (-1, 1);
+            \coordinate (x3point) at (0, -1);
+            \draw[dashed] (0, 0) circle (2.7cm);
+            \foreach \i in {1, 2, 3}{
+                \filldraw (x\i point) circle (1pt);
+                \draw[dashed] (x\i point) circle (.4cm*\i+.05cm) node[below]
+                    {$ x_\i $};
+                \draw (x\i point) -- ++(45*\i:.4cm*\i+.05cm);
+            }
+        \end{tikzpicture}
+    \end{minipage}
 \end{theorem}
 \begin{theorem}{The open ball is open}{open-ball-open}
     For any $ x \in X $ and any $ \epsilon > 0 $, $ B(x, \epsilon) \in T_d $.
@@ -895,8 +909,8 @@
             \begin{tikzpicture}
                 \coordinate (xpoint) at (0, 0);
                 \coordinate (ypoint) at (0, 1.5);
-                \draw[dashed] (xpoint) circle (3cm);
-                \draw (xpoint) -- ++(-30:3cm) node[anchor=south, pos=0.5,
+                \draw[dashed] (xpoint) circle (2.7cm);
+                \draw (xpoint) -- ++(-30:2.7cm) node[anchor=south, pos=0.5,
                     xshift=3pt, yshift=3pt] {$ \epsilon $};
                 \filldraw (xpoint) circle (1pt) node[left, xshift=-3pt]{$ x $};
                 \filldraw (ypoint) circle (1pt) node[right, xshift=3pt]{$ y $};
@@ -910,7 +924,7 @@
 
         Thus, $ z \in B(x, \epsilon) $ for all $ z \in B(y, \epsilon^\prime/2)
         $. Therefore, $ B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $, and
-        open balls are open.
+        open balls are indeed open.
     \end{proof}
 \end{theorem}
 \begin{theorem}{Elements of the topology are unions of open balls}
