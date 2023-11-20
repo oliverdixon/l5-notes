@@ -2,7 +2,6 @@
 % OLIVER DIXON, 2023
 
 % TODO: Remaining lectures:
-%   V
 %   VI
 %   VII
 %   VIII
@@ -24,6 +23,14 @@
     left=1in,
     right=1in,
 ]{geometry}
+\usepackage[
+    angle=90,
+    hanchor=l,
+    hpos=.05\paperwidth,
+    fontsize=1.5em,
+    color=black,
+    firstpageonly,
+]{draftwatermark}
 \usepackage[en-GB]{datetime2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, tcolorbox,
     tocloft, titlesec, lastpage, gitinfo2, enumitem, tikz}
@@ -44,10 +51,19 @@
 
 % END DOCUMENT METADATA
 
+\newcommand*\githublink{https://github.com/oliverdixon/l5-notes/}
 \newcommand*\subtitle{Consolidated Lecture Notes}
 \urlstyle{same}
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 \renewcommand*\vec{\mathbf}
+\DraftwatermarkOptions{text={Warning: Incomplete notes; do not redistribute.
+    Check for %
+    \begingroup
+        \hypersetup{allcolors=black}%
+        \textsl{\href{\githublink}{GitHub updates}}
+    \endgroup
+    periodically.}
+}
 
 \setlength\parskip{.8em}
 \setlength\parindent{0pt}
@@ -220,14 +236,12 @@
             Compilation Date & \today \\
             Author Contact & \href{mailto: Oliver Dixon <od641@york.ac.uk>}%
                 {od641@york.ac.uk} \\
-            Sources Link & \url{https://github.com/oliverdixon/l5-notes/tree/%
-                master/\internalname} \\
-            Latest Commit Hash & \href{https://github.com/oliverdixon/l5-notes/%
-                commit/\gitHash}{\gitHash} \\
+            Sources Link & \url{\githublink tree/master/\internalname} \\
+            Latest Commit Hash & \href{\githublink commit/\gitHash}{\gitHash} \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
                 \internalname .pdf} \\
-            Document Licence & \href{https://github.com/oliverdixon/l5-notes/%
-                blob/master/LICENSE}{MIT Licence}
+            Document Licence & \href{\githublink blob/master/LICENSE}
+                {MIT Licence} (All rights reserved on draft copies)
         \end{tabular}
     \end{center}
 \end{titlepage}
@@ -389,7 +403,7 @@
             {Upper Bounds of $ S $};
         \foreach \i in {-4, ..., 4} \draw[gray] (\i, -.1) -- (\i, .1);
         \draw[ultra thick, red] (setstart) -- (setend) node[pos=0.5,
-            anchor=north, yshift=-7pt]{Set $ S \subset \mathbb{R} $};
+            anchor=north, yshift=-7pt]{Set $ S $};
         \filldraw (setstart) circle (2pt) node[above, yshift=7pt] {$ \inf S $};
         \filldraw (setend) circle (2pt) node[above, yshift=7pt] {$ \sup S $};
     \end{tikzpicture}
