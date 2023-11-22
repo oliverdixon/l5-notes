@@ -2,7 +2,6 @@
 % OLIVER DIXON, 2023
 
 % TODO: Remaining lectures:
-%   VII
 %   VIII
 %   IX
 %   X
@@ -171,6 +170,7 @@
 \newtheoremtype{Example}{example}{blue}
 \newtheoremtype{Theorem}{theorem}{red}
 
+\newcommand*\crefrangeconjunction{~to~}
 \creflabelformat{equation}{#2#1#3}
 \crefname{equation}{equation}{equations}
 \Crefname{equation}{Equation}{Equations}
@@ -592,7 +592,7 @@
             \pic at (0, 0) {squarespace};
             \draw[fill=ballfill, dashed] (0, 0) circle[radius=1] node[above
                 left=1cm]{$ X $};
-            \filldraw (0, 0) circle (1pt) node[left] {$ x_0 $};
+            \filldraw[red] (0, 0) circle (1pt) node[left] {$ x_0 $};
             \draw (0, 0) -- ++(30:1cm) node[anchor=north, pos=0.5, xshift=2pt]
                 {$ \epsilon $};
         \end{tikzpicture}
@@ -604,7 +604,7 @@
             \pic at (0, 0) {squarespace};
             \draw[fill=ballfill] (0, 0) circle[radius=1] node[above left=1cm]
                 {$ X $};
-            \filldraw (0, 0) circle (1pt) node[left] {$ x_1 $};
+            \filldraw[red] (0, 0) circle (1pt) node[left] {$ x_1 $};
             \draw (0, 0) -- ++(30:1cm) node[anchor=north, pos=0.5, xshift=2pt]
                 {$ \delta $};
         \end{tikzpicture}
@@ -647,7 +647,7 @@
             \pic at (0, 0) {squarespace};
             \pic[scale=0.5, every path/.style={fill=ballfill, dashed}] at (0, 0)
                 {squarespace};
-            \filldraw (0, 0) circle (1pt) node[below, yshift=-5pt] {$ x $};
+            \filldraw[red] (0, 0) circle (1pt) node[below, yshift=-5pt] {$ x $};
         \end{tikzpicture}
         \captionof{figure}{An interior point $ x \in A^o $}
     \end{minipage}\hfill
@@ -657,7 +657,8 @@
             \pic at (0, 0) {squarespace};
             \pic[scale=0.5, every path/.style={fill=ballfill, dashed}] at (0, 0)
                 {squarespace};
-            \filldraw (.75, 0) circle (1pt) node[right, xshift=5pt] {$ y $};
+            \filldraw[red] (.75, 0) circle (1pt) node[right, xshift=5pt]
+                {$ y $};
         \end{tikzpicture}
         \captionof{figure}{A boundary point $ y \in \partial A $}
     \end{minipage}\hfill
@@ -667,7 +668,8 @@
             \pic at (.2, 0) {squarespace};
             \pic[scale=0.5, every path/.style={fill=ballfill, dashed}] at (0, 0)
                 {squarespace};
-            \filldraw (1.3, 0) circle (1pt) node[below, yshift=-5pt] {$ z $};
+            \filldraw[red] (1.3, 0) circle (1pt) node[below, yshift=-5pt]
+                {$ z $};
         \end{tikzpicture}
         \captionof{figure}{An exterior point $ z \in A^e $}
     \end{minipage}
@@ -757,7 +759,8 @@
             \draw[fill=ballfill, dashed] (0, 0) circle[radius=1];
             \draw (0, 0) circle[radius=1.3] node {$ A^o $} node[above left=1cm]
                 {$ A^e $};
-            \foreach \i in {0, 30, ..., 360} \filldraw (\i:1.15cm) circle (1pt);
+            \foreach \angle in {0, 30, ..., 360}
+                \filldraw[red] (\angle:1.15cm) circle (1pt);
         \end{tikzpicture}
         \captionof{figure}{An open set $ A $ does not contain its boundary
             points.}
@@ -768,7 +771,8 @@
             \pic at (0, 0) {squarespace};
             \draw[fill=ballfill] (0, 0) circle[radius=1.15] node {$ F^o $}
                 node[above left=1cm] {$ F^e $};
-            \foreach \i in {0, 30, ..., 360} \filldraw (\i:1.15cm) circle (1pt);
+            \foreach \angle in {0, 30, ..., 360}
+                \filldraw[red] (\angle:1.15cm) circle (1pt);
         \end{tikzpicture}
         \captionof{figure}{A closed set $ F $ contains its boundary points.}
     \end{minipage}
@@ -815,11 +819,12 @@
         \begin{align}
             \partial \left(A^c\right) &= \left\{ y \in X \colon \forall \epsilon
                 > 0 \, B(y, \epsilon) \cap A^c \neq \emptyset \land B(x,
-                \epsilon) \cap \left(A^c\right)^c \neq \emptyset \right\} \\
+                \epsilon) \cap \left(A^c\right)^c \neq \emptyset \right\}%
+                \label{eqn:boundary-complement-boundary-first}\\
             &= \left\{ y \in X \colon \forall \epsilon > 0 \, B(y, \epsilon)
                 \cap A^c \neq \emptyset \land B(x, \epsilon) \cap A \neq
                 \emptyset \right\} \\
-            &= \partial A.
+            &= \partial A.\label{eqn:boundary-complement-boundary-last}
         \end{align}
         Since $ \partial A \subseteq A^c $, and $ \partial A = \partial
         \left(A^c\right) $, we know that $ \partial \left(A^c\right) \subseteq
@@ -848,7 +853,7 @@
         \epsilon) \subseteq A.
     \end{equation}
 
-    \begin{minipage}{\dimexpr.6\linewidth-2em-2.5pt}
+    \begin{minipage}{\dimexpr.6\linewidth-2em}
         \begin{proof}
             \iffforward First assume that $ A $ is open. By definition, $ A \cap
             \partial A = \emptyset $. If $ A = \emptyset $, then there exists no
@@ -866,7 +871,7 @@
             B(x, \epsilon) \cap A^c = \emptyset $, because $ B(x, \epsilon)
             \subseteq A $. Hence, $ A $ is open.
         \end{proof}
-    \end{minipage}\hspace*{2em}%
+    \end{minipage}\hfill
     \begin{minipage}{.4\linewidth}
         \centering
         \begin{tikzpicture}
@@ -874,11 +879,11 @@
             \coordinate (x2point) at (-1, 1);
             \coordinate (x3point) at (0, -1);
             \draw[dashed] (0, 0) circle (2.7cm);
-            \foreach \i in {1, 2, 3}{
-                \filldraw (x\i point) circle (1pt);
-                \draw[dashed] (x\i point) circle (.4cm*\i+.05cm) node[below]
-                    {$ x_\i $};
-                \draw (x\i point) -- ++(45*\i:.4cm*\i+.05cm);
+            \foreach \pt in {1, 2, 3}{
+                \filldraw[red] (x\pt point) circle (1pt);
+                \draw[dashed, red] (x\pt point) circle (.4cm*\pt+.05cm)
+                    node[below] {$ x_\pt $};
+                \draw[red] (x\pt point) -- ++(45*\pt:.4cm*\pt+.05cm);
             }
         \end{tikzpicture}
     \end{minipage}
@@ -909,6 +914,10 @@
                 &< \Delta + \epsilon - \Delta \\
                 &= \epsilon
             \end{align}
+
+            Thus, $ z \in B(x, \epsilon) $ for all $ z \in B(y,
+            \epsilon^\prime/2) $. Therefore, $ B(y, \epsilon^\prime/2) \subseteq
+            B(x, \epsilon) $, and open balls are indeed open.
         \end{minipage}\hfill
         \begin{minipage}{.5\linewidth}
             \centering
@@ -918,19 +927,19 @@
                 \draw[dashed] (xpoint) circle (2.7cm);
                 \draw (xpoint) -- ++(-30:2.7cm) node[anchor=south, pos=0.5,
                     xshift=3pt, yshift=3pt] {$ \epsilon $};
-                \filldraw (xpoint) circle (1pt) node[left, xshift=-3pt]{$ x $};
-                \filldraw (ypoint) circle (1pt) node[right, xshift=3pt]{$ y $};
-                \draw (xpoint) -- (ypoint);
-                \draw[dashed] (ypoint) circle (1cm);
-                \draw (ypoint) -- ++(120:1cm) node[left, pos=.5, yshift=-3pt]
-                    {$ \frac{\epsilon^\prime}{2} $};
-                \node at (-.75, -1.3) {$ \left[\,\Delta = d(x, y)\,\right] $};
+                \filldraw[blue] (xpoint) circle (1pt) node[left, xshift=-3pt]
+                    {$ x $};
+                \filldraw[red] (ypoint) circle (1pt) node[right, xshift=3pt]
+                    {$ y $};
+                \draw[blue, dotted] (xpoint) -- (ypoint);
+                \draw[dashed, red] (ypoint) circle (1cm);
+                \draw[red] (ypoint) -- ++(120:1cm) node[left, pos=.5,
+                    yshift=-3pt] {$ \frac{\epsilon^\prime}{2} $};
+                \node[blue] at (-.75, -1.3)
+                    {$ \left[\,\Delta = d(x, y)\,\right] $};
             \end{tikzpicture}
         \end{minipage}
-
-        Thus, $ z \in B(x, \epsilon) $ for all $ z \in B(y, \epsilon^\prime/2)
-        $. Therefore, $ B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $, and
-        open balls are indeed open.
+        \par\vskip-2\parskip % Position the QED symbol
     \end{proof}
 \end{theorem}
 \begin{theorem}{Elements of the topology are unions of open balls}
@@ -1152,7 +1161,7 @@
             \draw (x0point) -- (1, -1) node[below, pos=.6, yshift=-3pt]
                 {$ \epsilon_4 $};
             \draw[red, dashed, fill=ballfill] (x0point) circle (5pt);
-            \filldraw[red] (x0point) circle (1pt) node[left, red, xshift=-3pt,
+            \filldraw[red] (x0point) circle (1pt) node[left, red, xshift=-5pt,
                 yshift=-1pt] {$ x_0 $};
         \end{tikzpicture}
         \captionof{figure}{Considering the $ d_1 $-defined unit circle $ \Omega
@@ -1171,7 +1180,8 @@
             \foreach \i in {0, 1, 2} {
                 \node[diamond, draw, minimum width=1.7cm, minimum height=1.7cm,
                     dashed, red, fill=ballfill] at (x\i point) {};
-                \filldraw[red] (x\i point) circle (1pt) node[below] {$ x_\i $};
+                \filldraw[red] (x\i point) circle (1pt) node[below, yshift=-2pt]
+                    {$ x_\i $};
             }
         \end{tikzpicture}
         \captionof{figure}{Considering the $ d_2 $-defined unit circle $
@@ -1201,8 +1211,9 @@
             \filldraw[red] (rightball)++(\i:1cm) circle (1pt);
         }
         \draw[->, thick] (leftbound) -- (rightbound) node [above, pos=.5,
-            yshift=7pt] {$ A \mapsto A \cup \partial A = \overline{A} $} node
-            [below, pos=.5, yshift=-7pt] {Closure Operation on $ A $};
+            yshift=7pt] {$ A \mapsto A \cup {\color{red}\partial A} =
+            \overline{A} $} node [below, pos=.5, yshift=-7pt]
+            {Closure Operation on $ A $};
     \end{tikzpicture}
     \captionof{figure}{Encapsulating the boundary of an open set $ A $ is the
     most `efficient' way of generating a closed set $ \overline{A} $ with the
@@ -1274,12 +1285,118 @@
 \end{theorem}
 
 \lecture{Lecture VII}{}{
-    Lecture Seven begins with an example of a space-specific equality between
-    the closure of the open ball and the closed ball. We continue to demonstrate
-    that a space is closed if and only if it is equal to its own closure, and
-    moved to introduce the topic of limit/accumulation/cluster points, proving
-    some useful related properties.
+    Lecture Seven demonstrates that a space is closed if and only if it is equal
+    to its own closure, and moves to introduce the topic of
+    limit/accumulation/cluster points whilst proving some useful related
+    properties.
 }{}
 
+\begin{theorem}{Relationships between a closed set and its
+        closure}{closed-set-closure}
+    If $ A \subseteq X $ is closed, then $ A = \overline{A} $; if $ A =
+    \overline{A} $, then $ A $ is closed. That is, $ A $ is closed if and only
+    if $ A = \overline{A} $.
+    \begin{proof}
+        \iffforward If $ A = \overline{A} $, then $ \overline{A} $ is closed by
+        \cref{theorem:closure-closed}. Thus $ A $ is closed.
+
+        \iffbackward If $ A $ is closed, then $ \overline{A} = A \cup \partial A
+        $ by \cref{definition:closure}. By
+        \cref{definition:open-closed-clopen-sets}, $ \overline{A} = \partial A
+        \cup \overline{A} = A $.
+    \end{proof}
+\end{theorem}
+\begin{definition}{Limit/Accumulation/Cluster Points}{limit-points}
+    \begin{minipage}{.6\linewidth}
+        Let $ (X, d) $ be a metric space, and $ A \subseteq X $. A \emph{limit
+        point} $ y \in X $ of $ A $ is an element of $ X $ for which
+        \begin{equation}
+            \left[ B(y, \epsilon) \setminus \{y\} \right] \cap A \neq \emptyset
+            \text{ for all } \epsilon > 0.
+        \end{equation}
+        The \emph{derived set} of $ A $ is denoted $ A^\prime $, and is defined
+        to be the set of all limit points of $ A $. Equivalently (in the context
+        of metric spaces, but not the more general topological spaces), we can
+        say that $ y \in X $ is a limit point of $ A $ if, for any $ \epsilon >
+        0 $, the intersection $ B(y, \epsilon) \cap A $ contains infinitely many
+        points of $ A $. Limit points are sometimes called \emph{accumulation
+        points} or \emph{cluster points}.
+    \end{minipage}\hfill
+    \begin{minipage}{.35\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \pic at (0, 0) {squarespace};
+            \node at (-1.3, 1.3) {$ X $};
+            \fill[ballfill] (0, 0) circle (1.3cm);
+            \foreach \radius in {1.3, 1.2, ..., .1}
+                \draw[dashed] (0, 0) circle (\radius cm);
+            \foreach \origin in {45, 135, 270}
+                \draw[thick] (\origin:1.3cm) -- (0, 0);
+            \filldraw[red] (0, 0) circle (1pt);
+        \end{tikzpicture}
+        \captionof{figure}{As the open balls contract \emph{ad infinitum}, we
+            can still find non-centroid points of $ A $.}
+    \end{minipage}
+\end{definition}
+\begin{theorem}{The closure of a set is the union of the base set and its
+        derived set}{closure-limit-union}
+    For a set $ A \subseteq X $, $ \overline{A} = A \cup A^\prime $.
+    \begin{proof}
+        If $ A $ is closed, then the result is immediate: $ \overline{A} = A $
+        (by \cref{theorem:closed-set-closure}), so $ A^\prime \subseteq A =
+        \overline{A} $. Thus, we assume that $ A $ is open. If $ A^\prime =
+        \emptyset $, then $ A^\prime \subseteq \overline{A} $, since $ A $ has
+        no limit points; therefore, we also assume that $ A $ is non-empty. We
+        will show the equality $ \overline{A} = A \cup A^\prime $ for an open
+        non-empty set $ A $ through the principle of double-inclusion.
+
+        \iffforward Without loss of generality, suppose that $ y $ is such that
+        $ y \in \partial A $ and $ y \not\in A $. For any choice of $ \epsilon >
+        0 $, we know that $ B(y, \epsilon) \cap A \neq \emptyset $. Since $ y
+        \not\in A $, there exists a $ y^\prime \neq y \in A, B(y, \epsilon) $.
+        This is consistent with \cref{definition:limit-points}. Thus, $ y $ is a
+        limit point, so $ A^\prime \subseteq \overline{A} $ and $ A \cup
+        A^\prime \subseteq \overline{A} $.
+
+        \iffbackward Given that $ A $ is not closed, there exists a $ y \in
+        A^\prime $ such that $ y \not\in A $. Take $ \epsilon > 0 $ and note
+        that $ B(y, \epsilon) \cap A \neq \emptyset $ and $ B(y, \epsilon) \cap
+        A^c \neq \emptyset $. Thus, by \cref{definition:boundary-points}, $ y $
+        is a boundary point. We now unravel the definitions:
+        \begin{alignat}{2}
+            A \text{ is closed} &\iff \partial A \subseteq A
+                &&\mathrm{[\Cref{definition:open-closed-clopen-sets}]} \\
+            &\iff A^c \text{ is open}
+                &&\mathrm{[\Cref{theorem:open-subset-closed-complement}]}%
+                \label{eqn:closure-limit-union-open} \\
+            &\iff A^c \cap \partial \left( A^c \right) = \emptyset
+                &&\mathrm{[\Cref{definition:open-closed-clopen-sets}]} \\
+            &\iff A^c \cap \partial A = \emptyset
+                &&\mathrm{[\Crefrange{eqn:boundary-complement-boundary-first}%
+                    {eqn:boundary-complement-boundary-last}]} \\
+            &\iff \forall x \in A^c,\, \exists \epsilon > 0 \text{ s.t. }
+                B(x, \epsilon) \subseteq A^c\quad
+                &&\mathrm{[\Cref{eqn:closure-limit-union-open}]} \\
+            &\iff A = \overline{A} \\
+            &\iff A \supseteq A^\prime
+        \end{alignat}
+        Hence, $ \overline{A} = A \cup \partial A = A \cup A^\prime $ for any
+        $ A \subseteq X $.
+    \end{proof}
+\end{theorem}
+\begin{definition}{Topological Interpretation of Closure}{topological-closure}
+    Let $ (X, d) $ be a metric space, and $ A \subseteq X $. Then,
+    \begin{equation}
+        \overline{A} = \bigcap_{F \in \mathcal{F}} F,
+    \end{equation}
+    where $ \mathcal{F} $ is the collection of all open supersets of $ A $. This
+    means that $ \overline{A} $ is the smallest closed superset of $ A $.
+\end{definition}
+\begin{definition}{Density}{density}
+    Let $ (X, d) $ be a metric space and $ A \subseteq X $. Then $ A $ is said
+    to be \emph{dense} in $ X $ if and only if $ \overline{A} = X $.
+    Alternatively---but equivalently---for any $ x \in X $ and any $ \epsilon >
+    0 $, there exists an $ a \in A $ such that $ d(x, a) < \epsilon $.
+\end{definition}
 \end{document}
 
