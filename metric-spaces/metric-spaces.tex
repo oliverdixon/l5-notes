@@ -8,6 +8,9 @@
 %   X
 %   XI
 %   XII
+%   XIII
+%   XIV
+%   XV
 
 % Video camera vector graphic adapted under CC0 from SVGRepo:
 % https://www.svgrepo.com/svg/475018/video-call
@@ -65,7 +68,7 @@
 \captionsetup[figure]{justification=centering}
 
 \definecolor{ballfill}{RGB}{242, 242, 242}
-\usetikzlibrary{decorations.pathreplacing, calc}
+\usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric}
 \tikzset{
     every node/.style={transform shape},
     unitaxes/.pic={
@@ -292,10 +295,10 @@
     \cref{eqn:d2-metric}, and \cref{eqn:dinf-metric} (and a very loose
     understanding of a \emph{circle}) we can draw the unit ``circles'' generated
     in $ \mathbb{R}^2 $ under each of these metrics. For instance,
-    \cref{fig:dinf-unit-circle} shows the boundary of the set $ S^1_\infty $,
+    \cref{fig:dinf-unit-circle} shows the boundary of the set $ S^2_\infty $,
     where
     \begin{equation}
-        S^1_\infty = \left\{ (x, y) \in \mathbb{R}^2 \colon d_\infty(x, y) \leq
+        S^2_\infty = \left\{ (x, y) \in \mathbb{R}^2 \colon d_\infty(x, y) \leq
         1 \right\}.
     \end{equation}
 
@@ -303,9 +306,10 @@
         \centering
         \begin{tikzpicture}
             \pic at (0, 0) {unitaxes};
-            \draw (-1, 0) -- (0, 1) -- (1, 0) -- (0, -1) -- (-1, 0);
+            \node[diamond, draw, minimum width=2cm, minimum height=2cm] {};
         \end{tikzpicture}
-        \captionof{figure}{Unit Circle in $ d_1 $}
+        \captionof{figure}{Unit Circle in $ d_1 $}%
+        \label{fig:d1-unit-circle}
     \end{minipage}\hfill
     \begin{minipage}{.3\linewidth}
         \centering
@@ -313,7 +317,8 @@
             \pic at (0, 0) {unitaxes};
             \draw (0, 0) circle[radius=1];
         \end{tikzpicture}
-        \captionof{figure}{Unit Circle in $ d_2 $}
+        \captionof{figure}{Unit Circle in $ d_2 $}%
+        \label{fig:d2-unit-circle}
     \end{minipage}\hfill
     \begin{minipage}{.3\linewidth}
         \centering
@@ -1099,7 +1104,74 @@
 \begin{example}{\texorpdfstring{$ \mathbb{R}^2 $}{The plane} is topologically
         equivalent under the \texorpdfstring{$ d_1 $, $ d_2 $, and $ d_\infty
         $}{standard} metrics}{plane-top-eq}
-    TODO
+    Recall the unit circles $ S_1^2 $ (\cref{fig:d1-unit-circle}), $ S_2^2 $
+    (\cref{fig:d2-unit-circle}), and $ S_\infty^2 $
+    (\cref{fig:dinf-unit-circle}) from \cref{example:unit-circles}. We claim
+    (and give an information demonstration to show) that $ T_{d_1} = T_{d_2} =
+    T_{d_\infty} $; that is, $ d_1 $, $ d_2 $, and $ d_\infty $ are
+    topologically equivalent by \cref{definition:topological-equivalence}.
+
+    We first consider the set $ S_1^2 \eqcolon \Omega $ in the space $
+    \left(\mathbb{R}^2, d_2\right) $. Take a point $ x_0 \in \Omega $ and
+    construct the open ball $ B(x_0, \epsilon/2) \subseteq S_1^1 $; such a ball
+    can be created by considering an $ \epsilon \coloneq \min\left\{ \epsilon_1,
+    \epsilon_2, \epsilon_3, \epsilon_4 \right\} $, where $ \epsilon_i $ for $ i
+    = 1, 2, 3, 4 $ are the perpendicular distances from $ x_0 $ to the boundary
+    of $ \Omega $ by the $ d_2 $ metric. Thus, $ \Omega \in T_{d_2} $.
+
+    Next, consider $ S_2^2 \eqcolon \Lambda $ in the space $ \left(\mathbb{R}^2,
+    d_1\right) $. Constructing open balls in $ d_1 $ around the points in $
+    \Lambda $ is easier still, since we only need to consider `diamonds' which
+    lie entirely within the Euclidean $ d_2 $ unit circle. Intuitively, we can
+    see that the metrics $ d_1 $ and $ d_2 $ induce the same topologies; an
+    analogous argument applies for establishing the equivalences to $ d_\infty
+    $.
+
+    \centering
+    \begin{minipage}{.45\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \coordinate (x0point) at (-.5, .5);
+            \draw[->] (-2.5, 0) -- (2.5, 0) node[right] {$x$};
+            \draw[->] (0, -2.5) -- (0, 2.5) node[above] {$y$} node[left=1.5cm,
+                below=.5cm] {$ (\mathbb{R}^2, d_2) $};
+            \node[diamond, dashed, draw, minimum width=4cm, minimum height=4cm]
+                {};
+            \draw (x0point) -- (-1, 1) node[above, pos=.5, xshift=7pt]
+                {$ \epsilon_1 $};
+            \draw (x0point) -- (1, 1) node[below, pos=.5, xshift=7pt]
+                {$ \epsilon_2 $};
+            \draw (x0point) -- (-1, -1) node[below, pos=.5, xshift=7pt]
+                {$ \epsilon_3 $};
+            \draw (x0point) -- (1, -1) node[below, pos=.6, yshift=-3pt]
+                {$ \epsilon_4 $};
+            \draw[red, dashed, fill=ballfill] (x0point) circle (5pt);
+            \filldraw[red] (x0point) circle (1pt) node[left, red, xshift=-3pt,
+                yshift=-1pt] {$ x_0 $};
+        \end{tikzpicture}
+        \captionof{figure}{Considering the $ d_1 $-defined unit circle $ \Omega
+            $ as an open set in the $ \left(\mathbb{R}^2, d_2\right) $ space.}
+    \end{minipage}\hfill
+    \begin{minipage}{.45\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \coordinate (x0point) at (-1, -.4);
+            \coordinate (x1point) at (1, -.4);
+            \coordinate (x2point) at (0, 1);
+            \draw[->] (-2.5, 0) -- (2.5, 0) node[right] {$x$};
+            \draw[->] (0, -2.5) -- (0, 2.5) node[above] {$y$} node[left=.8cm]
+                {$ (\mathbb{R}^2, d_1) $};
+            \draw[dashed] (0, 0) circle (2cm);
+            \foreach \i in {0, 1, 2} {
+                \node[diamond, draw, minimum width=1.7cm, minimum height=1.7cm,
+                    dashed, red, fill=ballfill] at (x\i point) {};
+                \filldraw[red] (x\i point) circle (1pt) node[below] {$ x_\i $};
+            }
+        \end{tikzpicture}
+        \captionof{figure}{Considering the $ d_2 $-defined unit circle $
+            \Lambda $ as an open set in the $ \left(\mathbb{R}^2, d_1\right) $
+            space.}
+    \end{minipage}
 \end{example}
 \begin{definition}{Closure}{closure}
     Let $ (X, d) $ be a metric space and $ A \subseteq X $. Then the
@@ -1157,14 +1229,21 @@
                 \subseteq A^c \lor B(y, \epsilon) \subseteq A \right\}
         \end{align}
         Since $ x \not\in A $, $ B(x, \epsilon) \subseteq A^c $ is the only
-        possibility. Now suppose that there exists a $ y \in B(x, \epsilon) $
-        such that $ y \in \partial A $. By definition, for all $ \delta > 0 $,
+        possibility. We also require that $ x \not\in \partial A $, so we need
+        to show that there is an $ \epsilon > 0 $ such that $ B(x, \epsilon)
+        \cap \partial A = \emptyset $. By way of contradiction, suppose that
+        there exists a $ y \in B(x, \epsilon) $ such that $ y \in \partial A $.
+        By definition \cref{definition:boundary-points}, for all $ \delta > 0 $,
         \begin{equation}
-            B(y, \delta) \cap A \neq \emptyset \land B(y, \delta) \cap A^c \neq
-            \emptyset.
+            B(y, \delta) \cap A \neq \emptyset \text{ and } B(y, \delta) \cap
+            A^c \neq \emptyset.
         \end{equation}
-
-        Hence, $ \overline{A} $ is closed.
+        If $ d(x, y) \eqcolon \epsilon^* < \epsilon $, and $ \hat{\epsilon}
+        \coloneq \min\left\{ \epsilon^*, \epsilon - \epsilon^* \right\} $, then
+        $ B(y, \hat{\epsilon}/2) \subseteq B(x, \epsilon) $. But $ B(y,
+        \hat{\epsilon}) \cap A \neq \emptyset $. This is a contradiction: no
+        such $ y $ can exist, so $ \left(\overline{A}\right)^c $ is open, and $
+        \overline{A} $ is closed.
     \end{proof}
     \centering
     \begin{tikzpicture}
