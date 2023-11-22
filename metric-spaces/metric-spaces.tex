@@ -153,10 +153,14 @@
 \newcommand\lecture[4]{
     \section{#1}\hfill
     \raisebox{3pt}{
-        \ifstrempty{#2}{\textit{No recording}}{
+        \ifstrempty{#2}{
+            \textit{No recording}\hspace*{8pt}
+            \fbox{\centering\includegraphics[width=13pt]{../icons/no-video.pdf}}
+        }{
             \textit{#4}\hspace*{8pt}
             \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
-                {\fbox{\centering\includegraphics[width=13pt]{../panopto}}}
+                {\fbox{\centering\includegraphics[width=13pt]%
+                    {../icons/video.pdf}}}
         }%
     }%
     \par #3
@@ -1113,7 +1117,7 @@
 
     We first consider the set $ S_1^2 \eqcolon \Omega $ in the space $
     \left(\mathbb{R}^2, d_2\right) $. Take a point $ x_0 \in \Omega $ and
-    construct the open ball $ B(x_0, \epsilon/2) \subseteq S_1^1 $; such a ball
+    construct the open ball $ B(x_0, \epsilon/2) \subseteq S_1^2 $; such a ball
     can be created by considering an $ \epsilon \coloneq \min\left\{ \epsilon_1,
     \epsilon_2, \epsilon_3, \epsilon_4 \right\} $, where $ \epsilon_i $ for $ i
     = 1, 2, 3, 4 $ are the perpendicular distances from $ x_0 $ to the boundary
@@ -1122,10 +1126,12 @@
     Next, consider $ S_2^2 \eqcolon \Lambda $ in the space $ \left(\mathbb{R}^2,
     d_1\right) $. Constructing open balls in $ d_1 $ around the points in $
     \Lambda $ is easier still, since we only need to consider `diamonds' which
-    lie entirely within the Euclidean $ d_2 $ unit circle. Intuitively, we can
-    see that the metrics $ d_1 $ and $ d_2 $ induce the same topologies; an
-    analogous argument applies for establishing the equivalences to $ d_\infty
-    $.
+    lie entirely within the Euclidean $ d_2 $ unit circle. By covering the
+    entire set, we can conclude that $ \Lambda \in T_{d_1} $.
+
+    Intuitively, we can see that the metrics $ d_1 $ and $ d_2 $ induce the same
+    topologies; an analogous argument applies for establishing the equivalences
+    to $ d_\infty $.
 
     \centering
     \begin{minipage}{.45\linewidth}
@@ -1185,15 +1191,15 @@
         \coordinate (leftbound) at (2, 0);
         \coordinate (rightbound) at (7, 0);
         \pic at (leftball) {squarespace};
-        \draw[fill=ballfill, dotted] (leftball) circle[radius=1] node {$ A $}
+        \draw[fill=ballfill, dashed] (leftball) circle[radius=1] node {$ A $}
             node [above left=1cm] {$ X $};
-        \foreach \i in {0, 30, ..., 360} \filldraw (leftball)++(\i:1cm)
-            circle (1pt);
         \pic at (rightball) {squarespace};
         \draw[fill=ballfill] (rightball) circle[radius=1] node
             {$ \overline{A} $} node [above left=1cm] {$ X $};
-        \foreach \i in {0, 30, ..., 360} \filldraw (rightball)++(\i:1cm) circle
-            (1pt);
+        \foreach \i in {0, 30, ..., 360} {
+            \filldraw[red] (leftball)++(\i:1cm) circle (1pt);
+            \filldraw[red] (rightball)++(\i:1cm) circle (1pt);
+        }
         \draw[->, thick] (leftbound) -- (rightbound) node [above, pos=.5,
             yshift=7pt] {$ A \mapsto A \cup \partial A = \overline{A} $} node
             [below, pos=.5, yshift=-7pt] {Closure Operation on $ A $};
@@ -1266,5 +1272,14 @@
         complement of the closure of $ A $, within which $ B(y, \delta) $ is
         nested.}
 \end{theorem}
+
+\lecture{Lecture VII}{}{
+    Lecture Seven begins with an example of a space-specific equality between
+    the closure of the open ball and the closed ball. We continue to demonstrate
+    that a space is closed if and only if it is equal to its own closure, and
+    moved to introduce the topic of limit/accumulation/cluster points, proving
+    some useful related properties.
+}{}
+
 \end{document}
 
