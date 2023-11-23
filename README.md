@@ -25,7 +25,7 @@ to (a) send a patch to <od641@york.ac.uk>, or (b) fork the GitHub repository,
 make the necessary changes in your own copy, and submit a pull request. Either
 way, you'll need to locally compile the LaTeX with a single invocation of
 `latexmk -pdf`. You'll also need to set-up
-[a post-commit hook](http://mirrors.ctan.org/macros/latex/contrib/gitinfo2/post-xxx-sample.txt)
+[a post-commit/checkout hook](http://mirrors.ctan.org/macros/latex/contrib/gitinfo2/post-xxx-sample.txt)
 in the Git repository to make version-control data visible to
 [gitinfo2](https://ctan.org/pkg/gitinfo2) when rendering the front covers.
 
