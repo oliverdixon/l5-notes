@@ -67,7 +67,7 @@
 \captionsetup[figure]{justification=centering}
 
 \definecolor{ballfill}{RGB}{242, 242, 242}
-\usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric}
+\usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric, arrows.meta}
 \tikzset{
     every node/.style={transform shape},
     unitaxes/.pic={
@@ -132,7 +132,7 @@
 }
 \makeatother
 
-\titleformat{\section}[runin]{\scshape \LARGE}{}{0pt}{}[\hfill \mbox{}]
+\titleformat\section[runin]{\scshape \LARGE}{}{0pt}{}[\hfill \mbox{}]
 \makeatletter
 \renewcommand*\cftsecpresnum{\begin{lrbox}{\@tempboxa}}
 \makeatother
@@ -250,6 +250,11 @@
 \end{titlepage}
 \stepcounter{page}
 \tableofcontents
+\vfill
+\begin{center}
+    \setlength\fboxsep{6pt}
+    \footnotesize \fbox{Dedicated to Maia}
+\end{center}
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
@@ -412,6 +417,8 @@
         \filldraw (setstart) circle (2pt) node[above, yshift=7pt] {$ \inf S $};
         \filldraw (setend) circle (2pt) node[above, yshift=7pt] {$ \sup S $};
     \end{tikzpicture}
+    \captionof{figure}{$ S \subset \mathbb{R} $  and its bounding points on the
+        real line}
 \end{definition}
 \begin{definition}{The \texorpdfstring{$ \ell^\infty $}{Ell-Infinity}
         Set of Bounded Sequences}{ell-infinity}
@@ -886,6 +893,7 @@
                 \draw[red] (x\pt point) -- ++(45*\pt:.4cm*\pt+.05cm);
             }
         \end{tikzpicture}
+        \captionof{figure}{Every point supports an open ball}
     \end{minipage}
 \end{theorem}
 \begin{theorem}{The open ball is open}{open-ball-open}
@@ -901,11 +909,11 @@
         Let $ \epsilon^\prime \coloneq \min\left\{ \Delta, \epsilon-\Delta
         \right\} $ and consider $ B(y, \epsilon^\prime/2) $.
 
-        To show the openness of the open ball, it is sufficient to show that $
-        B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $. By the triangle
-        inequality on $ d $, for any $ z \in B(y, \epsilon^\prime/2) $,
-
         \begin{minipage}{.45\linewidth}
+            To show the openness of the open ball, it is sufficient to show that
+            $ B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $. By the
+            triangle inequality on $ d $, for any $ z \in B(y,
+            \epsilon^\prime/2) $,
             \begin{align}
                 d(x, z) &\leq d(x, y) + d(y, z) \\
                 &\leq \Delta + \epsilon^\prime/2 \\
@@ -914,10 +922,6 @@
                 &< \Delta + \epsilon - \Delta \\
                 &= \epsilon
             \end{align}
-
-            Thus, $ z \in B(x, \epsilon) $ for all $ z \in B(y,
-            \epsilon^\prime/2) $. Therefore, $ B(y, \epsilon^\prime/2) \subseteq
-            B(x, \epsilon) $, and open balls are indeed open.
         \end{minipage}\hfill
         \begin{minipage}{.5\linewidth}
             \centering
@@ -938,8 +942,13 @@
                 \node[blue] at (-.75, -1.3)
                     {$ \left[\,\Delta = d(x, y)\,\right] $};
             \end{tikzpicture}
+            \captionof{figure}{Careful construction of
+                $ B(y, \epsilon^\prime/2) $}
         \end{minipage}
-        \par\vskip-2\parskip % Position the QED symbol
+
+        Thus, $ z \in B(x, \epsilon) $ for all $ z \in B(y, \epsilon^\prime/2)
+        $. Therefore, $ B(y, \epsilon^\prime/2) \subseteq B(x, \epsilon) $, and
+        open balls are indeed open.
     \end{proof}
 \end{theorem}
 \begin{theorem}{Elements of the topology are unions of open balls}
@@ -1002,19 +1011,25 @@
         \coordinate (linestart) at (-5, 0);
         \coordinate (lineend) at (5, 0);
         \draw[<->] (linestart) -- (lineend) node[right, xshift=7pt]
-            {$ \mathbb{R} $};
-        \draw (0, .2) -- (0, -.2) node[above, yshift=15pt] {$ 0 $};
-        \foreach \i in {1, ..., 4}{
-            \draw (-5+\i, .2) arc[start angle=90, end angle=270, radius=.2]
-                node[above, xshift=-5pt, yshift=13pt] {$ -\frac{1}{\i} $};
-            \draw (5-\i, .2) arc[start angle=90, end angle=-90, radius=.2]
-                node[above, xshift=3pt, yshift=13pt] {$ \frac{1}{\i} $};
-            \draw[<->] (-5+\i, -\i*.5-.5) -- (5-\i, -\i*.5-.5);
-            \draw[dotted] (-5+\i, -\i*.5-.5) -- (-5+\i, 0);
-            \draw[dotted] (5-\i, -\i*.5-.5) -- (5-\i, 0);
-            \node at (5, -\i*.5-.5) {$ I_\i $};
+            {$ \mathbb{R} $}; % Number line
+        \foreach \i in {1, ..., 5}{
+            \draw (-4/\i, .2) arc[start angle=90, end angle=270, radius=.2];
+                % Left arc
+            \draw (4/\i, .2) arc[start angle=90, end angle=-90, radius=.2];
+                % Right arc
+            \draw[<->] (-4/\i, -\i*.5-.5) -- (4/\i, -\i*.5-.5); % Interval
+            \node at (5, -\i*.5-.5) {$ I_{\i} $}; % Interval marker
+            \draw[dotted] (-4/\i, -\i*.5-.5) -- (-4/\i, .2); % Left dotted line
+            \draw[dotted] (4/\i, -\i*.5-.5) -- (4/\i, .2); % Right dotted line
         }
+        \draw (0, .2) -- (0, -.2); % Zero marker
+        \node at (0, .6) {$ 0 $}; % Zero label
+        \node at (-4, .6) {$ -1 $}; % Negative-one marker
+        \node at (4, .6) {$ 1 $}; % Positive-one marker
+        \node[xshift=-5pt] at (-2, .6) {$ -1/2 $}; % Negative-one-half marker
+        \node at (2, .6) {$ 1/2 $}; % Positive-one-half marker
     \end{tikzpicture}
+    \captionof{figure}{Nested intersections $ I_1 $ through $ I_5 $}
 \end{example}
 \begin{theorem}{Any finite intersection of open sets is closed}
         {open-intersection-open}
@@ -1130,7 +1145,7 @@
     can be created by considering an $ \epsilon \coloneq \min\left\{ \epsilon_1,
     \epsilon_2, \epsilon_3, \epsilon_4 \right\} $, where $ \epsilon_i $ for $ i
     = 1, 2, 3, 4 $ are the perpendicular distances from $ x_0 $ to the boundary
-    of $ \Omega $ by the $ d_2 $ metric. Thus, $ \Omega \in T_{d_2} $.
+    of $ \Omega $ by the $ d_2 $ metric. Then, $ \Omega \in T_{d_2} $.
 
     Next, consider $ S_2^2 \eqcolon \Lambda $ in the space $ \left(\mathbb{R}^2,
     d_1\right) $. Constructing open balls in $ d_1 $ around the points in $
@@ -1329,10 +1344,10 @@
             \node at (-1.3, 1.3) {$ X $};
             \fill[ballfill] (0, 0) circle (1.3cm);
             \foreach \radius in {1.3, 1.2, ..., .1}
-                \draw[dashed] (0, 0) circle (\radius cm);
-            \foreach \origin in {45, 135, 270}
-                \draw[thick] (\origin:1.3cm) -- (0, 0);
+                \draw[dashed, gray] (0, 0) circle (\radius cm);
             \filldraw[red] (0, 0) circle (1pt);
+            \foreach \angle in {45, 165, 285}
+                \draw[-{Latex[width=5pt]}] (\angle:1.3cm) -- (\angle:.1cm);
         \end{tikzpicture}
         \captionof{figure}{As the open balls contract \emph{ad infinitum}, we
             can still find non-centroid points of $ A $.}
