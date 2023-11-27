@@ -13,12 +13,12 @@ permitted in centrally timetabled exams), head over to
  * Level 5: Linear Algebra [*Scheduled for Semester 2*]
  * Level 5: Groups, Rings, and Fields [*Scheduled for Semester 2*]
 
+## Contributing
+
 Contact me at <od641@york.ac.uk> if you spot any errors or have comments
 regarding these notes. Please be mindful that I am reading the [MMath Mathematics and Computer Science (with a year in industry)](https://www.york.ac.uk/study/undergraduate/courses/mmath-mathematics-computer-science-year-industry/)
 degree, and therefore do not study approximately half of the modules considered
 "core" by the Mathematics Department.
-
-## Contributing
 
 If you would like to contribute to any or all of these notes, please feel free
 to (a) send a patch to <od641@york.ac.uk>, or (b) fork the GitHub repository,
