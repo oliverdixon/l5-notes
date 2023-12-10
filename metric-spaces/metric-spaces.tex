@@ -2,7 +2,6 @@
 % OLIVER DIXON, 2023
 
 % TODO: Remaining lectures:
-%   VIII
 %   IX
 %   X
 %   XI
@@ -34,7 +33,7 @@
 \usepackage[en-GB]{datetime2}
 \usepackage[missing=master]{gitinfo2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, tcolorbox,
-    tocloft, titlesec, lastpage, enumitem, tikz}
+    tocloft, titlesec, lastpage, enumitem, tikz, multirow}
 \usepackage[hypcap=false]{caption}
 \usepackage[
     colorlinks,
@@ -250,11 +249,11 @@
 \end{titlepage}
 \stepcounter{page}
 \tableofcontents
-\vfill
-\begin{center}
-    \setlength\fboxsep{6pt}
-    \footnotesize \fbox{Dedicated to Maia}
-\end{center}
+% \vfill
+% \begin{center}
+%     \setlength\fboxsep{6pt}
+%     \footnotesize \fbox{Dedicated to Maia}
+% \end{center}
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
@@ -1104,7 +1103,7 @@
                 \right) \in T_d}_\mathrm{\Cref{axiom:open-union-open}} \implies
                 \bigcap_{F \in \mathcal{F}} F \text { is closed,}
             \end{equation}
-            since $ \left(\bigcap_{F \in \mathcal{F}}\right)^c =
+            since $ \left(\bigcap_{F \in \mathcal{F}} F\right)^c =
             \bigcup_{F \in \mathcal{F}} \left( F^c \right) \in T_d $ by De
             Morgan's laws.
         \item Similarly, for any finite collection of closed sets $ F_1, \ldots,
@@ -1154,8 +1153,8 @@
     entire set, we can conclude that $ \Lambda \in T_{d_1} $.
 
     Intuitively, we can see that the metrics $ d_1 $ and $ d_2 $ induce the same
-    topologies; an analogous argument applies for establishing the equivalences
-    to $ d_\infty $.
+    topologies; analogous arguments apply for establishing the equivalences to $
+    d_\infty $.
 
     \centering
     \begin{minipage}{.45\linewidth}
@@ -1413,5 +1412,184 @@
     Alternatively---but equivalently---for any $ x \in X $ and any $ \epsilon >
     0 $, there exists an $ a \in A $ such that $ d(x, a) < \epsilon $.
 \end{definition}
+
+\lecture{Lecture VIII}{Sessions/List.aspx\#folderID="072999e9-f3bc-4486-98af-%
+        b0a000d51b97"}{
+    Lecture Eight gives the definition of a \emph{sequence} in a metric space,
+    and motivates the study of various properties thereof, such as
+    \emph{convergence}. Some examples are provided, with familiar concepts from
+    Real Analysis being recast into the more abstract setting of metric and
+    topological spaces.
+}{\DTMdisplaydate{2023}{10}{19}{Thursday}}
+
+\begin{definition}{Sequence}{sequence}
+    A \emph{sequence} in a metric space $ (X, d) $ is an element of $
+    X^\mathbb{N} $, where any element $ x \in X^\mathbb{N} $ can be written as a
+    countable set $ x = \left\{ x_1, \ldots, x_n, \ldots \right\} $, such that
+    $ x_i \in X $ for all $ i \in \mathbb{N} $. Such a sequence is denoted
+    \begin{equation}
+        \left( x_n \right)_{n \in \mathbb{N}} \text{ or }
+        \left( x_n \right)_{n=1}^\infty.
+    \end{equation}
+\end{definition}
+\begin{definition}{Convergence of Sequences (by the Metric)}
+        {sequence-convergence-metric}
+    Let $ \left( x_n \right)_{n \in \mathbb{N}} $ be a sequence in $ (X, d) $.
+    Then, $ \left( x_n \right)_{n \in \mathbb{N}} $ \emph{converges} to $ x \in
+    X $ if and only if
+    \begin{equation}
+        \text{For all } \epsilon > 0 \text{, there exists an } N=N(\epsilon)
+        \text{ such that } d(x_n, x) < \epsilon \text{ for all } n > N.
+    \end{equation}
+    If this is the case, we write $ x_n \to x $ (as $ n \to \infty $), and the $
+    x $ is \emph{the} (unique) limit of $ \left(x_n\right)_{n \in \mathbb{N}} $.
+    If no such $ x $ exists, then $ \left(x_n\right)_{n \in \mathbb{N}} $ is
+    \emph{divergent}.
+
+    \centering
+    \begin{tikzpicture}
+        \draw[<->] (-5, 0) -- (5, 0) node[pos=0, left, xshift=-7pt] {$ (X, d) =
+            (\mathbb{R}, d) $}; % Number line and markings
+        \foreach \i in {-4, ..., 4} \draw[gray] (\i, -.1) -- (\i, .1);
+
+        \foreach \i in {-4.5, -3.5, ..., 4.5}
+            \filldraw[red] (\i, 0) circle (1pt); % Spacing: 1, Start: -4.5
+
+        \foreach \i in {1, 1.25, ..., 4.5}
+            \filldraw[red] (\i, 0) circle (1pt); % Spacing: 0.25, Start: 1
+
+        \foreach \i in {3, 3.125, ..., 4.5}
+            \filldraw[red] (\i, 0) circle (1pt); % Spacing: 0.125, Start: 3
+
+        \foreach \i in {4, 4.0625, ..., 4.5}
+            \filldraw[red] (\i, 0) circle (1pt); % Spacing: 0.0625, Start: 4
+
+        \filldraw (4, 0) circle (2pt) node[below=7pt] {$ x $};
+
+        \draw (3.7, .2) arc[start angle=90, end angle=270, radius=.2]; % L. arc
+        \draw (4.3, .2) arc[start angle=90, end angle=-90, radius=.2]; % R. arc
+    \end{tikzpicture}
+    \captionof{figure}{A sequence in $ (\mathbb{R}, d) $, where $ d $ is the
+        standard metric, converging to an $ x \in \mathbb{R} $. The \emph{zone
+        of convergence} $ (x-\epsilon, x+\epsilon) $ is denoted with parentheses
+        about $ x $.}
+\end{definition}
+\begin{definition}{Convergence of Sequences (by the Open Balls)}
+        {sequence-convergence-balls}
+    An equivalent notion of convergence can be expressed in terms of open balls,
+    such that the tail of the sequence exists in the open ball centered at the
+    limit. Let $ \left( x_n \right)_{n \in \mathbb{N}} $ be a sequence in $ (X,
+    d) $. Then, $ \left( x_n \right)_{n \in \mathbb{N}} $ \emph{converges} to $
+    x \in X $ if and only if
+    \begin{equation}
+        \forall \epsilon > 0\, \exists N > 0 \text{ such that } x_n \in B(x,
+        \epsilon)\, \forall n > N.
+    \end{equation}
+    That is, for any given $ \epsilon > 0 $, we must find an index $ N $ for the
+    sequence $ (x_n)_{n \in \mathbb{N}} $ after which all points $ x_i\,\, (i >
+    N) $ exist within the open ball $ B(x, \epsilon) $. If this holds, then the
+    sequence $ (x_n) $ converges to the centre of the open ball $ x $.
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (ballcentre) at (2, 0);
+        \pic at (0, 0) {longspace};
+        \draw[fill=ballfill, dashed] (ballcentre) circle (1.3cm);
+        \filldraw (ballcentre) circle (1pt) node[below, yshift=-3pt] {$ x $};
+        \draw (ballcentre) -- ++(30:1.3cm) node[pos=.5, below, yshift=-3pt]
+            {$ \epsilon $};
+        \node at (4.1, 0) {$ X $};
+
+        \begin{scope}[every path/.style={red}, every node/.style={black, below,
+                yshift=-3pt}]
+            \filldraw (-4, 0) circle (1pt) node {$ x_1 $};
+            \filldraw (-3, .5) circle (1pt) node {$ x_2 $};
+            \filldraw (-2, -.5) circle (1pt) node {$ x_3 $};
+            \filldraw (-1, 1) circle (1pt) node {$ x_4 $};
+            \filldraw (0, -.5) circle (1pt) node {$ x_5 $};
+            \filldraw (1.5, 0) circle (1pt) node {$ x_6 $};
+            \filldraw (2, .8) circle (1pt) node {$ x_7 $};
+            \filldraw (2.5, -.5) circle (1pt) node {$ x_8 $};
+        \end{scope}
+    \end{tikzpicture}
+    \captionof{figure}{A sequence converging within the bounds of an arbitrarily
+    sized open ball centred at the limit. In this example, $ N = 5 $, since all
+    sequence points $ x_6, x_7, x_8, \ldots $ belong to the pictured open ball.}
+\end{definition}
+\begin{definition}{Convergence of Sequences (by the convergence of a real
+        sequence)}{sequence-convergence-real}
+    We can also use results from Real Analysis to consider the real sequence
+    generated by the distances between each point in the space and the proposed
+    limit $ x $. For a sequence $ \left( x_n \right)_{n \in \mathbb{N}} $ in a
+    metric space $ (X, d) $,
+    \begin{equation}
+        \lim_{n \to \infty} x_n = x \iff \lim_{n \to \infty} d(x_n, x) \to 0.
+    \end{equation}
+\end{definition}
+\begin{theorem}{Convergences of Real-Dimensional Vector
+        Spaces}{vector-space-convergence}
+    In $ \mathbb{R}^k $ with any $ d_1 $, $ d_2 $, or $ d_\infty $ metrics,
+    \emph{overall convergence is equivalent to simultaneous component-wise
+    convergence}. That is, for $ \vec{x}_n \in \mathbb{R}^k $ with $ n \in
+    \mathbb{N} $,
+    \begin{equation}
+        \lim_{n \to \infty} \vec{x}_n \to \vec{x} \iff
+        \lim_{n \to \infty} x_i^{(n)} \to x_i \text{ for each } i \in \left\{1,
+        \ldots, k \right\}.
+    \end{equation}
+    Note that $ \vec{x} = (x_1, \ldots, x_k) $ denotes a general
+    vector/candidate limit, and $ \vec{x}_n = \left(x_1^{(n)}, \ldots,
+    x_k^{(n)}\right) $ denotes a $ k $-dimensional vector in the sequence at
+    index $ n $. For this demonstration, we will consider the specific case of
+    $ \left(\mathbb{R}^k, d_\infty\right) $.
+    \begin{proof}
+        \iffforward Suppose that $ \vec{x}_n \to \vec{x} $ as $ n \to \infty $.
+        We want to show that, for each $ i \in \left\{ 1, \ldots, k \right\} $,
+        the components converge such that $ x_i^{(n)} \to x_i $ as $ n \to
+        \infty $. Let $ \epsilon > 0 $ be given. Since $ \lim_{n \to \infty}
+        \vec{x}_n = \vec{x} $, there exists an $ N(\epsilon) > 0 $ such that
+        $ d_\infty(\vec{x}_n, \vec{x}) < \epsilon $ for all $ n > N $. By
+        recalling the mapping definition of $ d_\infty $ from
+        \cref{definition:canon-metrics}, we can derive that
+        \begin{equation}
+            \max_{1 \leq i \leq k} \left\vert x_i^{(n)} - x_i \right\vert <
+            \epsilon \text{ for all } n > N.
+        \end{equation}
+        By the nature of the maximum function, we can generalise this inequality
+        to all choices of $ i \in \left\{ 1, \ldots, k \right\} $:
+        \begin{equation}
+            \left\vert x_i^{(n)} - x_i \right\vert < \epsilon \text{ for all } n
+            > N \text{ for all } i \in \left\{1, \ldots, k \right\}.
+        \end{equation}
+        We can immediately arrive at the desired limit for the real sequence: $
+        \lim_{n \to \infty} x_i^{(n)} = x_i $ for all $ i \in \left\{ 1, \ldots,
+        k \right\} $.
+
+        \iffbackward Now suppose that $ \lim_{n \to \infty} x_i^{(n)} = x_i $
+        for all $ i \in \left\{ 1, \ldots, k \right\} $, and let $ \epsilon > 0
+        $ be given. Then, for any suitable choice of $ i $, there exists an $
+        N_i(\epsilon) > 0 $ such that $ \left\vert x_i^{(n)} - x_i \right\vert <
+        \epsilon $ for all $ n > N_i $.
+        \begin{equation*}
+            \renewcommand\arraystretch{1.5}
+            \begin{matrix}
+                \vec{x}_1 & \vline & x_1^{(1)} & x_2^{(1)} & x_3^{(1)} & \ldots
+                    & x_k^{(1)} \\
+                \vec{x}_2 & \vline & x_1^{(2)} & x_2^{(2)} & x_3^{(2)} & \ldots
+                    & x_k^{(2)} \\
+                \vec{x}_3 & \vline & x_1^{(3)} & x_2^{(3)} & x_3^{(3)} & \ldots
+                    & x_k^{(3)} \\
+                \vdots & \vline & \vdots & \vdots & \vdots & \ddots & \vdots \\
+                \vdots & \vline & \multirow{2}{*}{$ \begin{cases} ~~N_1 \\
+                    ~~~\vdots \end{cases} $} & \big\downarrow & N_3 &
+                    \big\downarrow & N_k & \multirow{2}{*}{\hspace{-1ex}
+                    $ \begin{rcases} \vphantom{~}\\\vphantom{~}\end{rcases} $}
+                    \\ % What the fuck?
+                \vdots & \vline & & N_2 & \vdots & N_j & \vdots \\
+                & & \multicolumn{6}{c}{\text{Zones of Convergence}}
+            \end{matrix}
+        \end{equation*}
+    \end{proof}
+\end{theorem}
 \end{document}
 
