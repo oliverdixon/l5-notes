@@ -1,14 +1,15 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
-
+%
+% TODO: In progress: X
 % TODO: Remaining lectures:
-%   IX
-%   X
 %   XI
 %   XII
 %   XIII
 %   XIV
 %   XV
+%   XVI
+%   XVII [End of examinable content]
 
 % Video camera vector graphic adapted under CC0 from SVGRepo:
 % https://www.svgrepo.com/svg/475018/video-call
@@ -1580,13 +1581,15 @@
                 \vec{x}_3 & \vline & x_1^{(3)} & x_2^{(3)} & x_3^{(3)} & \ldots
                     & x_k^{(3)} \\
                 \vdots & \vline & \vdots & \vdots & \vdots & \ddots & \vdots \\
-                \vdots & \vline & \multirow{2}{*}{$ \begin{cases} ~~N_1 \\
-                    ~~~\vdots \end{cases} $} & \big\downarrow & N_3 &
-                    \big\downarrow & N_k & \multirow{2}{*}{\hspace{-1ex}
-                    $ \begin{rcases} \vphantom{~}\\\vphantom{~}\end{rcases} $}
+                \vdots & \vline & \multirow{2}{*}{$ \begin{cases}
+                    ~~\color{red}{N_1} \\ ~~~\vdots \end{cases} $} &
+                    \big\downarrow & \color{red}{N_3} &
+                    \big\downarrow & \color{red}{N_k} &
+                    \multirow{2}{*}{\hspace{-1ex} $ \begin{rcases}
+                    \vphantom{~}\\\vphantom{~}\end{rcases} $}
                     \\ % What the fuck?
-                \vdots & \vline & & N_2 & \vdots & N_j & \vdots \\
-                & & \multicolumn{6}{c}{\text{Zones of Convergence}}
+                \vdots & \vline & & \color{red}{N_2} & \vdots & \color{red}{N_j}
+                & \vdots \\ & & \multicolumn{6}{c}{\text{Zones of Convergence}}
             \end{matrix}
         \end{equation*}
         Take $ N \coloneq \max\left\{ N_1, \ldots, N_k \right\} $, such that $ N
@@ -1611,8 +1614,8 @@
             \item In $ d_\infty $, $ \left(f_n\right)_{n=1}^\infty $ diverges.
         \end{enumerate}
         First consider the sequence under the $ d_2 $ metric. In general, we
-        know that $ x_n \to x $ as $ n \to \infty \iff d(x_n, x) \to 0 $ as $ n
-        \to \infty $. Therefore, we compute $ d_2(f_n, 0): $
+        know that $ x_n \to x $ as $ n \to \infty $ if and only if $ d(x_n, x)
+        \to 0 $ as $ n \to \infty $. Therefore, we compute $ d_2(f_n, 0) $:
         \begin{align}
             d_2(f_n, 0) &= \left[ \int_0^1 \left\vert f_n(t) \right\vert^2 \,
                 \mathrm{d}t \right]^{1/2} \\
@@ -1686,6 +1689,155 @@
         \iffbackward A near-identical argument for deriving convergence in $
         (X, d) $ by assuming convergence in $ (X, d^*) $.
     \end{proof}
+\end{theorem}
+
+\lecture{Lecture IX}{Viewer.aspx?id=0fa218ae-7c44-465c-b963-b09f009bd3ea}{
+    Lecture Nine proves the uniqueness of limits, and begins to formalise the
+    Cauchy Condition while introducing its various surprising relationships to
+    `traditional' convergence. We are also brought to consider the concept of
+    pointwise convergence over a sequence of functions.
+}{\DTMdisplaydate{2023}{10}{24}{Tuesday}}
+
+\begin{theorem}{Uniqueness of Limits of Convergent
+        Sequences}{unique-sequence-limit}
+    Let $ (X, d) $ be a metric space, and let $ \left( x_n \right)_{n=1}^\infty
+    $ be a convergent sequence in $ (X, d) $ such that $ x_n \to x $, and $ x_n
+    \to y $, as $ n \to \infty $. Then, $ x = y $.
+    \begin{proof}
+        Assume, by way of contradiction, that $ x \neq y $. Thus, $ d(x, y)
+        \eqcolon \epsilon < 0 $. Set $ \delta \coloneq \epsilon/2 $. Given that
+        $ x_n \to x $ as $ n \to \infty $ there exists an $ N(\delta) > 0 $ such
+        that $ d(x_n, x) < \delta = \epsilon/2 $ for all $ n > N $, by
+        \cref{definition:sequence-convergence-metric}. Due to the purported
+        simultaneous convergence to $ y $, there also exists an $
+        \widetilde{N}(\delta) > 0 $ such that $ d(x_n, y) < \delta = \epsilon/2
+        $ for all $ n > \widetilde{N} $.
+
+        Thus,
+        \begin{equation}
+            d(x_n, x) < \delta = \frac{\epsilon}{2} \text{ and }
+            d(x_n, y) < \delta = \frac{\epsilon}{2}
+        \end{equation}
+        for all $ n > M $, where $ M \coloneq \max\left\{ N, \widetilde{N}
+        \right\} $. By the triangle inequality,
+        \begin{align}
+            d(x, y) &\leq d(x, x_n) + d(x_n, y) \\
+            &< \delta + \delta \\
+            &= \epsilon \text{ for all } n > M.
+        \end{align}
+        Given that $ \epsilon $ was defined to be equal to $ d(x, y) $, this is
+        a contradiction. Therefore, $ x = y $, and the limits are unique.
+    \end{proof}
+    \centering
+    \begin{tikzpicture}
+        \coordinate (xpos) at (-1, .5);
+        \coordinate (ypos) at (1, .5);
+        \pic at (0, 0) {longspace};
+        \filldraw (xpos) circle (1pt) node[below, yshift=-3pt] {$ x $};
+        \filldraw (ypos) circle (1pt) node[below, yshift=-3pt] {$ y $};
+        \draw[dashed] (xpos) circle (1cm) node[below, yshift=-1.3cm]
+            {$ B(x, \epsilon/2) $};
+        \draw[dashed] (ypos) circle (1cm) node[below, yshift=-1.3cm]
+            {$ B(y, \epsilon/2) $};
+        \draw (xpos) -- (ypos);
+        \node at (4.1, 0) {$ X $};
+    \end{tikzpicture}
+    \captionof{figure}{Given the required sequence convergences, we cannot have
+    distinct limits.}
+\end{theorem}
+\begin{example}{Abstract Infinite Series}{infinite-series}
+    We are often concerned with expressions of the form
+    \begin{equation}
+        S_\infty = \sum_{n=1}^\infty x_n,
+    \end{equation}
+    where $ S_\infty $ is defined to be the limit of the sequence generated by
+    the partial sums
+    \begin{equation}
+        S_k = \sum_{n=1}^k x_n
+    \end{equation}
+    as $ k $ approaches infinity. If a metric space $ (X, d) $ supports an
+    algebra with a suitable notion of `addition', this idea can be generalised
+    to a more abstract setting.
+\end{example}
+\begin{definition}{Pointwise Convergence}{pointwise-convergence}
+    Let $ \left( f_n \right)_{n=1}^\infty $ be a sequence of functions $ f : X
+    \to Y $. The function $ f $ is the \emph{pointwise limit} of the function
+    sequence if and only if
+    \begin{equation}
+        \lim_{n \to \infty} f_n{\left( x_0 \right)} = f{\left( x_0 \right)}
+        \text{ for any } x_0 \in X.
+    \end{equation}
+    This equivalence allows us to study convergence in an arbitrary metric space
+    by examining convergence in the codomain $ Y $.
+\end{definition}
+\begin{definition}{The Sequential Characterisation of
+        Continuity}{sequential-continuity}
+    Let $ f : X \to Y $ be a function from $ (X, d) $ to $ (Y, d^*) $. Then, $ f
+    $ is \emph{continuous at} $ x_0 \in X $ if and only if $ f{\left(x_n\right)}
+    $ converges to $ f{\left(x_0\right)} $ whenever the sequence generated by $
+    x_n $ converges to $ x_0 $.
+
+    The function $ f $ is \emph{continuous} if and only if $ f $ is continuous
+    at every point $ x_0 \in X $.
+\end{definition}
+\begin{definition}{Cauchy Sequence}{cauchy-sequences}
+    Let $ \left( x_n \right)_{n=1}^\infty $ be a sequence. Then, $ \left( x_n
+    \right)_{n=1}^\infty $ is a \emph{Cauchy sequence} if and only if, for any
+    $ \epsilon > 0 $, there exists an $ N > 0 $ such that
+
+    \begin{minipage}{.6\linewidth}
+        \begin{equation}
+            d(x_n, x_m) < \epsilon \text{ for all } n, m > N
+        \end{equation}
+        The terms of Cauchy sequences grow arbitrarily close, and Cauchy
+        sequences need not be convergent; the property of convergence requires
+        the holding of the Cauchy condition and completeness in the space of the
+        sequence. The notion of \emph{completeness} will be explored shortly.
+    \end{minipage}\hfill
+    \begin{minipage}{.35\linewidth}
+        \centering
+        \begin{tikzpicture}
+            \node {\includegraphics[angle=-90]{pluto}};
+            \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
+            \node[white, rotate=-20] at (1.5, 0) {\large Complete};
+        \end{tikzpicture}
+        \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
+            {Pluto}, the Greek God of Convergence}
+    \end{minipage}
+\end{definition}
+\begin{example}{The Cauchy condition does not imply
+        convergence}{cauchy-no-convergence}
+    Take any sequence of rationals $ p_n/q_n $ for which $ (p_n/q_n)^2 \to 2 $
+    as $ n \to \infty $. Note the following:
+    \begin{itemize}
+        \item $ \left( p_n/q_n \right)_{n=1}^\infty $ is Cauchy;
+        \item There is no $ x \in \mathbb{Q} $ such that $ \lim_{n \to
+            \infty}{\left( p_n/q_n \right)} = x $, since $ \sqrt{2} \not\in
+            \mathbb{Q} $.
+    \end{itemize}
+    These facts lead to the well-known result regarding the incompleteness of
+    the rationals.
+\end{example}
+\begin{theorem}{Convergence implies Cauchy}{convergence-implies-cauchy}
+    Let $ (X, d) $ be a metric space and let $ \left( x_n \right)_{n=1}^\infty $
+    be a convergent sequence such that $ \lim_{n \to \infty}{x_n} = x $. Then,
+    $ \left( x_n \right)_{x=1}^\infty $ is Cauchy.
+    \begin{proof}
+        Let $ \epsilon > 0 $ be given, and set $ \delta \coloneq \epsilon/2 $.
+        Given that $ \left( x_n \right)_{n=1}^\infty $ is convergent, there
+        exists an $ N(\delta) > 0 $ such that $ d(x_n, x) < \delta $ for all $ n
+        > N $, according to \cref{definition:sequence-convergence-metric}. By
+        the triangle inequality, for all $ n, m > N $,
+        \begin{align}
+            d(x_n, x_m) &\leq d(x_n, x) + d(x, x_m) \\
+            &< \delta + \delta = \epsilon
+        \end{align}
+        This is precisely the criterion for the Cauchy property on $ \left( x_n
+        \right)_{n=1}^\infty $ by \cref{definition:cauchy-sequences}.
+    \end{proof}
+    This result, combined with the counterexample shown in
+    \cref{example:cauchy-no-convergence}, demonstrates that while convergence
+    implies Cauchy, Cauchy does not necessarily imply convergence.
 \end{theorem}
 \end{document}
 
