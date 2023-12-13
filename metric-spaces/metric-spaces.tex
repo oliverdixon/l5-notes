@@ -1483,7 +1483,7 @@
     x \in X $ if and only if
     \begin{equation}
         \forall \epsilon > 0\, \exists N > 0 \text{ such that } x_n \in B(x,
-        \epsilon)\, \forall n > N.
+        \epsilon) \text{ for all } n > N.
     \end{equation}
     That is, for any given $ \epsilon > 0 $, we must find an index $ N $ for the
     sequence $ (x_n)_{n \in \mathbb{N}} $ after which all points $ x_i\,\, (i >
@@ -1589,6 +1589,102 @@
                 & & \multicolumn{6}{c}{\text{Zones of Convergence}}
             \end{matrix}
         \end{equation*}
+        Take $ N \coloneq \max\left\{ N_1, \ldots, N_k \right\} $, such that $ N
+        $ is a sufficiently large index to induce convergence on all component
+        sequences. That is,
+        \begin{equation}
+            \max_{1 \leq i \leq k} \left\vert x_i^{(n)} - x_i \right\vert <
+            \epsilon \text{ for all } n > N.
+        \end{equation}
+        Thus, $ \lim_{n \to \infty} x_i^{n} = x_i $ for all $ i \in \left\{ 1,
+        \ldots, k \right\} $, as desired.
+    \end{proof}
+\end{theorem}
+\begin{example}{Convergence of Continuous Functions}{function-convergence}
+    \begin{minipage}{.55\linewidth}
+        Consider the sequence $ \left( f_n \right)_{n=1}^\infty $ where $ f_n
+        \in C\left( [0, 1] \right) $ and $ t \mapsto t^n $. We claim the
+        following:
+        \begin{enumerate}
+            \item In $ d_2 $, $ \left(f_n\right)_{n=1}^\infty $ converges to
+                zero;
+            \item In $ d_\infty $, $ \left(f_n\right)_{n=1}^\infty $ diverges.
+        \end{enumerate}
+        First consider the sequence under the $ d_2 $ metric. In general, we
+        know that $ x_n \to x $ as $ n \to \infty \iff d(x_n, x) \to 0 $ as $ n
+        \to \infty $. Therefore, we compute $ d_2(f_n, 0): $
+        \begin{align}
+            d_2(f_n, 0) &= \left[ \int_0^1 \left\vert f_n(t) \right\vert^2 \,
+                \mathrm{d}t \right]^{1/2} \\
+            &= \sqrt{\frac{1}{2n+1}}
+        \end{align}
+    \end{minipage}\hfill
+    \begin{minipage}{.4\linewidth}
+        \centering
+        \begin{tikzpicture}[domain=0:1]
+            \draw[->] (-.2, 0) -- (4, 0) node[right] {$ t $};
+            \draw[->] (0, -.2) -- (0, 4) node[above] {$ f_n(t) $};
+            \draw (3.5, .2) -- (3.5, -.2) node[below] {$ 1 $};
+            \draw (.2, 3.5) -- (-.2, 3.5) node[left] {$ 1 $};
+            \begin{scope}[every path/.style={ultra thin}]
+                \begin{pgflowlevelscope}{\pgftransformscale{3.5}}
+                    \draw plot (\x, \x);
+                    \draw plot (\x, {\x*\x});
+                    \draw plot (\x, {\x*\x*\x});
+                    \draw plot (\x, {\x*\x*\x*\x});
+                \end{pgflowlevelscope}
+            \end{scope}
+        \end{tikzpicture}
+        \captionof{figure}{The graphs of $ f_n(t) $ over $ [0, 1] $ for $ n = 1,
+        2, 3, 4 $.}
+    \end{minipage}
+
+    Given that $ \lim_{n \to \infty}\sqrt{1/(2n+1)} = 0 $, we can conclude that
+    $ f_n \to 0 $ as $ n \to \infty $. Next considering the sequence under the
+    $ d_\infty $ metric, recall that, for all $ n \in \mathbb{N} $,
+    \begin{equation}
+        d_\infty(f_n, 0) = \sup\left\{ \left\vert f_n(t) \right\vert \colon t
+        \in [0, 1] \right\} = 1.
+    \end{equation}
+    Since $ 1 $ does not approach $ 0 $, $ f_n \not\to 0 $ as $ n \to \infty $.
+    Therefore, we can see, by example, that changing the metric on a set can
+    vastly alter its convergence properties.
+\end{example}
+\begin{theorem}{Relationship between Mutual Convergence and Topological
+        Equivalence}{convergence-top-equivalence}
+    Suppose that $ \left( X, d \right) $ and $ \left( X, d^* \right) $ are
+    topologically equivalent. Then,
+    \begin{equation}
+        \underbrace{\left( x_n \right)_{n=1}^\infty \to x}_{\text{Convergence in
+        } \left( X, d \right)} \iff \underbrace{\left( x_n \right)_{n=1}^\infty
+        \to x.}_{\text{Convergence in } \left( X, d^* \right)}
+    \end{equation}
+    \begin{proof}
+        Due to the topological equivalence of $ (X, d) $ and $ (X, d^*) $, and
+        by \cref{theorem:determining-top-eq}, there exists a scalar $ \lambda >
+        0 $ such that
+        \begin{equation}
+            \frac{1}{\lambda} d^*(x, y) \leq d(x, y) \leq \lambda d^*(x, y)
+            \text{ for all } x, y \in X.
+        \end{equation}
+        \iffforward Suppose that $ \left( x_n \right)_{n=1}^\infty \to x $ as $
+        n \to \infty $. Let $ \epsilon > 0 $ be given, and set $ \epsilon^*
+        \coloneq \epsilon/\lambda $. By
+        \cref{definition:sequence-convergence-metric}, there exists an $ N > 0 $
+        such that $ d(x_n, x) < \epsilon^* $ for all $ n > N $. Since $ (X, d) $
+        and $ (X, d^*) $ are topologically equivalent,
+        \begin{equation}
+            \frac{1}{\lambda} d^*(x_n, x) \leq d(x_n, x) < \epsilon^* =
+            \frac{\epsilon}{\lambda}.
+        \end{equation}
+        Since $ \lambda > 0 $, we can multiply through by $ \lambda $:
+        \begin{equation}
+            d^*(x_n, x) \leq \lambda d(x_n, x) < \epsilon.
+        \end{equation}
+        Thus, $ d^*(x_n, x) < \epsilon $ for all $ n > N $, so $ \left( x_n
+        \right)_{n=1}^\infty \to x $ as $ n \to \infty $ in $ (X, d^*) $.
+        \iffbackward A near-identical argument for deriving convergence in $
+        (X, d) $ by assuming convergence in $ (X, d^*) $.
     \end{proof}
 \end{theorem}
 \end{document}
