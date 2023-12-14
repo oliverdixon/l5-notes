@@ -1,6 +1,7 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 %
+% TODO: Add book references to all lectures (S, S&V)
 % TODO: In progress: X
 % TODO: Remaining lectures:
 %   XI
@@ -11,10 +12,8 @@
 %   XVI
 %   XVII [End of examinable content]
 
-% Video camera vector graphic adapted under CC0 from SVGRepo:
-% https://www.svgrepo.com/svg/475018/video-call
-
 \documentclass{article}
+\pdfsuppresswarningpagegroup=1
 
 \usepackage[
     a4paper,
@@ -34,8 +33,9 @@
 \usepackage[en-GB]{datetime2}
 \usepackage[missing=master]{gitinfo2}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, tcolorbox,
-    tocloft, titlesec, lastpage, enumitem, tikz, multirow}
+    lastpage, enumitem, tikz, multirow}
 \usepackage[hypcap=false]{caption}
+\usepackage[explicit]{titlesec}
 \usepackage[
     colorlinks,
     allcolors=blue,
@@ -62,10 +62,11 @@
 
 \setlength\parskip{.8em}
 \setlength\parindent{0pt}
-\setlength\cftparskip{0pt}
 \renewcommand*\baselinestretch{1.2}
 \captionsetup[figure]{justification=centering}
 
+\newcommand*\iffforward{\par\boxed\Longrightarrow\ }
+\newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
 \definecolor{ballfill}{RGB}{242, 242, 242}
 \usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric, arrows.meta}
 \tikzset{
@@ -88,14 +89,10 @@
     },
 }
 
-\newcommand*\iffforward{\par\boxed\Longrightarrow\ }
-\newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
-
 \tcbuselibrary{theorems, breakable, skins}
 \tcbset{
-    enhanced,
-    parbox=false,
-    before upper=\hspace{-3.5pt},
+    enhanced, % Enable box-page-breaking
+    parbox=false, % Allow multi-paragraph tcolorboxes
     colback=white, colbacktitle=white, coltitle=black,
     fonttitle=\bfseries,
     rounded corners=all,
@@ -103,8 +100,8 @@
     titlerule=1pt,
     description font=\normalfont,
     separator sign none,
-    breakable,
-    fontlower=\slshape,
+    breakable, % Break tcolorboxes over page boundaries
+    fontlower=\slshape, % Font specifications after \tcblower issued
 }
 
 % \newtheoremtype: create a new tcolorbox theorem-like environment which will be
@@ -124,23 +121,43 @@
     \newtcbtheorem[auto counter, number within=section, Crefname={#1}{#1s},
         crefname={\fclower{#1}\relax}{\fclower{#1}\relax s}]
         {aux:#2}{#1}{colframe=#3}{#2}
-    \NewDocumentEnvironment{#2}{m+m}{
-        \expandafter\csname aux:#2\endcsname{##1}{##2}
-        \addcontentsline{toc}{subsection}{#1 \ref*{#2:##2}: ##1}
+    \NewDocumentEnvironment{#2}{m+m}{%
+        \expandafter\csname aux:#2\endcsname{##1}{##2}%
+        \addcontentsline{toc}{subsection}{#1 \ref*{#2:##2}: ##1}%
         \ignorespaces
     }{\expandafter\csname endaux:#2\endcsname}
 }
 \makeatother
 
-\titleformat\section[runin]{\scshape \LARGE}{}{0pt}{}[\hfill \mbox{}]
-\makeatletter
-\renewcommand*\cftsecpresnum{\begin{lrbox}{\@tempboxa}}
-\makeatother
-\renewcommand*\cftsecaftersnum{\end{lrbox}}
-\setlength\cftsecnumwidth{0pt}
-\renewcommand*\contentsname{Lecture Contents}
-\renewcommand*\cfttoctitlefont{\scshape \LARGE \hfill}
-\renewcommand*\cftaftertoctitle{\hfill \mbox{}}
+\renewcommand*\contentsname{Lecture Index}
+\let\Sectionmark\sectionmark
+\def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
+\titleformat\section
+    {\Large\bfseries}
+    {Lecture \thesection: }{0pt}
+    {#1\quad\leaders\hbox{\rule[.4ex]{1pt}{1pt}}\hfill}
+
+\newlength\iconsize
+\setlength\iconsize{16pt}
+
+\newcommand*\panoptostamp[2]{%
+    \ifstrempty{#2}
+        {%
+            \raisebox{.125\iconsize}{\textit{No Recording}} &
+            \fbox{\centering\includegraphics[width=\iconsize]
+                {../icons/no-video}}
+        }{%
+            \raisebox{.125\iconsize}{\textit{#1}} &
+            \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
+                {\fbox{\centering\includegraphics[width=\iconsize]
+                    {../icons/video}}}%
+        }%
+}
+
+\newcommand*\bookstamp[2]{%
+    \raisebox{.125\iconsize}{\textit{#1}} &
+    \fbox{\centering\includegraphics[width=\iconsize]{../icons/#2}}%
+}
 
 % \lecture: start a new lecture section, with a description and Panopto link.
 %
@@ -149,21 +166,28 @@
 %   #3: lecture summary paragraph
 %   #4: date of live delivery
 %
-\newcommand\lecture[4]{
-    \section{#1}\hfill
-    \raisebox{3pt}{
-        \ifstrempty{#2}{
-            \textit{No recording}\hspace*{8pt}
-            \fbox{\centering\includegraphics[width=13pt]{../icons/no-video.pdf}}
-        }{
-            \textit{#4}\hspace*{8pt}
-            \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
-                {\fbox{\centering\includegraphics[width=13pt]%
-                    {../icons/video.pdf}}}
-        }%
-    }%
-    \par #3
-    \vskip.5\baselineskip
+\newcommand\lecture[4]{%
+    \section{#1}
+    \parbox{.66\linewidth}{#3}\hfill
+    \begin{tabular}{cc}
+        \panoptostamp{#4}{#2} \\
+        \bookstamp{SV}{sv-book} \\
+        \bookstamp{Searcoid}{searcoid-book}
+    \end{tabular}
+    \vskip\baselineskip
+    % \parbox{.3\linewidth}{%
+    %     \raggedleft\raisebox{3pt}{%
+    %         \ifstrempty{#2}{%
+    %             \textit{No recording}\hspace*{8pt}
+    %             \fbox{\centering\includegraphics[width=13pt]{../icons/no-video.pdf}}
+    %         }{%
+    %             \textit{#4}\hspace*{8pt}
+    %             \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
+    %                 {\fbox{\centering\includegraphics[width=13pt]%
+    %                     {../icons/video.pdf}}}
+    %         }%
+    %     }%
+    % }\vskip\baselineskip%
 }
 
 \newtheoremtype{Definition}{definition}{black}
@@ -175,7 +199,6 @@
 \crefname{equation}{equation}{equations}
 \Crefname{equation}{Equation}{Equations}
 \numberwithin{equation}{section}
-
 \Crefname{figure}{Figure}{Figures}
 \crefname{figure}{figure}{figures}
 \numberwithin{figure}{section}
@@ -188,9 +211,6 @@
     \setlist[axioms]{label=#1\arabic*), ref=#1\arabic*}
 }
 
-\renewcommand*\thesection{\Roman{section}}
-\let\Sectionmark\sectionmark
-\def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
 \renewcommand*\headrulewidth{0pt}
 \renewcommand*\footrulewidth{\headrulewidth}
 \makeatletter
@@ -249,7 +269,10 @@
     \end{center}
 \end{titlepage}
 \stepcounter{page}
-\tableofcontents
+\begingroup
+    \setlength\parskip{0pt}
+    \tableofcontents
+\endgroup
 % \vfill
 % \begin{center}
 %     \setlength\fboxsep{6pt}
@@ -259,7 +282,8 @@
 \pagenumbering{arabic}
 \pagestyle{mainbody}
 
-\lecture{Lecture I}{Viewer.aspx?id=c3a52a78-486e-4e1d-88fc-b083009b9766}{
+\lecture{Introduction to Metric Spaces}
+        {Viewer.aspx?id=c3a52a78-486e-4e1d-88fc-b083009b9766}{
     Lecture One introduces the concept of a \emph{metric} as a generalisation of
     the notion of distance between two points in a set. Three \emph{canonical
     metrics} on $\mathbb{R}^N$ are presented; these are then generalised
@@ -385,11 +409,12 @@
     \end{proof}
 \end{theorem}
 
-\lecture{Lecture II}{Viewer.aspx?id=e35adcae-8b46-4472-8b19-b085009bdfe1}{
+\lecture{Real Analysis Prerequisites}
+        {Viewer.aspx?id=e35adcae-8b46-4472-8b19-b085009bdfe1}{
     Lecture Two introduces the concept of the \emph{supremum} and \emph{infimum}
     as properties of any subset of the reals. The sets of \emph{bounded} and
-    \emph{continous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1]) $
-    respectively, and we prove that the ``sup-metric'' $ d_\infty $ forms a
+    \emph{continuous} functions are introduced as $ B([0, 1]) $ and $ C([0, 1])
+    $ respectively, and we prove that the ``sup-metric'' $ d_\infty $ forms a
     metric on $ B([0, 1]) $.
 }{\DTMdisplaydate{2023}{09}{28}{Thursday}}
 
@@ -506,7 +531,8 @@
     \end{proof}
 \end{theorem}
 
-\lecture{Lecture III}{Viewer.aspx?id=afbe7e12-8494-4fe3-b73f-b08a009bdc46}{
+\lecture{Norms, Subspaces, and Isometric Maps}
+        {Viewer.aspx?id=afbe7e12-8494-4fe3-b73f-b08a009bdc46}{
     Lecture Three opens with a counterexample to challenge a common
     misconception. It continues to introduce the concept of \emph{norms} as
     generalisations of the absolute value function, \emph{metric subspaces}, and
@@ -573,7 +599,8 @@
     \mathbb{R}^2 $ to $ \mathbb{C} $, and hence qualifies as an isometry.
 \end{example}
 
-\lecture{Lecture IV}{Viewer.aspx?id=3a47174e-ed9d-413d-b309-b08c009bdb8e}{
+\lecture{Introduction to the Topology of a Metric Space}
+        {Viewer.aspx?id=3a47174e-ed9d-413d-b309-b08c009bdb8e}{
     Lecture Four begins an investigation into the topology of a metric space. In
     particular, we introduce \emph{open and closed balls}, \emph{interior
     points}, \emph{boundary points}, and \emph{exterior points}, and define
@@ -799,7 +826,8 @@
     clopen when interpreted as a subspace.
 \end{example}
 
-\lecture{Lecture V}{Viewer.aspx?id=dbcb156d-d828-454f-929d-b091009bf65b}{
+\lecture{Results on the Topology of Metric Spaces}
+        {Viewer.aspx?id=dbcb156d-d828-454f-929d-b091009bf65b}{
     Lecture Five proves multiple important theorems: a set is open if and only
     if its complement is closed; a set is open if and only if we can place an
     open ball around every point and stay inside of the set; and an open set can
@@ -1083,7 +1111,8 @@
     \end{axioms}
 \end{theorem}
 
-\lecture{Lecture VI}{Viewer.aspx?id=ed63db50-27cd-4d84-8e60-b093009be8af}{
+\lecture{Closed Sets \& Topological Equivalence}
+        {Viewer.aspx?id=ed63db50-27cd-4d84-8e60-b093009be8af}{
     Lecture Six continues to cover the topology induced by a metric by deriving
     the corresponding properties of closed sets. We introduce the concept of
     \emph{topological equivalence} as weaker method of determining ``sameness''
@@ -1299,7 +1328,7 @@
         nested.}
 \end{theorem}
 
-\lecture{Lecture VII}{}{
+\lecture{Limit Points and their Consequences}{}{
     Lecture Seven demonstrates that a space is closed if and only if it is equal
     to its own closure, and moves to introduce the topic of
     limit/accumulation/cluster points whilst proving some useful related
@@ -1414,8 +1443,8 @@
     0 $, there exists an $ a \in A $ such that $ d(x, a) < \epsilon $.
 \end{definition}
 
-\lecture{Lecture VIII}{Sessions/List.aspx\#folderID="072999e9-f3bc-4486-98af-%
-        b0a000d51b97"}{
+\lecture{Sequences and Convergence}
+        {Sessions/List.aspx\#folderID="072999e9-f3bc-4486-98af-b0a000d51b97"}{
     Lecture Eight gives the definition of a \emph{sequence} in a metric space,
     and motivates the study of various properties thereof, such as
     \emph{convergence}. Some examples are provided, with familiar concepts from
@@ -1691,7 +1720,8 @@
     \end{proof}
 \end{theorem}
 
-\lecture{Lecture IX}{Viewer.aspx?id=0fa218ae-7c44-465c-b963-b09f009bd3ea}{
+\lecture{Cauchy Sequences \& More on Convergence}
+        {Viewer.aspx?id=0fa218ae-7c44-465c-b963-b09f009bd3ea}{
     Lecture Nine proves the uniqueness of limits, and begins to formalise the
     Cauchy Condition while introducing its various surprising relationships to
     `traditional' convergence. We are also brought to consider the concept of
@@ -1784,26 +1814,19 @@
     Let $ \left( x_n \right)_{n=1}^\infty $ be a sequence. Then, $ \left( x_n
     \right)_{n=1}^\infty $ is a \emph{Cauchy sequence} if and only if, for any
     $ \epsilon > 0 $, there exists an $ N > 0 $ such that
-
-    \begin{minipage}{.6\linewidth}
-        \begin{equation}
-            d(x_n, x_m) < \epsilon \text{ for all } n, m > N
-        \end{equation}
-        The terms of Cauchy sequences grow arbitrarily close, and Cauchy
-        sequences need not be convergent; the property of convergence requires
-        the holding of the Cauchy condition and completeness in the space of the
-        sequence. The notion of \emph{completeness} will be explored shortly.
-    \end{minipage}\hfill
-    \begin{minipage}{.35\linewidth}
-        \centering
-        \begin{tikzpicture}
-            \node {\includegraphics[angle=-90]{pluto}};
-            \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
-            \node[white, rotate=-20] at (1.5, 0) {\large Complete};
-        \end{tikzpicture}
-        \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
-            {Pluto}, the Greek God of Convergence}
-    \end{minipage}
+    \begin{equation}
+        d(x_n, x_m) < \epsilon \text{ for all } n, m > N
+    \end{equation}
+    The terms of Cauchy sequences grow arbitrarily close, and Cauchy sequences
+    need not be convergent.
+    % \centering
+    % \begin{tikzpicture}
+    %     \node {\includegraphics[angle=-90]{pluto}};
+    %     \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
+    %     \node[white, rotate=-20] at (1.5, 0) {\large Complete};
+    % \end{tikzpicture}
+    % \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
+    %     {Pluto}, the Greek God of Convergence}
 \end{definition}
 \begin{example}{The Cauchy condition does not imply
         convergence}{cauchy-no-convergence}
@@ -1839,5 +1862,37 @@
     \cref{example:cauchy-no-convergence}, demonstrates that while convergence
     implies Cauchy, Cauchy does not necessarily imply convergence.
 \end{theorem}
+
+\lecture{Results on Cauchy Sequences, Subsequences, and Completeness}
+        {Sessions/List.aspx\#folderID="494bb17f-0504-4108-b637-b0a700ef131e"}{
+    Lecture Ten establishes more useful relationships between the properties of
+    a Cauchy sequence and a convergent sequences, and introduces the concept of
+    subsequences. The property of completeness is finally defined, along with
+    a statement of the Completion Theorem.
+}{\DTMdisplaydate{2023}{10}{26}{Tuesday}}
+
+\begin{example}{The Harmonic Series Sequence is not
+        Convergent}{harmonic-series-divergent}
+    Consider $ (\mathbb{R}, d) $ and the Harmonic series $ \sum_{n=1}^\infty 1/n
+    $. Define a sequence $ \left( S_N \right)_{N=1}^\infty $, such that
+    \begin{equation}
+        S_N \coloneq \sum_{n=1}^N \frac{1}{n}.
+    \end{equation}
+    We claim that $ \left( S_N \right)_{N=1}^\infty $ is not convergent; this
+    can be shown by considering the contrapositive of the statement given by
+    \cref{theorem:convergence-implies-cauchy}: ``not Cauchy'' implies ``not
+    convergent''. Consider the difference between $ S_{(2N)} $ and $ S_N $:
+    \begingroup
+    \setlength\jot{.8em}
+    \begin{align}
+        \begin{split}
+            S_{(2N)} - S_N &= \left( \frac{1}{2N} + \frac{1}{2N-1} + \ldots +
+            \frac{1}{N+1} + \frac{1}{N} + \frac{1}{N-1} + \ldots + 1 \right) -\\
+            &\left( \frac{1}{N} + \frac{1}{N-1} + \ldots + 1 \right)
+        \end{split}\\
+        &\geq \frac{N}{2N} = \frac{1}{2}
+    \end{align}
+    \endgroup
+\end{example}
 \end{document}
 

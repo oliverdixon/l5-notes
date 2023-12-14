@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="666"
+   height="400"
+   viewBox="0 0 19.98 12"
+   fill="none"
+   version="1.1"
+   id="svg1893"
+   sodipodi:docname="searcoid-book-inkscape.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1897" />
+  <sodipodi:namedview
+     id="namedview1895"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="0.51279297"
+     inkscape:cx="169.65911"
+     inkscape:cy="270.08951"
+     inkscape:window-width="1920"
+     inkscape:window-height="1136"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1893" />
+  <g
+     id="g2837"
+     transform="matrix(0.9478506,0,0,0.94621198,0.02607479,0.02689292)"
+     style="stroke-width:1.05593">
+    <path
+       d="M 10.5,2.5584443 C 9.3999,1.5656977 7.70406,0.57295105 3.50119,0.50009886 3.22513,0.49532004 3,0.65430442 3,0.85009423 3,2.3025151 3,7.8011855 3,9.4274022 3,9.6231636 3.22515,9.7769509 3.50114,9.7833321 7.70405,9.8807519 9.3999,11.201947 10.5,12.194722 m 0,-9.6362777 C 11.6001,1.5656977 13.2959,0.57295105 17.4988,0.50009886 17.7749,0.49532004 18,0.65073095 18,0.84652075 18,2.4700858 18,7.8033125 18,9.4269059 18,9.6226673 17.7749,9.7769509 17.4989,9.7833321 13.296,9.8807519 11.6001,11.201947 10.5,12.194722 m 0,-9.6362777 v 9.6362777"
+       stroke="#000000"
+       stroke-linejoin="round"
+       id="path1889"
+       style="stroke:#00ff00;stroke-width:1.05593;stroke-opacity:0.51756668" />
+    <path
+       d="M 17.7353,1.9138779 H 20 c 0.2761,0 0.5,0.1587221 0.5,0.3545119 V 11.51335 c 0,0.286871 -0.4767,0.477456 -0.8465,0.360964 -0.7951,-0.250498 -2.122,-0.556513 -3.8594,-0.556513 -2.9412,0 -5.2941,1.231433 -5.2941,1.231433 0,0 -2.35294,-1.231433 -5.29412,-1.231433 -1.73743,0 -3.06432,0.306015 -3.85941,0.556513 C 0.97668,11.990806 0.5,11.800221 0.5,11.51335 V 2.2683898 C 0.5,2.0726 0.72386,1.9138779 1,1.9138779 h 2.26471"
+       stroke="#000000"
+       stroke-linejoin="round"
+       id="path1891"
+       style="stroke:#00ff00;stroke-width:1.05593;stroke-opacity:0.51756668" />
+  </g>
+  <g
+     id="g2842"
+     transform="translate(-0.50999985,-0.84683579)">
+    <text
+       xml:space="preserve"
+       style="font-size:8.8px;font-family:serif;-inkscape-font-specification:serif;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-opacity:0.333803"
+       x="1.4887937"
+       y="12.758836"
+       id="text2485"><tspan
+         sodipodi:role="line"
+         id="tspan2483"
+         style="font-weight:bold;font-size:8.8px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-opacity:1"
+         x="1.4887937"
+         y="12.758836">S'cd</tspan></text>
+  </g>
+</svg>
