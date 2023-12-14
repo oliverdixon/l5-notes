@@ -1,5 +1,7 @@
 .*
 *.pdf
+*.xcf
+*.jpg
 
 .*.sw*
 .nfs*
@@ -12,6 +14,7 @@
 *.loe
 *.theorems
 *.toc
+
 *.bbl
 *.bcf
 *.blg

@@ -1,8 +1,17 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
+%
+% You can download the large cover image (cover.jpg) from:
+% https://www-users.york.ac.uk/~od641/l5-notes/assets/metric-spaces.{jpg,xcf}
+%
+% To compile this document in `draft' mode, which does not require many external
+% assets, issue \drafttrue in place of \draftfalse. Do not distribute any
+% generated draft copies!
 
 \documentclass{article}
 \pdfsuppresswarningpagegroup=1
+\newif\ifdraft
+\drafttrue
 
 \usepackage[
     a4paper,
@@ -43,8 +52,6 @@
 
 % END DOCUMENT METADATA
 
-\newif\ifdraft
-\drafttrue
 \addbibresource{texts.bib}
 \nocite{*}
 
@@ -238,6 +245,13 @@
 \pagestyle{plain}
 \pagenumbering{roman}
 \begin{titlepage}
+    \ifdraft\else\begin{tikzpicture}[remember picture, overlay]
+        % Preprocessing this image in GIMP to fix the alpha masks (gradient and
+        % opacity) greatly reduces the eventual file-size of the PDF, since the
+        % JPEG optimiser can be more compressive on the majority-white regions.
+        \node[inner sep=0pt] at (current page.center)
+            {\includegraphics[width=\paperwidth, height=\paperheight]{cover}};
+    \end{tikzpicture}\fi
     \begin{flushright}
         \makeatletter
         \begingroup
@@ -273,7 +287,12 @@
                 (\gitBranch) \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
                 \internalname .pdf} \\
-            Document Licence & \licencetext
+            Document Licence & \licencetext \\
+            \ifdraft\else
+                Cover Image Credit & \href{https://pixabay.com/%
+                illustrations/flora-flower-blossoms-background-70512/}{Gerd
+                Altmann} of Pixabay
+            \fi
         \end{tabular}
     \end{center}
 \end{titlepage}
@@ -306,7 +325,6 @@ In no particular order:
     \item Fix page boundaries/trailing under-filled vertical boxes;
     \item Add Shirali and S\&V book references;
     \item Rewrite lecture summaries;
-    \item Add the fractal title page graphic on the final version;
     \item Lectures:
         \begin{itemize}
             \item XII;
@@ -1168,9 +1186,9 @@ In no particular order:
         \item For any collection of closed sets $ \mathcal{F} $,
             \begin{equation}
                 \text{For all } F \in \mathcal{F} \text{, } \underbrace{F^c \in
-                T_d}_\mathrm{\Cref{theorem:open-subset-closed-complement}}
+                T_d}_\text{\Cref{theorem:open-subset-closed-complement}}
                 \implies\underbrace{\bigcup_{F \in \mathcal{F}} \left( F^c
-                \right) \in T_d}_\mathrm{\Cref{axiom:open-union-open}} \implies
+                \right) \in T_d}_\text{\Cref{axiom:open-union-open}} \implies
                 \bigcap_{F \in \mathcal{F}} F \text { is closed,}
             \end{equation}
             since $ \left(\bigcap_{F \in \mathcal{F}} F\right)^c =
@@ -1449,18 +1467,18 @@ In no particular order:
         is a boundary point. We now unravel the definitions:
         \begin{alignat}{2}
             A \text{ is closed} &\iff \partial A \subseteq A
-                &&\mathrm{[\Cref{definition:open-closed-clopen-sets}]} \\
+                &&\text{[\Cref{definition:open-closed-clopen-sets}]} \\
             &\iff A^c \text{ is open}
-                &&\mathrm{[\Cref{theorem:open-subset-closed-complement}]}%
+                &&\text{[\Cref{theorem:open-subset-closed-complement}]}%
                 \label{eqn:closure-limit-union-open} \\
             &\iff A^c \cap \partial \left( A^c \right) = \emptyset
-                &&\mathrm{[\Cref{definition:open-closed-clopen-sets}]} \\
+                &&\text{[\Cref{definition:open-closed-clopen-sets}]} \\
             &\iff A^c \cap \partial A = \emptyset
-                &&\mathrm{[\Crefrange{eqn:boundary-complement-boundary-first}%
+                &&\text{[\Crefrange{eqn:boundary-complement-boundary-first}%
                     {eqn:boundary-complement-boundary-last}]} \\
             &\iff \forall x \in A^c,\, \exists \epsilon > 0 \text{ s.t. }
                 B(x, \epsilon) \subseteq A^c\quad
-                &&\mathrm{[\Cref{eqn:closure-limit-union-open}]} \\
+                &&\text{[\Cref{eqn:closure-limit-union-open}]} \\
             &\iff A = \overline{A} \\
             &\iff A \supseteq A^\prime
         \end{alignat}
@@ -1996,6 +2014,19 @@ In no particular order:
     Let $ (X, d) $ be a metric space. Then, $ X $ is \emph{complete} if and only
     if any Cauchy sequence converges to a point in $ X $. We may assume that $
     (\mathbb{R}, d) $ is complete.
+
+    If a sequence is Cauchy, and its resident metric space is complete, then the
+    sequence is convergent.
+
+    \centering
+    \begin{tikzpicture}
+        \node {\fbox{\includegraphics[angle=-90]{pluto}}};
+        \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
+        \node[white, rotate=-20] at (1.5, 0) {\large Complete};
+    \end{tikzpicture}
+    \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
+        {Pluto}, the Greek God of Convergence, brandishing his mathematical
+        bident}
 \end{definition}
 \begin{theorem}{The Completion Theorem}{completion-theorem}
     Let $ (X, d) $ be a metric space. There is a metric space $ (X^*, d^*) $ and
@@ -2051,10 +2082,64 @@ In no particular order:
         \autocite{Shirali:2006}.
     \end{proof}
 \end{theorem}
+\begin{theorem}{A real-valued vector space is complete under the sup-metric}
+            {real-vector-sup-complete}
+    The space $ \left( \mathbb{R}^k, d_\infty \right) $ where $ k \geq 2 $ is
+    complete.
+    \begin{proof}
+        By \cref{definition:completeness}, and in the same vein as
+        \cref{theorem:completion-theorem}, we take an arbitrary Cauchy sequence
+        $ \left( \vec{x}_n \right)_{n=1}^\infty $ from $ \left( \mathbb{R}^k,
+        d_\infty \right) $, and let $ \epsilon > 0 $ be given. Since $ \left(
+        \vec{x}_n \right)_{n=1}^\infty $ is Cauchy,
+        there exists an $ N(\epsilon) > 0 $ such that, for all $ n, m > N $,
+        \begin{alignat}{2}
+            d_\infty\left( \vec{x}_n, \vec{x}_m \right) &= \max_{1 \leq i \leq
+            k}\left\{ \left\vert \vec{x}_i^{(n)} - \vec{x}_{i}^{(m)} \right\vert
+            \right\}\quad &&\text{[\Cref{definition:canon-metrics}]}\\
+            &< \epsilon &&\text{[\Cref{definition:cauchy-sequences}]}
+        \end{alignat}
+        Given that $ \mathbb{R} $ is axiomatised to be complete, each real
+        subsequence converges to a real limit. Since we know the limit to exist,
+        we can construct a candidate limit $ \vec{x} $ to be the component-wise
+        limits, as pictured below.
+        \begin{equation*}
+            \renewcommand\arraystretch{1.8}
+            \begin{matrix}
+                \vec{x}_1 & \vline & \Big( & x_1^{(1)}, & x_1^{(2)}, & \ldots,
+                    & x_1^{(k)} & \Big) \\
+                \vec{x}_2 & \vline & \Big( & x_2^{(1)}, & x_2^{(2)}, & \ldots,
+                    & x_2^{(k)} & \Big) \\
+                \vdots & \vline & & \big\downarrow & \big\downarrow & \ddots &
+                    \big\downarrow & \\
+                \color{red}{\vec{x}} & \vline & \Big( & {\color{red}x_1}, &
+                    {\color{red}x_2}, & \ldots, & {\color{red}x_k} & \Big) &
+                    \begin{rcases}\vphantom{\Big)}\end{rcases}\,\,N(\epsilon)
+            \end{matrix}
+        \end{equation*}
+
+        After the index $ N $, $ \vec{x}_n $ and $ \vec{x}_m $ are sufficiently
+        close by the $ d_\infty $ metric; that is, $ \vec{x} \in \mathbb{R}^k $
+        is composed of the component-wise limits of $ \vec{x}_i $ for $ i \in
+        \mathbb{N} $. We can use \cref{theorem:vector-space-convergence} to show
+        that the candidate limit $ \vec{x} $ is valid, given that the coordinate
+        sequences converge component-wise (by construction of $ \vec{x} $).
+
+        Thus, any arbitrary Cauchy sequence $ \left( \vec{x}_n
+        \right)_{n=1}^\infty \in \left( \mathbb{R}^k \right)^\mathbb{N} $
+        converges to $ \vec{x} \in \mathbb{R}^k $, so $ \left( \mathbb{R}^k,
+        d_\infty \right) $ is complete by \cref{definition:completeness}.
+    \end{proof}
+\end{theorem}
 
 \lecture{Generalising Continuity}
         {Viewer.aspx?id=227c74d2-ed70-4345-bed6-b0ad00abd4d4}{
-    TODO
+    Lecture Eleven introduces a general form of continuity according to the $
+    \epsilon $--$ \delta $ definition and hence motivates five superficially
+    different, albeit equivalent, notions of a continuous map in terms of highly
+    abstract open and closed sets. The sets of bounded and continuous functions
+    are revisited with greater care, and an example helps to illustrate $ B(X,
+    Y) $ with the $ d_\infty $ metric.
 }{\DTMdisplaydate{2023}{11}{7}{Tuesday}}
 
 \clearpage
@@ -2063,11 +2148,4 @@ In no particular order:
 
 \vfill\centering---\ \textsc{End of Document}\ ---%
 \end{document}
-% \centering
-% \begin{tikzpicture}
-%     \node {\includegraphics[angle=-90]{pluto}};
-%     \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
-%     \node[white, rotate=-20] at (1.5, 0) {\large Complete};
-% \end{tikzpicture}
-% \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
-%     {Pluto}, the Greek God of Convergence}
+%
