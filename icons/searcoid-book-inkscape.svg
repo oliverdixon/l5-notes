@@ -27,14 +27,14 @@
      inkscape:deskcolor="#505050"
      showgrid="false"
      inkscape:zoom="0.51279297"
-     inkscape:cx="169.65911"
-     inkscape:cy="270.08951"
+     inkscape:cx="168.68406"
+     inkscape:cy="272.03961"
      inkscape:window-width="1920"
-     inkscape:window-height="1136"
+     inkscape:window-height="1016"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1893" />
+     inkscape:current-layer="g2837" />
   <g
      id="g2837"
      transform="matrix(0.9478506,0,0,0.94621198,0.02607479,0.02689292)"
@@ -44,13 +44,13 @@
        stroke="#000000"
        stroke-linejoin="round"
        id="path1889"
-       style="stroke:#00ff00;stroke-width:1.05593;stroke-opacity:0.51756668" />
+       style="stroke:#00ff00;stroke-width:1.05593;stroke-opacity:0.69999999" />
     <path
        d="M 17.7353,1.9138779 H 20 c 0.2761,0 0.5,0.1587221 0.5,0.3545119 V 11.51335 c 0,0.286871 -0.4767,0.477456 -0.8465,0.360964 -0.7951,-0.250498 -2.122,-0.556513 -3.8594,-0.556513 -2.9412,0 -5.2941,1.231433 -5.2941,1.231433 0,0 -2.35294,-1.231433 -5.29412,-1.231433 -1.73743,0 -3.06432,0.306015 -3.85941,0.556513 C 0.97668,11.990806 0.5,11.800221 0.5,11.51335 V 2.2683898 C 0.5,2.0726 0.72386,1.9138779 1,1.9138779 h 2.26471"
        stroke="#000000"
        stroke-linejoin="round"
        id="path1891"
-       style="stroke:#00ff00;stroke-width:1.05593;stroke-opacity:0.51756668" />
+       style="stroke:#00ff00;stroke-width:1.05593;stroke-opacity:0.69999999" />
   </g>
   <g
      id="g2842"
