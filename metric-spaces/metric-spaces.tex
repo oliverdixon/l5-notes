@@ -107,8 +107,8 @@
 % \newtheoremtype: create a new tcolorbox theorem-like environment which will be
 % included as a subsection in the table of contents.
 %
-%   #1: display name (e.g. Definition)
-%   #2: environment name (e.g. definition)
+%   #1: display name (e.g. Definition);
+%   #2: environment name (e.g. definition);
 %   #3: colour of the bounding box, according to xcolor (e.g. red)
 %
 % NOTE: Creating an auxiliary environment is slightly circuitous, but the
@@ -140,12 +140,17 @@
 \newlength\iconsize
 \setlength\iconsize{16pt}
 
+% \panoptostamp: occupy a two-column table row with a Panopto link
+%
+%   #1: date of lecture delivery;
+%   #2: Panopto video/folder URL suffix (or empty if no recording)
+%
 \newcommand*\panoptostamp[2]{%
     \ifstrempty{#2}
         {%
             \raisebox{.125\iconsize}{\textit{No Recording}} &
             \fbox{\centering\includegraphics[width=\iconsize]
-                {../icons/no-video}}
+                {../icons/no-video}}%
         }{%
             \raisebox{.125\iconsize}{\textit{#1}} &
             \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
@@ -154,6 +159,11 @@
         }%
 }
 
+% \panoptostamp: occupy a two-column table row with a book reference
+%
+%   #1: reference display text;
+%   #2: location of the relevant book icon, relative to '../icons/'
+%
 \newcommand*\bookstamp[2]{%
     \raisebox{.125\iconsize}{\textit{#1}} &
     \fbox{\centering\includegraphics[width=\iconsize]{../icons/#2}}%
@@ -161,9 +171,9 @@
 
 % \lecture: start a new lecture section, with a description and Panopto link.
 %
-%   #1: lecture display name
-%   #2: Panopto video/folder URL suffix (or empty if no recording)
-%   #3: lecture summary paragraph
+%   #1: lecture display name;
+%   #2: Panopto video/folder URL suffix (or empty if no recording);
+%   #3: lecture summary paragraph;
 %   #4: date of live delivery
 %
 \newcommand\lecture[4]{%
@@ -175,19 +185,6 @@
         \bookstamp{Searcoid}{searcoid-book}
     \end{tabular}
     \vskip\baselineskip
-    % \parbox{.3\linewidth}{%
-    %     \raggedleft\raisebox{3pt}{%
-    %         \ifstrempty{#2}{%
-    %             \textit{No recording}\hspace*{8pt}
-    %             \fbox{\centering\includegraphics[width=13pt]{../icons/no-video.pdf}}
-    %         }{%
-    %             \textit{#4}\hspace*{8pt}
-    %             \href{https://york.cloud.panopto.eu/Panopto/Pages/#2}
-    %                 {\fbox{\centering\includegraphics[width=13pt]%
-    %                     {../icons/video.pdf}}}
-    %         }%
-    %     }%
-    % }\vskip\baselineskip%
 }
 
 \newtheoremtype{Definition}{definition}{black}
@@ -273,11 +270,12 @@
     \setlength\parskip{0pt}
     \tableofcontents
 \endgroup
-% \vfill
-% \begin{center}
-%     \setlength\fboxsep{6pt}
-%     \footnotesize \fbox{Dedicated to Maia}
-% \end{center}
+\vfill
+\begin{center}
+    \setlength\fboxsep{6pt}
+    \footnotesize \fbox{Page boundaries in draft copies may be untidy.
+    Trailing under-filled vertical boxes will be fixed in the final version.}
+\end{center}
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
@@ -1819,14 +1817,6 @@
     \end{equation}
     The terms of Cauchy sequences grow arbitrarily close, and Cauchy sequences
     need not be convergent.
-    % \centering
-    % \begin{tikzpicture}
-    %     \node {\includegraphics[angle=-90]{pluto}};
-    %     \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
-    %     \node[white, rotate=-20] at (1.5, 0) {\large Complete};
-    % \end{tikzpicture}
-    % \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
-    %     {Pluto}, the Greek God of Convergence}
 \end{definition}
 \begin{example}{The Cauchy condition does not imply
         convergence}{cauchy-no-convergence}
@@ -1883,16 +1873,24 @@
     \cref{theorem:convergence-implies-cauchy}: ``not Cauchy'' implies ``not
     convergent''. Consider the difference between $ S_{(2N)} $ and $ S_N $:
     \begingroup
-    \setlength\jot{.8em}
-    \begin{align}
-        \begin{split}
-            S_{(2N)} - S_N &= \left( \frac{1}{2N} + \frac{1}{2N-1} + \ldots +
-            \frac{1}{N+1} + \frac{1}{N} + \frac{1}{N-1} + \ldots + 1 \right) -\\
-            &\left( \frac{1}{N} + \frac{1}{N-1} + \ldots + 1 \right)
-        \end{split}\\
-        &\geq \frac{N}{2N} = \frac{1}{2}
-    \end{align}
+        \setlength\jot{.8em}
+        \begin{align}
+            \begin{split}
+                S_{(2N)} - S_N &= \left( \frac{1}{2N} + \frac{1}{2N-1} + \ldots
+                + \frac{1}{N+1} + \frac{1}{N} + \frac{1}{N-1} + \ldots + 1
+                \right) -\\ &\left( \frac{1}{N} + \frac{1}{N-1} + \ldots + 1
+                \right)
+            \end{split}\\
+            &\geq \frac{N}{2N} = \frac{1}{2}
+        \end{align}
     \endgroup
 \end{example}
 \end{document}
-
+% \centering
+% \begin{tikzpicture}
+%     \node {\includegraphics[angle=-90]{pluto}};
+%     \node[white, rotate=-10] at (1.5, .8) {\large Cauchy};
+%     \node[white, rotate=-20] at (1.5, 0) {\large Complete};
+% \end{tikzpicture}
+% \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
+%     {Pluto}, the Greek God of Convergence}
