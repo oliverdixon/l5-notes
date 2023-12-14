@@ -135,7 +135,7 @@
 \titleformat\section
     {\Large\bfseries}
     {Lecture \thesection: }{0pt}
-    {#1\quad\leaders\hbox{\rule[.4ex]{1pt}{1pt}}\hfill}
+    {#1\quad\leaders\hrule height .5ex depth -3pt\hfill}
 
 \newlength\iconsize
 \setlength\iconsize{16pt}
@@ -597,7 +597,7 @@
     \mathbb{R}^2 $ to $ \mathbb{C} $, and hence qualifies as an isometry.
 \end{example}
 
-\lecture{Introduction to the Topology of a Metric Space}
+\lecture{Introduction to the Topology of Metric Spaces}
         {Viewer.aspx?id=3a47174e-ed9d-413d-b309-b08c009bdb8e}{
     Lecture Four begins an investigation into the topology of a metric space. In
     particular, we introduce \emph{open and closed balls}, \emph{interior
@@ -1713,7 +1713,7 @@
         \end{equation}
         Thus, $ d^*(x_n, x) < \epsilon $ for all $ n > N $, so $ \left( x_n
         \right)_{n=1}^\infty \to x $ as $ n \to \infty $ in $ (X, d^*) $.
-        \iffbackward A near-identical argument for deriving convergence in $
+        \iffbackward A near-identical argument applies: derive convergence in $
         (X, d) $ by assuming convergence in $ (X, d^*) $.
     \end{proof}
 \end{theorem}
@@ -1863,8 +1863,8 @@
 
 \begin{example}{The Harmonic Series Sequence is not
         Convergent}{harmonic-series-divergent}
-    Consider $ (\mathbb{R}, d) $ and the Harmonic series $ \sum_{n=1}^\infty 1/n
-    $. Define a sequence $ \left( S_N \right)_{N=1}^\infty $, such that
+    Consider $ (\mathbb{R}, d) $ and the Harmonic series $ \sum_{n=1}^\infty
+    (1/n) $. Define a sequence $ \left( S_N \right)_{N=1}^\infty $, such that
     \begin{equation}
         S_N \coloneq \sum_{n=1}^N \frac{1}{n}.
     \end{equation}
@@ -1880,10 +1880,19 @@
                 + \frac{1}{N+1} + \frac{1}{N} + \frac{1}{N-1} + \ldots + 1
                 \right) -\\ &\left( \frac{1}{N} + \frac{1}{N-1} + \ldots + 1
                 \right)
-            \end{split}\\
-            &\geq \frac{N}{2N} = \frac{1}{2}
+            \end{split}\label{eqn:harmonic-series-1}\\
+            &\geq \frac{N}{2N} = \frac{1}{2}\label{eqn:harmonic-series-2}
         \end{align}
     \endgroup
+    By \cref{definition:cauchy-sequences}, given an $ \epsilon > 0 $, we need to
+    find $ K > 0 $ such that
+    \begin{equation}
+        \left\vert S_M - S_N \right\vert < \epsilon \text{ for all } M, N > K.
+    \end{equation}
+    Given \crefrange{eqn:harmonic-series-1}{eqn:harmonic-series-2}, if $ M := 2N
+    $, then $ \left\vert S_M - S_N \right\vert > \epsilon $, and the Cauchy
+    condition does not hold. By the initial statement, the sequence is therefore
+    not convergent.
 \end{example}
 \end{document}
 % \centering
