@@ -1,15 +1,5 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
-%
-% TODO: Add book references to all lectures (S, S&V)
-% TODO: In progress: XI
-% TODO: Remaining lectures:
-%   XII
-%   XIII
-%   XIV
-%   XV
-%   XVI
-%   XVII [End of examinable content]
 
 \documentclass{article}
 \pdfsuppresswarningpagegroup=1
@@ -28,6 +18,7 @@
     fontsize=1.5em,
     color=black,
     firstpageonly,
+    stamp=false
 ]{draftwatermark}
 \usepackage[en-GB]{datetime2}
 \usepackage[missing=master]{gitinfo2}
@@ -52,16 +43,23 @@
 
 % END DOCUMENT METADATA
 
+\newif\ifdraft
+\drafttrue
 \addbibresource{texts.bib}
 \nocite{*}
 
+\ifdraft
+    \DraftwatermarkOptions{text={Warning: Incomplete notes; do not redistribute.
+        Check for \href{\githublink}{GitHub updates} periodically.}, stamp}
+\fi
+
 \newcommand*\githublink{https://github.com/oliverdixon/l5-notes/}
 \newcommand*\subtitle{Consolidated Lecture Notes}
+\newcommand*\licencetext{\href{\githublink blob/\gitBranch/LICENSE}{MIT Licence}
+    \ifdraft(all rights reserved on draft copies)\fi}
 \urlstyle{same}
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 \renewcommand*\vec{\mathbf}
-\DraftwatermarkOptions{text={Warning: Incomplete notes; do not redistribute.
-    Check for \href{\githublink}{GitHub updates} periodically.}}
 
 \setlength\parskip{.8em}
 \setlength\parindent{0pt}
@@ -215,6 +213,13 @@
 
 \renewcommand*\headrulewidth{0pt}
 \renewcommand*\footrulewidth{\headrulewidth}
+\ifdraft
+    \fancypagestyle{plain}{
+        \fancyhf{}
+        \fancyhead[C]{\bfseries DRAFT/UNFINISHED}
+        \fancyfoot[C]{\thepage}
+    }
+\fi
 \makeatletter
 \fancypagestyle{mainbody}{
 	\fancyhf{}
@@ -222,6 +227,9 @@
     \fancyhead[R]{\itshape \@date}
     \fancyfoot[L]{\itshape \@author}
     \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
+    \ifdraft
+        \fancyfoot[C]{\bfseries DRAFT/UNFINISHED}
+    \fi
 }
 \makeatother
 
@@ -265,17 +273,17 @@
                 (\gitBranch) \\
             York Web Link & \url{https://www-users.york.ac.uk/~od641/l5-notes/%
                 \internalname .pdf} \\
-            Document Licence & \href{\githublink blob/\gitBranch/LICENSE}
-                {MIT Licence} (all rights reserved on draft copies)
+            Document Licence & \licencetext
         \end{tabular}
     \end{center}
 \end{titlepage}
 \stepcounter{page}
+
 \section*{Structural Information}
 
 This document consolidates the content delivered during lectures \#1 through
 \#17 of the undergraduate \emph{Metric Spaces} module, presented throughout
-Semester 1 of the 2022/23 academic year at the University of York. Each lecture
+Semester 1 of the 2023/24 academic year at the University of York. Each lecture
 introduction is annotated with references to the relevant Panopto lecture
 recording, accessible exclusively to UoY-authenticated users, and references to
 the germane sections in \autocite{Shirali:2006} and \autocite{Searcoid:2007},
@@ -290,12 +298,26 @@ directed to the Author via the Author Contact as printed on the title page.
     \setlength\parskip{0pt}
     \tableofcontents
 \endgroup
-\vfill
-\begin{center}
-    \setlength\fboxsep{6pt}
-    \footnotesize \fbox{Page boundaries in draft copies may be untidy.
-    Trailing under-filled vertical boxes will be fixed in the final version.}
-\end{center}
+\ifdraft
+\section*{Draft Copy Only: To-Do List}
+
+In no particular order:
+\par\begin{itemize}
+    \item Fix page boundaries/trailing under-filled vertical boxes;
+    \item Add Shirali and S\&V book references;
+    \item Rewrite lecture summaries;
+    \item Add the fractal title page graphic on the final version;
+    \item Lectures:
+        \begin{itemize}
+            \item XII;
+            \item XIII;
+            \item XIV;
+            \item XV;
+            \item XVI;
+            \item XVII: \emph{end of examinable content}.
+        \end{itemize}
+\end{itemize}
+\fi
 \clearpage
 \pagenumbering{arabic}
 \pagestyle{mainbody}
@@ -2029,6 +2051,12 @@ directed to the Author via the Author Contact as printed on the title page.
         \autocite{Shirali:2006}.
     \end{proof}
 \end{theorem}
+
+\lecture{Generalising Continuity}
+        {Viewer.aspx?id=227c74d2-ed70-4345-bed6-b0ad00abd4d4}{
+    TODO
+}{\DTMdisplaydate{2023}{11}{7}{Tuesday}}
+
 \clearpage
 \printbibliography[heading=bibintoc,
     title={Recommended Texts \& Further Reading}]
