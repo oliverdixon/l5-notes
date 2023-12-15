@@ -32,5 +32,5 @@ in the Git repository to make version-control data visible to
 
 To convert the icons from SVG to PDF
 ([why?](https://maths.york.ac.uk/moodle/mod/hsuforum/discuss.php?d=7352#p18645)),
-run (/icons/generate-pdfs.sh) in a Bash shell.
+run [icons/generate-pdfs.sh](/icons/generate-pdfs.sh) in a Bash shell.
 
