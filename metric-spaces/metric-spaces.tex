@@ -63,8 +63,8 @@
 
 \newcommand*\githublink{https://github.com/oliverdixon/l5-notes/}
 \newcommand*\subtitle{Consolidated Lecture Notes}
-\newcommand*\licencetext{\href{\githublink blob/\gitBranch/LICENSE}{MIT Licence}
-    \ifdraft(all rights reserved on draft copies)\fi}
+\newcommand*\licencetext{\ifdraft All rights reserved (draft
+    copy)\else\href{\githublink blob/\gitBranch/LICENSE}{MIT Licence}\fi}
 \urlstyle{same}
 \newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 \renewcommand*\vec{\mathbf}
@@ -79,7 +79,8 @@
 \newcommand*\cauchyquotient{%
     \ensuremath\mathcal{G}{\left(X\right)/\hspace{-.5ex}\sim}}
 \definecolor{ballfill}{RGB}{242, 242, 242}
-\usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric, arrows.meta}
+\usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric, arrows.meta,
+    fadings}
 \tikzset{
     every node/.style={transform shape},
     unitaxes/.pic={
@@ -99,6 +100,7 @@
             (5,0) (5,-1) (0,-2) (-5,-1) (-5,0) (-5,1) (0,2)};
     },
 }
+\tikzfading[name=fade, bottom color=transparent!50, top color=transparent!100]
 
 \tcbuselibrary{theorems, breakable, skins}
 \tcbset{
@@ -235,9 +237,7 @@
     \fancyhead[R]{\itshape \@date}
     \fancyfoot[L]{\itshape \@author}
     \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
-    \ifdraft
-        \fancyfoot[C]{\bfseries DRAFT/UNFINISHED}
-    \fi
+    \ifdraft\fancyfoot[C]{\bfseries DRAFT/UNFINISHED}\fi
 }
 \makeatother
 
@@ -246,13 +246,13 @@
 \pagestyle{plain}
 \pagenumbering{roman}
 \begin{titlepage}
-    \ifdraft\else\begin{tikzpicture}[remember picture, overlay]
+    \ifdraft\else
         % Preprocessing this image in GIMP to fix the alpha masks (gradient and
         % opacity) greatly reduces the eventual file-size of the PDF, since the
-        % JPEG optimiser can be more compressive on the majority-white regions.
-        \node[inner sep=0pt] at (current page.center)
-            {\includegraphics[width=\paperwidth, height=\paperheight]{cover}};
-    \end{tikzpicture}\fi
+        % JPEG compressor can be more aggressive on the majority-white regions.
+        \AddToHookNext{shipout/background}{\put(0,-\paperheight)
+            {\includegraphics[width=\paperwidth, height=\paperheight]{cover}}}
+    \fi
     \begin{flushright}
         \makeatletter
         \begingroup
@@ -311,7 +311,7 @@ denoted by the icons
 \fbox{\includegraphics[width=.8\iconsize]{../icons/video}},
 \fbox{\includegraphics[width=.8\iconsize]{../icons/sv-book}}, and
 \fbox{\includegraphics[width=.8\iconsize]{../icons/searcoid-book}}
-respectively.  Comments and corrections are warmly welcomed, and should be
+respectively. Comments and corrections are warmly welcomed, and should be
 directed to the Author via the Author Contact as printed on the title page.
 
 \begingroup
@@ -327,8 +327,6 @@ In no particular order:
     \item Fix page boundaries/trailing under-filled vertical boxes;
     \item Add Shirali and S\&V book references;
     \item Improve the length and prose style of lecture-introduction paragraphs;
-    \item Enforce uniform spacing on function-argument vector pairs, e.g.
-        $ \sin(x) $ vs. $ \sin{(x)} $;
     \item Lectures:
         \begin{itemize}
             \item XII;
@@ -373,12 +371,12 @@ In no particular order:
     $ d_\infty $, each of which have a domain of $ \mathbb{R}^N \times
     \mathbb{R}^N $ and a codomain of $ [0, \infty) $:
     \begin{align}
-        d_1(\vec{x}, \vec{y}) &= \sum_{i=1}^N \vert \vec{x}_i - \vec{y}_i
-            \vert\label{eqn:d1-metric} \\
+        d_1(\vec{x}, \vec{y}) &= \sum_{i=1}^N \left\vert \vec{x}_i - \vec{y}_i
+            \right\vert\label{eqn:d1-metric} \\
         d_2(\vec{x}, \vec{y}) &= \left[\sum_{i=1}^N (\vec{x}_i - \vec{y}_i)^2
             \right]^{1/2} \label{eqn:d2-metric} \\[.8em]
-        d_\infty(\vec{x}, \vec{y}) &= \max_{1 \leq i \leq N} \vert \vec{x}_i -
-            \vec{y}_i \vert\label{eqn:dinf-metric}
+        d_\infty(\vec{x}, \vec{y}) &= \max_{1 \leq i \leq N} \left\vert
+            \vec{x}_i - \vec{y}_i \right\vert\label{eqn:dinf-metric}
     \end{align}
     Unless otherwise stated, $ \mathbb{R}^N $ is endowed with $ d_2 $ Euclidean
     metric. This is consistent with our current understanding of the real line,
@@ -521,7 +519,7 @@ In no particular order:
     Then, the infinity metric is defined in terms of the supremum, since a
     sequence with infinite terms mightn't possess a maximum:
     \begin{equation}
-        d_\infty(X, Y) = \sup\left\{\vert X_i - Y_i \vert \colon
+        d_\infty(X, Y) = \sup\left\{\left\vert X_i - Y_i \right\vert \colon
             i \in \mathbb{N}\right\} \text { for } X, Y \in \ell^\infty.
     \end{equation}
 \end{definition}
@@ -539,8 +537,8 @@ In no particular order:
     supremum, such that the upper bound needn't lie in the set:
     \begin{equation}
         d_\infty \colon B([0, 1]) \times B([0, 1]) \to [0, \infty)
-            \text{ such that } (f, g) \mapsto \sup\left\{\vert f(t) - g(t) \vert
-            \colon t \in [0, 1] \right\}.
+            \text{ such that } (f, g) \mapsto \sup\left\{\left\vert f(t) - g(t)
+            \right\vert \colon t \in [0, 1] \right\}.
     \end{equation}
     Then, $ \left(B([0, 1]),\, d_\infty\right) $ is a metric space.
     \begin{proof}
@@ -550,26 +548,26 @@ In no particular order:
         \begin{itemize}
             \item Since $ f-g $ is a bounded function, there exists an $ M \geq
                 0 $ for which $ f(t) - g(t) \leq M $ for all $ t \in [0, 1] $.
-                Thus, $ \sup\left\{\vert f(t) - g(t) \vert \colon t \in [0,
-                1]\right\} \geq 0 $, and $ d_\infty(f, g) \geq 0 $ for all $ f,
-                g \in B([0, 1]) $.
+                Thus, $ \sup\left\{\left\vert f(t) - g(t) \right\vert \colon t
+                \in [0, 1]\right\} \geq 0 $, and $ d_\infty(f, g) \geq 0 $ for
+                all $ f, g \in B([0, 1]) $.
             \item \iffforward If $ f = g $, then $ \vert f(t) - g(t) \vert = 0 $
                 for all $ t \in [0, 1] $, so $ d_\infty(f, g) = \sup\{0, 0,
                 \ldots\} = 0 $.
 
                 \iffbackward Furthermore, if $ d_\infty(f, g) = 0 $, then we
-                know that $ \sup\left\{ \vert f(t) - g(t) \vert \colon t \in [0,
-                1] \right\} = 0 $. We know that $ \vert f(t) - g(t) \vert \geq 0
-                $, so $ \vert f(t) - g(t) \vert = 0 $ follows immediately, from
-                which we can conclude that $ f(t) = g(t) $ for all $ t \in [0,
-                1] $, hence $ f = g $.
+                know that $ \sup\left\{ \left\vert f(t) - g(t) \right\vert
+                \colon t \in [0, 1] \right\} = 0 $. We know that $ \vert f(t) -
+                g(t) \vert \geq 0 $, so $ \vert f(t) - g(t) \vert = 0 $ follows
+                immediately, from which we can conclude that $ f(t) = g(t) $ for
+                all $ t \in [0, 1] $, hence $ f = g $.
 
                 Thus, $ d_\infty(f, g) = 0 \iff f = g $.
             \item By the symmetry of the standard metric on $ \mathbb{R} $, the
                 symmetry of $ d_\infty $ on $ B([0, 1]) $ follows immediately:
                 \begin{align}
-                    d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
-                        t \in [0, 1] \right\} \\
+                    d_\infty(f, g) &= \sup\left\{ \left\vert f(t) - g(t)
+                        \right\vert \colon t \in [0, 1] \right\} \\
                     &= \sup\left\{ \vert g(t) - f(t) \vert \colon t \in [0, 1]
                         \right\} \\
                     &= d_\infty(g, f).
@@ -577,13 +575,13 @@ In no particular order:
             \item By the triangularity property of the standard metric on $
                     \mathbb{R} $,
                 \begin{align}
-                    d_\infty(f, g) &= \sup\left\{ \vert f(t) - g(t) \vert \colon
-                        t \in [0, 1] \right\} \\
-                    &= \sup\left\{ \vert f(t) - h(t) + h(t) - g(t) \vert \colon
-                        t \in [0, 1] \right\} \\
-                    &\leq \sup\left\{ \vert f(t) - h(t) \vert \colon t \in [0,
-                        1] \right\} + \sup\left\{ \vert h(t) - g(t) \vert \colon
-                        t \in [0, 1] \right\} \\
+                    d_\infty(f, g) &= \sup\left\{ \left\vert f(t) - g(t)
+                        \right\vert \colon t \in [0, 1] \right\} \\
+                    &= \sup\left\{ \left\vert f(t) - h(t) + h(t) - g(t)
+                        \right\vert \colon t \in [0, 1] \right\} \\
+                    &\leq \sup\left\{ \left\vert f(t) - h(t) \right\vert \colon
+                        t \in [0, 1] \right\} + \sup\left\{ \left\vert h(t) -
+                        g(t) \right\vert \colon t \in [0, 1] \right\} \\
                     &= d_\infty(f, h) + d_\infty(h, g),
                 \end{align}
                 hence $ d_\infty $ possesses the property of triangularity on $
@@ -618,8 +616,8 @@ In no particular order:
     \end{equation}
     Despite there being no inherent algebraic structure or ordering on $ \Sigma
     $, $ d $ is a metric that is inversely proportional with the earliest point
-    at which two given binary strings diverge, thus providing a notion of
-    \emph{distance}.
+    at which two given binary strings diverge, thus inducing a very natural---
+    although unconventional---notion of \emph{distance}.
     \tcblower
     This example was adapted from Ben Green's University of Oxford
     \href{https://courses.maths.ox.ac.uk/course/view.php?id=65}{Metric Spaces
@@ -2031,7 +2029,7 @@ In no particular order:
         \node[white, rotate=-20] at (1.5, 0) {\large Complete};
     \end{tikzpicture}
     \captionof{figure}{\href{https://en.wikipedia.org/wiki/Bident\#In\_art}%
-        {Pluto}, the Greek God of Convergence, brandishing his mathematical
+        {Pluto}, the Greek God of Convergence, brandishing his topological
         bident}
 \end{definition}
 \begin{theorem}{The Completion Theorem}{completion-theorem}
@@ -2184,9 +2182,21 @@ In no particular order:
 \end{definition}
 
 \clearpage
+\ifdraft\else
+    % We need to use one of the new LaTeX hooks for this, otherwise the TikZ
+    % picture interferes with the prose and fancyhdr components on the page.
+    % See http://mirrors.ctan.org/macros/latex/base/lthooks-doc.pdf
+    \AddToHookNext{shipout/background}{\put(0,-\paperheight)
+        {\begin{tikzpicture}[remember picture, overlay]
+            \node[inner sep=0pt, rotate=180] at (current page.center)
+                {\includegraphics[width=\paperwidth,
+                height=\paperheight]{cover}};
+            \fill[white,path fading=fade] (current page.north west) rectangle
+                (current page.south east);
+        \end{tikzpicture}}
+    }
+\fi
 \printbibliography[heading=bibintoc,
     title={Recommended Texts \& Further Reading}]
-
-\vfill\centering---\ \textsc{End of Document}\ ---%
 \end{document}
 %
