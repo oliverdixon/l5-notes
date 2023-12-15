@@ -16,7 +16,8 @@ permitted in centrally timetabled exams), head over to
 ## Contributing
 
 Contact me at <od641@york.ac.uk> if you spot any errors or have comments
-regarding these notes. Please be mindful that I am reading the [MMath Mathematics and Computer Science (with a year in industry)](https://www.york.ac.uk/study/undergraduate/courses/mmath-mathematics-computer-science-year-industry/)
+regarding these notes. Please be mindful that I am reading the
+[MMath Mathematics and Computer Science (with a year in industry)](https://www.york.ac.uk/study/undergraduate/courses/mmath-mathematics-computer-science-year-industry/)
 degree, and therefore do not study approximately half of the modules considered
 "core" by the Mathematics Department.
 
@@ -28,4 +29,8 @@ way, you'll need to locally compile the LaTeX with a single invocation of
 [a post-commit/checkout hook](http://mirrors.ctan.org/macros/latex/contrib/gitinfo2/post-xxx-sample.txt)
 in the Git repository to make version-control data visible to
 [gitinfo2](https://ctan.org/pkg/gitinfo2) when rendering the front covers.
+
+To convert the icons from SVG to PDF
+([why?](https://maths.york.ac.uk/moodle/mod/hsuforum/discuss.php?d=7352#p18645)),
+run (/icons/generate-pdfs.sh) in a Bash shell.
 
