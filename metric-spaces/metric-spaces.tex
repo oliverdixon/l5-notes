@@ -1,8 +1,9 @@
 % METRIC SPACES NOTES
 % OLIVER DIXON, 2023
 %
-% You can download the large cover image (cover.jpg) from:
-% https://www-users.york.ac.uk/~od641/l5-notes/assets/metric-spaces.{jpg,xcf}
+% You can download the large cover image (to be named `cover.jpg') from:
+% https://www-users.york.ac.uk/~od641/l5-notes/assets/ms-cover.jpg. You can
+% request a (very large ~20MB) layer-rich XCF copy of the cover by e-mailing me.
 %
 % To compile this document in `draft' mode, which does not require many external
 % assets, issue \drafttrue in place of \draftfalse. Do not distribute any
@@ -322,9 +323,12 @@ directed to the Author via the Author Contact as printed on the title page.
 
 In no particular order:
 \par\begin{itemize}
+    \item Finish lecture XI: add diagrams to continuity definitions;
     \item Fix page boundaries/trailing under-filled vertical boxes;
     \item Add Shirali and S\&V book references;
-    \item Rewrite lecture summaries;
+    \item Improve the length and prose style of lecture-introduction paragraphs;
+    \item Enforce uniform spacing on function-argument vector pairs, e.g.
+        $ \sin(x) $ vs. $ \sin{(x)} $;
     \item Lectures:
         \begin{itemize}
             \item XII;
@@ -2016,7 +2020,9 @@ In no particular order:
     (\mathbb{R}, d) $ is complete.
 
     If a sequence is Cauchy, and its resident metric space is complete, then the
-    sequence is convergent.
+    sequence is convergent. To show that a space is \emph{not complete}, we must
+    find a Cauchy sequence in the space which does not converge to another point
+    in the space.
 
     \centering
     \begin{tikzpicture}
@@ -2141,6 +2147,41 @@ In no particular order:
     are revisited with greater care, and an example helps to illustrate $ B(X,
     Y) $ with the $ d_\infty $ metric.
 }{\DTMdisplaydate{2023}{11}{7}{Tuesday}}
+
+\begin{definition}{Inverse Image (Traditional Interpretation)}
+        {inverse-image-traditional}
+    Consider $ f \colon X \to Y $, and let $ A \subseteq Y $. Then, the
+    \emph{inverse image} of $ A $ is defined as
+    \begin{equation}
+        f^{-1}{(A)} \coloneq \left\{ x \in X \colon f(x) \in A \right\}.
+    \end{equation}
+\end{definition}
+\begin{definition}{Inverse Image (Fibreoptic Interpretation)}
+        {inverse-image-fibre}
+    Following from \cref{definition:inverse-image-traditional}, we can define a
+    \emph{fibre} of $ y $ to be the inverse image of the singleton set $ \{ y \}
+    $, denoted $ F_y $:
+    \begin{equation}
+        F_y \coloneq \left\{ x \in X \colon f(x) = y \right\}.
+    \end{equation}
+    Then, the \emph{inverse image} of $ A $ is the union of all fibres in $ A $:
+    \begin{equation}
+        f^{-1}{(A)} = \bigcup_{y \in A} F_y.
+    \end{equation}
+\end{definition}
+\begin{definition}{Continuity on the Real Line}{real-continuity}
+    A function $ f \colon \mathbb{R} \to \mathbb{R} $ is \emph{continuous} if
+    and only if, for all $ \epsilon > 0 $ there exists a $ \delta{(\epsilon)} >
+    0 $ such that
+    \begin{equation}
+        \left\vert x - x_0 \right\vert < \delta \implies \left\vert f{(x)} -
+        f{\left(x_0\right)} \right\vert < \epsilon.
+    \end{equation}
+    This is the least abstract, yet formally correct, definition of continuity,
+    as it applies only to the set of real numbers. Over the next set of
+    definitions, we define increasingly abstract---albeit equivalent---notions
+    of \emph{continuity in a metric space}.
+\end{definition}
 
 \clearpage
 \printbibliography[heading=bibintoc,

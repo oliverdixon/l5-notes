@@ -7,7 +7,7 @@ command="export-type:pdf; export-text-to-path; export-pdf-version:1.5;"
 for file in *-inkscape.svg; do
     outfile=${file/-inkscape.svg/.pdf}
     command="${command} file-open:${file};"
-    command="${command} export-filename:${outfile}"
+    command="${command} export-filename:${outfile};"
     command="${command} export-do;"
     echo "Added: ${file} -> ${outfile}"
 done
