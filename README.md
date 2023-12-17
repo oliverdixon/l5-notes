@@ -28,7 +28,9 @@ way, you'll need to locally compile the LaTeX with a single invocation of
 `latexmk -pdf`. You'll also need to set-up
 [a post-commit/checkout hook](http://mirrors.ctan.org/macros/latex/contrib/gitinfo2/post-xxx-sample.txt)
 in the Git repository to make version-control data visible to
-[gitinfo2](https://ctan.org/pkg/gitinfo2) when rendering the front covers.
+[gitinfo2](https://ctan.org/pkg/gitinfo2) when rendering the front covers; this
+can be done automatically by executing [setup-gitinfo.sh](/setup-gitinfo.sh) in
+a Bash shell.
 
 To convert the icons from SVG to PDF
 ([why?](https://maths.york.ac.uk/moodle/mod/hsuforum/discuss.php?d=7352#p18645)),
