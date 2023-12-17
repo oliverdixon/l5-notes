@@ -8,6 +8,16 @@
 % To compile this document in `draft' mode, which does not require many external
 % assets, issue \drafttrue in place of \draftfalse. Do not distribute any
 % generated draft copies!
+%
+% A note on PGF externalisation: due to the inevitable file-size increase
+% incurred when importing external PDFs (with their own embedded fonts), the PGF
+% external library is used as sparsely as possible, and only in cases where
+% on-line point-sampling would cause significant slow-down, such as in cases of
+% three-dimensional meshes (e.g. the global continuity diagram). In these cases,
+% the tikzpicture environment should be encapsulated in a group with the
+% external/export key set to true. The library is also known to clash with
+% tcolorboxes, for which a fix was proposed by the author of the latter:
+% https://tex.stackexchange.com/a/497136
 
 \documentclass{article}
 \pdfsuppresswarningpagegroup=1
@@ -34,7 +44,7 @@
 \usepackage[missing=master]{gitinfo2}
 \usepackage[sorting=none, style=alphabetic, backend=biber]{biblatex}
 \usepackage{fancyhdr, anyfontsize, amsthm, mathtools, amssymb, tcolorbox,
-    lastpage, enumitem, tikz, multirow}
+    lastpage, enumitem, tikz, multirow, pgfplots}
 \usepackage[hypcap=false]{caption}
 \usepackage[explicit]{titlesec}
 \usepackage[
@@ -76,12 +86,16 @@
 
 \newcommand*\iffforward{\par\boxed\Longrightarrow\ }
 \newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
+\DeclareMathOperator\fcomp{\,\circ\,}
 \newcommand*\cauchyquotient{%
     \ensuremath\mathcal{G}{\left(X\right)/\hspace{-.5ex}\sim}}
 \definecolor{ballfill}{RGB}{242, 242, 242}
 \usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric, arrows.meta,
-    fadings}
+    fadings, external}
+\pgfplotsset{compat=1.18, compat/show suggested version=false}
+\tikzexternalize[prefix=pgf-cache/]
 \tikzset{
+    external/export=false,
     every node/.style={transform shape},
     unitaxes/.pic={
         \draw[->] (-1.5, 0)--(1.5, 0) node[right] {$x$};
@@ -103,6 +117,7 @@
 \tikzfading[name=fade, bottom color=transparent!50, top color=transparent!100]
 
 \tcbuselibrary{theorems, breakable, skins}
+\tcbsetforeverylayer{shield externalize}
 \tcbset{
     enhanced, % Enable box-page-breaking
     parbox=false, % Allow multi-paragraph tcolorboxes
@@ -228,7 +243,8 @@
 \ifdraft
     \fancypagestyle{plain}{
         \fancyhf{}
-        \fancyhead[C]{\bfseries DRAFT/UNFINISHED}
+        \fancyhead[C]{\textbf{DRAFT/UNFINISHED\quad\today\quad
+            All rights reserved}}
         \fancyfoot[C]{\thepage}
     }
 \fi
@@ -239,7 +255,8 @@
     \fancyhead[R]{\itshape \@date}
     \fancyfoot[L]{\itshape \@author}
     \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
-    \ifdraft\fancyfoot[C]{\bfseries DRAFT/UNFINISHED}\fi
+    \ifdraft\fancyfoot[C]{\bfseries DRAFT/UNFINISHED\\\today\quad All rights
+        reserved}\fi
 }
 \makeatother
 
@@ -299,6 +316,9 @@
         \end{tabular}
     \end{center}
 \end{titlepage}
+% Disable the watermark stamp once the first page has shipped out, otherwise it
+% will be included in the externalised PGF figure pages!
+\DraftwatermarkOptions{stamp=false}
 \stepcounter{page}
 
 \section*{Structural Information}
@@ -330,7 +350,6 @@ In no particular order:
     \item Improve the length and prose style of lecture-introduction paragraphs;
     \item Lectures:
         \begin{itemize}
-            \item XII;
             \item XIII;
             \item XIV;
             \item XV;
@@ -1694,43 +1713,23 @@ In no particular order:
     \end{proof}
 \end{theorem}
 \begin{example}{Convergence of Continuous Functions}{function-convergence}
-    \begin{minipage}{.55\linewidth}
-        Consider the sequence $ \left( f_n \right)_{n=1}^\infty $ where $ f_n
-        \in C\left( [0, 1] \right) $ and $ t \mapsto t^n $. We claim the
-        following:
-        \begin{enumerate}
-            \item In $ d_2 $, $ \left(f_n\right)_{n=1}^\infty $ converges to
-                zero;
-            \item In $ d_\infty $, $ \left(f_n\right)_{n=1}^\infty $ diverges.
-        \end{enumerate}
-        First consider the sequence under the $ d_2 $ metric. In general, we
-        know that $ x_n \to x $ as $ n \to \infty $ if and only if $ d(x_n, x)
-        \to 0 $ as $ n \to \infty $. Therefore, we compute $ d_2(f_n, 0) $:
-        \begin{align}
-            d_2(f_n, 0) &= \left[ \int_0^1 \left\vert f_n(t) \right\vert^2 \,
-                \mathrm{d}t \right]^{1/2} \\
-            &= \sqrt{\frac{1}{2n+1}}
-        \end{align}
-    \end{minipage}\hfill
-    \begin{minipage}{.4\linewidth}
-        \centering
-        \begin{tikzpicture}[domain=0:1]
-            \draw[->] (-.2, 0) -- (4, 0) node[right] {$ t $};
-            \draw[->] (0, -.2) -- (0, 4) node[above] {$ f_n(t) $};
-            \draw (3.5, .2) -- (3.5, -.2) node[below] {$ 1 $};
-            \draw (.2, 3.5) -- (-.2, 3.5) node[left] {$ 1 $};
-            \begin{scope}[every path/.style={ultra thin}]
-                \begin{pgflowlevelscope}{\pgftransformscale{3.5}}
-                    \draw plot (\x, \x);
-                    \draw plot (\x, {\x*\x});
-                    \draw plot (\x, {\x*\x*\x});
-                    \draw plot (\x, {\x*\x*\x*\x});
-                \end{pgflowlevelscope}
-            \end{scope}
-        \end{tikzpicture}
-        \captionof{figure}{The graphs of $ f_n(t) $ over $ [0, 1] $ for $ n = 1,
-        2, 3, 4 $.}
-    \end{minipage}
+    Consider the sequence $ \left( f_n \right)_{n=1}^\infty $ where $ f_n
+    \in C\left( [0, 1] \right) $ and $ t \mapsto t^n $. We claim the
+    following:
+
+    \begin{enumerate}
+        \item In $ d_2 $, $ \left(f_n\right)_{n=1}^\infty $ converges to
+            zero;
+        \item In $ d_\infty $, $ \left(f_n\right)_{n=1}^\infty $ diverges.
+    \end{enumerate}
+    First consider the sequence under the $ d_2 $ metric. In general, we
+    know that $ x_n \to x $ as $ n \to \infty $ if and only if $ d(x_n, x)
+    \to 0 $ as $ n \to \infty $. Therefore, we compute $ d_2(f_n, 0) $:
+    \begin{align}
+        d_2(f_n, 0) &= \left[ \int_0^1 \left\vert f_n(t) \right\vert^2 \,
+            \mathrm{d}t \right]^{1/2} \\
+        &= \sqrt{\frac{1}{2n+1}}
+    \end{align}
 
     Given that $ \lim_{n \to \infty}\sqrt{1/(2n+1)} = 0 $, we can conclude that
     $ f_n \to 0 $ as $ n \to \infty $. Next considering the sequence under the
@@ -1742,6 +1741,25 @@ In no particular order:
     Since $ 1 $ does not approach $ 0 $, $ f_n \not\to 0 $ as $ n \to \infty $.
     Therefore, we can see, by example, that changing the metric on a set can
     vastly alter its convergence properties.
+
+    \centering
+    \begingroup
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xlabel=$ t $, ylabel=$ f_n(t) $, legend pos=north west]
+                \addplot[domain=0:1, color=red] {x};
+                    \addlegendentry{$ n=2 $}
+                \addplot[domain=0:1, color=green] {x^2};
+                    \addlegendentry{$ n=2 $}
+                \addplot[domain=0:1, color=blue] {x^3};
+                    \addlegendentry{$ n=3 $}
+                \addplot[domain=0:1, color=magenta] {x^4};
+                    \addlegendentry{$ n=4 $}
+            \end{axis}
+        \end{tikzpicture}
+        \captionof{figure}{The graphs of $ f_n(t) $ over $ [0, 1] $ for $ n = 1,
+        2, 3, 4 $.}
+    \endgroup
 \end{example}
 \begin{theorem}{Relationship between Mutual Convergence and Topological
         Equivalence}{convergence-top-equivalence}
@@ -2338,6 +2356,115 @@ In no particular order:
         converge to $ f\left(x_0\right) $. Hence, $ P $ does not hold, as
         required.
     \end{proof}
+\end{theorem}
+
+\lecture{Applications of Continuity}
+        {Viewer.aspx?id=67becd92-a94f-4318-a4ae-b0af00ac252a}{
+    Lecture Twelve reframes much of the theoretical discussion around continuity
+    into a more applied context, in which the equivalent definitions of a
+    continuous map are considered in bounded and continuous function spaces.
+    Some remarks are made in the realm of closed sets, particularly with regard
+    to the concept of \emph{global continuity}, where we have previously
+    focussed on manipulations with open sets to show \emph{local} continuity.
+}{\DTMdisplaydate{2023}{11}{9}{Thursday}}
+
+\begin{definition}{Global continuity (by way of local continuity)}
+        {global-continuity-local}
+    Let $ f \colon X \to Y $. Then, $ f $ is \emph{globally continuous} if and
+    only if it is (locally) continuous, by \cref{definition:continuity}, at
+    every point $ x_0 \in X $.
+\end{definition}
+\begin{definition}{Global continuity (topological perspective)}
+        {global-continuity-topology}
+    If $ V \subseteq Y $ is open, then $ f $ is \emph{globally continuous} if
+    and only if $ f^{-1}(V) \subseteq X $ is also open. We can eventually
+    restate this definition in terms of a closed set $ F \subseteq Y $:
+    \begin{align}
+        f \text{ is globally continuous}
+        &\iff V \in T_e \implies f^{-1}(V) \in T_d \\
+        &\iff f^{-1}(F) \text{ is closed.}
+    \end{align}
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (leftspace) at (-4, 0);
+        \coordinate (rightspace) at (4, 0);
+        \pic at (leftspace) {squarespace};
+        \pic at (rightspace) {squarespace};
+        \begin{scope}[every node/.style={scale=.4},
+                every path/.style={fill=ballfill, dashed}]
+            \pic[rotate=80] at (leftspace) {squarespace};
+            \pic[rotate=30] at (rightspace) {squarespace};
+        \end{scope}
+        \node[below of=leftspace, yshift=-1cm] {$ (X, d) $};
+        \node[below of=rightspace, yshift=-1cm] {$ (Y, e) $};
+        \draw[thick, latex-] (leftspace) to [bend left=10] (rightspace)
+            node[above, yshift=.5cm, pos=.5] {$ f^{-1} \colon Y \to X $};
+        \draw[thick, latex-] (rightspace) to [bend left=10] (leftspace)
+            node[below, yshift=-.5cm, pos=.5] {$ f \colon X \to Y $};
+        \node[right of=rightspace, yshift=-1cm] {$ V \in T_e $};
+        \node[right of=leftspace, yshift=1.1cm, xshift=-1em]
+            {$ f^{-1}(V) \in T_d $};
+    \end{tikzpicture}
+    \captionof{figure}{Considering the membership of the pre-image of $ V $
+    under $ f $ in the topology of the domain space, versus membership in the
+    topology of the codomain space, can reveal $ f $ to be a globally continuous
+    map.}
+\end{definition}
+\begin{example}{Global continuity in the plane}{global-continuity-plane}
+    Consider $ f \colon \mathbb{R}^2 \to \mathbb{R} $ such that $ (x, y) \mapsto
+    x^2 + e^y $ and a curve $ \Gamma $ such that
+    \begin{equation}
+        \Gamma \coloneq \left\{ (x, y) \in \mathbb{R}^2 \colon f(x) = 1
+        \right\}.
+    \end{equation}
+
+    % Some manual positioning is necessary here, since the two plots need to be
+    % aligned along non-plot boundaries (but rather their internal axis
+    % y-positions).
+    \begingroup
+        \tikzset{external/export=true}
+        \centering
+        \hspace*{-2em}\begin{tikzpicture}
+            \begin{axis}[xlabel=$ x $, ylabel=$ y $, zlabel={$ f(x, y) $},
+                width=.5\linewidth]
+                \addplot3[mesh, samples=20, domain=0:1, mark=none, surf]
+                    {x^2 + e^y};
+            \end{axis}
+        \end{tikzpicture}\qquad
+        \raisebox{2em}{\begin{tikzpicture}
+            \begin{axis}[xlabel=$ x $, ylabel=$ y $, axis lines=middle, ymax=.2,
+                width=.5\linewidth]
+                \addplot[samples=20, smooth, domain=-1.5:1.5,
+                    unbounded coords=jump] {ln(1-x^2)};
+            \end{axis}
+        \end{tikzpicture}}
+        \captionof{figure}{The mesh $ z = f(x, y) $ with the level set $ \Gamma
+        $.}
+    \endgroup
+
+    By \cref{definition:global-continuity-topology} it is easy to verify that $
+    \Gamma $ is closed in $ \mathbb{R}^2 $: given that $ f $ is globally
+    continuous, and given that $ \{ 1 \} $ is closed---as are all
+    singletons---its inverse image $  $ is
+    also closed. Since $ \Gamma = f^{-1}\left(\left\{1\right\}\right) $, $
+    \Gamma $ is closed.
+\end{example}
+\begin{theorem}{Constant functions are globally
+        continuous}{constant-global-continuity}
+    Let $ f \colon X \to Y $ be such that $ x \mapsto k $, where $ k $ is fixed.
+    Then, $ f $ is continuous.
+    \begin{proof}
+        The singleton $ \{ k \} $ is known to be closed, and the entire domain
+        space $ f^{-1}\left(\left\{ k \right\}\right) = X $ is known to be
+        clopen, and thus closed. Hence, by
+        \cref{definition:global-continuity-topology}, $ f $ is continuous.
+    \end{proof}
+\end{theorem}
+\begin{theorem}{Continuity is preserved under function
+        composition}{continuity-preserved-composition}
+    Let $ f \colon X \to Y $ and $ g \colon Y \to Z $ be a pair of continuous
+    functions. Then, $ g \fcomp f \colon X \to Z $ is also continuous.
 \end{theorem}
 
 \clearpage
