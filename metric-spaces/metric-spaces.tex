@@ -212,6 +212,8 @@
 \Crefname{figure}{Figure}{Figures}
 \crefname{figure}{figure}{figures}
 \numberwithin{figure}{section}
+\Crefname{section}{Lecture}{Lectures}
+\crefname{section}{lecture}{lectures}
 
 \setlist{topsep=0pt}
 \newlist{axioms}{enumerate}{1}
@@ -323,7 +325,6 @@ directed to the Author via the Author Contact as printed on the title page.
 
 In no particular order:
 \par\begin{itemize}
-    \item Finish lecture XI: add diagrams to continuity definitions;
     \item Fix page boundaries/trailing under-filled vertical boxes;
     \item Add Shirali and S\&V book references;
     \item Improve the length and prose style of lecture-introduction paragraphs;
@@ -895,7 +896,7 @@ In no particular order:
     \emph{a topology} $ T_d $ as the collection of all open subsets, and prove
     theorems related to closure under the familiar union and intersection set
     operations.
-}{\DTMdisplaydate{2023}{10}{10}{Tuesday}}
+}{\DTMdisplaydate{2023}{10}{10}{Tuesday}}\label{sec:topology-results}
 
 \begin{theorem}{A subset is open if and only if its complement is
         closed}{open-subset-closed-complement}
@@ -1823,13 +1824,15 @@ In no particular order:
         \coordinate (xpos) at (-1, .5);
         \coordinate (ypos) at (1, .5);
         \pic at (0, 0) {longspace};
-        \filldraw (xpos) circle (1pt) node[below, yshift=-3pt] {$ x $};
-        \filldraw (ypos) circle (1pt) node[below, yshift=-3pt] {$ y $};
+        \draw (xpos) -- (ypos);
+        \filldraw[red] (xpos) circle (1pt) node[black, below, yshift=-3pt]
+            {$ x $};
+        \filldraw[red] (ypos) circle (1pt) node[black, below, yshift=-3pt]
+            {$ y $};
         \draw[dashed] (xpos) circle (1cm) node[below, yshift=-1.3cm]
             {$ B(x, \epsilon/2) $};
         \draw[dashed] (ypos) circle (1cm) node[below, yshift=-1.3cm]
             {$ B(y, \epsilon/2) $};
-        \draw (xpos) -- (ypos);
         \node at (4.1, 0) {$ X $};
     \end{tikzpicture}
     \captionof{figure}{Given the required sequence convergences, we cannot have
@@ -2099,7 +2102,7 @@ In no particular order:
         there exists an $ N(\epsilon) > 0 $ such that, for all $ n, m > N $,
         \begin{alignat}{2}
             d_\infty\left( \vec{x}_n, \vec{x}_m \right) &= \max_{1 \leq i \leq
-            k}\left\{ \left\vert \vec{x}_i^{(n)} - \vec{x}_{i}^{(m)} \right\vert
+            k}\left\{ \left\vert x_i^{(n)} - x_{i}^{(m)} \right\vert
             \right\}\quad &&\text{[\Cref{definition:canon-metrics}]}\\
             &< \epsilon &&\text{[\Cref{definition:cauchy-sequences}]}
         \end{alignat}
@@ -2158,11 +2161,12 @@ In no particular order:
         {inverse-image-fibre}
     Following from \cref{definition:inverse-image-traditional}, we can define a
     \emph{fibre} of $ y $ to be the inverse image of the singleton set $ \{ y \}
-    $, denoted $ F_y $:
+    \subseteq Y $, denoted $ F_y $:
     \begin{equation}
         F_y \coloneq \left\{ x \in X \colon f(x) = y \right\}.
     \end{equation}
-    Then, the \emph{inverse image} of $ A $ is the union of all fibres in $ A $:
+    Then, the \emph{inverse image} of $ A $ is the union over all fibres of the
+    singletons in $ A $:
     \begin{equation}
         f^{-1}{(A)} = \bigcup_{y \in A} F_y.
     \end{equation}
@@ -2180,6 +2184,161 @@ In no particular order:
     definitions, we define increasingly abstract---albeit equivalent---notions
     of \emph{continuity in a metric space}.
 \end{definition}
+\begin{definition}{Continuity in an Abstract Metric Space}{continuity}
+    Let $ (X, d) $ and $ (Y, \widetilde{d}) $ be metric spaces. The function $ f
+    \colon X \to Y $ is continuous at $ x_0 \in X $ if any of the following
+    equivalent definitions holds:
+    \begin{enumerate}
+        \item \textbf{(Analytic Definition)} For any $ \epsilon > 0 $, there
+            exists a $ \delta > 0 $ such that $
+            \widetilde{d}\left(f\left(x\right), f\left(x_0\right)\right) <
+            \epsilon $ whenever $ d\left(x, x_0\right) < \delta $.
+        \item \textbf{(Open Ball Definition)} For any $ \epsilon > 0 $, there
+            exists a $ \delta > 0 $ such that $ f\left(B\left(x_0,
+            \delta\right)\right) \subseteq B\left(f\left(x_0,
+            \epsilon\right)\right) $. See \cref{fig:open-ball-continuous}.
+        \item \textbf{(Open Set with Ball Definition)} For any open set $ V
+            \subseteq Y $ with $ f\left( x_0 \right) \in V $, there exists a
+            \emph{ball} $ B \subseteq X $ such that $ x_0 \in B $ and $ f(B)
+            \subseteq V $.
+        \item \textbf{(Purely Topological Definition)} For any open set $ V
+            \subseteq Y $ with $ f\left(x_0\right) \in V $, there exists an
+            \emph{open set} $ U \subseteq X $ with $ x_0 \in U $ and $ f(U)
+            \subseteq V $.
+        \item \textbf{(Sequence Definition)} For any sequence $ \left( x_n
+            \right)_{n=1}^\infty $ with $ \lim_{n \to \infty} x_n = x_0 $, the
+            sequence generated by $ f\left( x_n \right) $ is such that $ \lim_{n
+            \to \infty}f\left(x_n\right) = f\left(x_0\right) $.
+    \end{enumerate}
+    To prove the equivalence between these definitions, we need to demonstrate
+    the following cycle of implications:
+    \begin{equation}
+        \text{\#1} \implies \text{\#2} \implies \text{\#3} \implies \text{\#4}
+        \implies \text{\#5} \implies \text{\#1}.
+    \end{equation}
+    In particular, we will show that $ \text{\#4} \implies \text{\#5} $
+    (\cref{theorem:seq-top-continuity}), followed by $ \text{\#5} \implies
+    \text{\#1} $ (\cref{theorem:top-anal-continuity}). The equivalences of
+    statements \#1 through \#4 can be trivially established through previously
+    established results on the connexions between open balls and open sets, such
+    as those enumerated throughout \cref{sec:topology-results}.
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (leftball) at (-4, 0);
+        \coordinate (rightball) at (4, 0);
+        \pic at (leftball) {squarespace};
+        \node at (-5.3, 1.3) {$ X $};
+        \pic[rotate=30] at (rightball) {squarespace};
+        \node at (4.5, 1.8) {$ Y $};
+        \draw[fill=ballfill, dashed] (leftball) circle (1cm);
+        \draw[fill=ballfill, dashed] (rightball) circle (1cm); % B(f(x0), e))
+        \draw[fill=ballfill, dotted] (rightball) circle (.8cm); % f(B(x0, d))
+        \draw[thick, latex-] (leftball) to [bend left=10] (rightball)
+            node[above, yshift=.5cm, xshift=-.5cm, pos=.5]
+            {$ f^{-1} \colon Y \to X $};
+        \draw[thick, latex-] (rightball) to [bend left=10] (leftball)
+            node[below, yshift=-.5cm, xshift=-.5cm, pos=.5]
+            {$ f \colon X \to Y $};
+        \draw (leftball) -- ++(135:1cm) node[above, pos=.5, xshift=5pt]
+            {$ \delta $};
+        \draw (rightball) -- ++(45:1cm) node[above, pos=.5, xshift=-5pt]
+            {$ \epsilon $};
+        \begin{scope}[every path/.style={red}, every node/.style={black, below,
+                yshift=-3pt}]
+            \filldraw (leftball) circle (1pt) node {$ x_0 $};
+            \filldraw (rightball) circle (1pt) node {$ f\left(x_0\right) $};
+        \end{scope}
+    \end{tikzpicture}
+    \captionof{figure}{An open ball $ B\left(x_0, \delta\right) \subseteq X $
+    with two open balls in $ Y $ such that $ f\left(B\left( x_0, \delta
+    \right)\right) \subseteq B\left(f\left(x_0\right), \epsilon\right) \subseteq
+    Y $, marked by dotted, dashed, and solid paths
+    respectively.}\label{fig:open-ball-continuous}
+\end{definition}
+\begin{theorem}{The sequential statement of continuity follows from the
+        topological definition}{seq-top-continuity}
+    Let $ x_0 \in X $ and let $ \left( x_n \right)_{n=1}^\infty $ be a sequence
+    in $ X $ such that $ \lim_{n \to \infty} x_n = x_0 $. If, for any open set $
+    V \subseteq Y $ with $ f\left( x_0 \right) \in V$, there exists an open set
+    $ U \subseteq X $ with $ x_0 \in U $ and $ f(U) \subseteq V $, then the
+    sequence generated by $ f\left( x_n \right) $ is such that $ \lim_{n \to
+    \infty} f\left(x_n\right) = f\left(x_0\right) $.
+    \begin{proof}
+        Take an arbitrary open set $ V \subseteq Y $ with $ f\left(x_0\right)
+        \in V $; thus, there exists an open set $ U \subseteq X $ such that $
+        x_0 \in U $ and $ f(U) \subseteq V $. Given that $ U $ is open, there
+        exists an open ball by \cref{theorem:openness-open-balls}: $ \exists
+        \epsilon > 0 $ such that $ B\left(x_0, \epsilon\right) \subseteq U $. As
+        $ \left(x_n\right)_{n=1}^\infty $ tends to $ x_0 $, we can find an index
+        point $ N > 0 $ such that $ d\left(x_n, x_0\right) < \epsilon $ for all
+        $ n > N $ (by \cref{definition:sequence-convergence-metric}).
+
+        Thus, $ f\left(x_n\right) \in f(U) \subseteq V $ for all $ n > N $.
+        Given that $ V $ was chosen arbitrarily, any sequence generated by $
+        f\left(x_n\right) $ must converge to $ f\left(x_0\right) $.
+    \end{proof}
+\end{theorem}
+\begin{theorem}{The analytical statement of continuity follows from the
+        sequential definition}{top-anal-continuity}
+    For any sequence $ \left(x_n\right)_{n=1}^\infty $ such that $ \lim_{n \to
+    \infty} x_n = x_0 $, if the sequence $
+    \left(f\left(x_n\right)\right)_{n=1}^\infty $ is such that $ \lim_{n \to
+    \infty} f\left(x_n\right) = f\left(x_0\right) $, then given an $ \epsilon >
+    0 $, there exists a $ \delta > 0 $ such that $ d\left(f(x),
+    f\left(x_0\right)\right) < \epsilon $ whenever $ \widetilde{d}\left(x,
+    x_0\right) $.
+    \begin{proof}
+        We will prove this using contraposition (modus tollens); the argument is
+        visualised below with the premise $ P $ and conclusion $ Q $, to argue
+        that $ \lnot Q \implies \lnot P $.
+
+        \begingroup
+            \renewcommand\fboxsep{.8em}
+            \begin{align*} % Great test of your editor's syntax highlighting!
+                \underbrace{\mathrm{\fbox{\parbox{.42\linewidth}{
+                    For an arbitrary sequence $ \left(x_n\right)_{n=1}^\infty $
+                    such that $ x_n \to x_0 $ as $ n \to \infty $, the sequence
+                    $ f\left( x_n \right) \to f\left( x_0 \right) $ as $ n \to
+                    \infty $.
+                }}}}_{\text{Premise } P}&\implies
+                \underbrace{\mathrm{\fbox{\parbox{.42\linewidth}{
+                    For any $ \epsilon > 0 $, there exists a $ \delta > 0 $ such
+                    that $ d\left( f(x), f\left( x_0 \right) \right) < \epsilon
+                    $ whenever $ \widetilde{d}\left( x, x_0 \right) $.
+                }}}}_{\text{Conclusion } Q} \\
+                &\tikz\node[rotate=90, minimum size=1cm] {$ \iff $}; \\
+                \underbrace{\mathrm{\fbox{\parbox{.42\linewidth}{
+                    There exists some $ \epsilon > 0 $ such that, for all $
+                    \delta > 0 $, $ \widetilde{d}\left( f(x), f\left(x_0\right)
+                    \right) \geq \epsilon $ for some $ x \in X $ with $ d\left(
+                    x, x_0 \right) < \delta $.
+                }}}}_{\text{Negated Conclusion } \lnot Q}&\implies
+                \underbrace{\mathrm{\fbox{\parbox{.42\linewidth}{
+                    There exists a sequence $ \left(x_n\right)_{n=1}^\infty $
+                    such that $ x_n \to x_0 $ as $ n \to \infty $, but $ f\left(
+                    x_n \right) \not\to f\left( x_0 \right) $.
+                }}}}_{\text{Negated Premise } \lnot P}
+            \end{align*}
+        \endgroup
+
+        We will assume $ \lnot Q $ and derive $ \lnot P $. For each $ n \in
+        \mathbb{N} $, define the set
+        \begin{equation}
+            A_n \coloneq \left\{ x^\prime \in X \colon d\left(x^\prime,
+            x_0\right) < \frac{1}{n} \,\land\, \widetilde{d}\left(
+            f\left(x^\prime\right), f\left(x_0\right) \right) \geq \epsilon
+            \right\}.
+        \end{equation}
+        By the assumption of $ \lnot Q $, $ A_n $ is non-empty for all $ n \in
+        \mathbb{N} $. Thus, for each $ n $, pick an element $ x_n \in A_n $ and
+        note that $ \lim_{n \to \infty} x_n = x_0 $, but $ \lim_{n \to \infty}
+        \widetilde{d}\left( f\left(x_n\right), f\left(x_0\right) \right) \geq
+        \epsilon $, so the sequence generated by $ f\left(x_n\right) $ does not
+        converge to $ f\left(x_0\right) $. Hence, $ P $ does not hold, as
+        required.
+    \end{proof}
+\end{theorem}
 
 \clearpage
 \ifdraft\else
@@ -2191,7 +2350,7 @@ In no particular order:
             \node[inner sep=0pt, rotate=180] at (current page.center)
                 {\includegraphics[width=\paperwidth,
                 height=\paperheight]{cover}};
-            \fill[white,path fading=fade] (current page.north west) rectangle
+            \fill[white, path fading=fade] (current page.north west) rectangle
                 (current page.south east);
         \end{tikzpicture}}
     }
