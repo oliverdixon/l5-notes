@@ -1,13 +1,23 @@
+# Hidden files and large images
 .*
-*.pdf
 *.xcf
 *.jpg
+*.pdf
 
+# Case-by-case inclusion for smaller images
+!metric-spaces/pluto.jpg
+
+# Filesystem temporary files
 .*.sw*
 .nfs*
 
-*.fls
+# LaTeXMK configuration files
+*/latexmkrc
+!/latexmkrc
 *.fdb_latexmk
+
+# Standard LaTeX regenerable files
+*.fls
 *.aux
 *.log
 *.out
@@ -15,11 +25,13 @@
 *.theorems
 *.toc
 
+# Bibliography regenerable files
 *.bbl
 *.bcf
 *.blg
 *.run.xml
 
+# pgfplots cache (the directory needs to exist)
 *.auxlock
 */pgf-cache/*
 !*/pgf-cache/.keep

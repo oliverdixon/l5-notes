@@ -23,16 +23,39 @@ degree, and therefore do not study approximately half of the modules considered
 
 If you would like to contribute to any or all of these notes, please feel free
 to (a) send a patch to <od641@york.ac.uk>, or (b) fork the GitHub repository,
-make the necessary changes in your own copy, and submit a pull request. Either
-way, you'll need to locally compile the LaTeX with a single invocation of
-`latexmk -pdf`. You'll also need to set-up
-[a post-commit/checkout hook](http://mirrors.ctan.org/macros/latex/contrib/gitinfo2/post-xxx-sample.txt)
-in the Git repository to make version-control data visible to
-[gitinfo2](https://ctan.org/pkg/gitinfo2) when rendering the front covers; this
+make the necessary changes in your own copy, and submit a pull request.
+
+## Building
+
+To configure a suitable environment, clone the repository and complete the
+following set-up tasks:
+
+ * Set-up [a post-commit/checkout
+   hook](http://mirrors.ctan.org/macros/latex/contrib/gitinfo2/post-xxx-sample.txt)
+in the cloned Git repository to make version-control data visible to
+[gitinfo2](https://ctan.org/pkg/gitinfo2) when rendering the front covers.  This
 can be done automatically by executing [setup-gitinfo.sh](/setup-gitinfo.sh) in
 a Bash shell.
 
-To convert the icons from SVG to PDF
-([why?](https://maths.york.ac.uk/moodle/mod/hsuforum/discuss.php?d=7352#p18645)),
-run [icons/generate-pdfs.sh](/icons/generate-pdfs.sh) in a Bash shell.
+ * Convert the icons from SVG to PDF
+   ([why?](https://maths.york.ac.uk/moodle/mod/hsuforum/discuss.php?d=7352#p18645))
+by executing [icons/generate-pdfs.sh](/icons/generate-pdfs.sh) in a Bash shell.
+
+ * Navigate into the directory containing the TeX file, and execute `latexmk -r
+   ../latexmkrc`. You can omit the `-r` option on the command-line by creating a
+symbolic link to the Perl configuration script from the TeX directory: `ln -s
+../latexmkrc .`.
+
+ * **(Optional)** By default, the documents will be compiled in "draft mode",
+   which removes the requirement for the externally hosted cover images. To
+compile a release document, issue `\draftfalse` in place of `\drafttrue` in the
+preamble of the relevant TeX file, download the appropriate cover image from
+[the assets folder](https://www-users.york.ac.uk/~od641/l5-notes/assets/), to be
+stored as `cover.jpg` in the same folder as the TeX file, and compile as usual.
+
+ * **(Optional)** PDF compression under GhostScript can often yield
+   significantly smaller (albeit visually identical) output files; this is
+principally achieved through compression of the embedded vector typefaces
+(portability doesn't come for free!). Try `gs -sDEVICE=pdfwrite -dNOPAUSE
+-dQUIET -dBATCH -sOutputFile=out.pdf in.pdf` to produce `out.pdf` from `in.pdf`.
 
