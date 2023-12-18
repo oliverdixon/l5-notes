@@ -168,8 +168,7 @@
 
 \renewcommand*\headrulewidth{0pt}
 \renewcommand*\footrulewidth{\headrulewidth}
-\newcommand*\draftmessage{%
-    \ifdraft\textbf{DRAFT/UNFINISHED\qquad All Rights Reserved}\fi}
+\newcommand*\draftmessage{\ifdraft\textbf{DRAFT/UNFINISHED}\fi}
 \fancypagestyle{plain}{
     \fancyhf{}
     \fancyhead[C]{\draftmessage}
@@ -356,14 +355,12 @@ directed to the Author via the Author Contact as printed on the title page.
 
 In no particular order:
 \par\begin{itemize}
-    \item In progress: lecture XIII;
-    \item Add examples to lecture XII;
+    \item In progress: lecture XIV;
     \item Fix page boundaries/trailing under-filled vertical boxes;
     \item Add Shirali and S\&V book references;
     \item Improve the length and prose style of lecture-introduction paragraphs;
     \item Lectures:
         \begin{itemize}
-            \item XIV;
             \item XV;
             \item XVI;
             \item XVII: \emph{end of examinable content}.
@@ -2607,6 +2604,73 @@ In no particular order:
         \end{align}
         \iffbackward Suppose that $ V $ is open, so $ V^c $ is closed. As above,
         $ f^{-1}\left(V^c\right) $ is closed, and $ f^{-1}(V) $ is open.
+    \end{proof}
+\end{theorem}
+
+\lecture{The Contraction Mapping Theorem}
+        {Viewer.aspx?id=fd3b00e1-b523-45ef-bab5-b0b400ac5f0b}{
+    Lecture Thirteen introduces the concepts of Lipschitz constants, Lipschitz
+    functions, (strict) contractions, and the Contraction Mapping Theorem. It
+    also restates the existence of the spaces of bounded and continuous
+    function, and considers a stronger notion of continuity induced by the $
+    d_\infty $ metric. \emph{Note:} this lecture was unusually short.
+}{\DTMdisplaydate{2023}{11}{14}{Tuesday}}
+
+\begin{definition}{The space of continuous bounded
+        functions}{continuous-bounded-functions}
+    The entire space of all continuous functions from $ (X, d) $ to $ (Y, e) $
+    can be difficult to handle. From \cref{definition:bounded-functions-set}, we
+    can consider $ B(X, Y) $ to be set of all bounded functions $ f \colon X \to
+    Y $: there exists an open ball $ B \subseteq Y $ such that $ f(X) \subseteq
+    B $. Now consider the \emph{set of continuous bounded functions} from $ X $
+    to $ Y $, denoted $ \mathcal{C}(X, Y) $, such that
+    \begin{equation}
+        \mathcal{C}(X, Y) = B(X, Y) \cap C(X, Y).
+    \end{equation}
+    We will normally impose the $ d_\infty $ metric on this space, such that
+    \begin{equation}
+        d_\infty(f, g) = \sup\left\{ e\left(f(x), g(x)\right) \colon x \in X
+        \right\}
+    \end{equation}
+    for all $ f, g \in \mathcal{C}(X, Y) $.
+\end{definition}
+\begin{definition}{Uniform Convergence}{uniform-convergence}
+    Let $ \left( f_n \right)_{n=1}^\infty $ be a sequence of functions from
+    $ \left(\mathcal{C}(X, \mathbb{K}), d_\infty\right) $, where $ \mathbb{K} $
+    is a field ($ \mathbb{R} $ or $ \mathbb{C} $). The sequence $ \left( f_n
+    \right)_{n=1}^\infty $ is \emph{uniformly convergent} on $ X $ with a limit
+    $ f \colon X \to \mathbb{K} $ if and only if, for every $ \epsilon > 0 $,
+    there exists an $ N > 0 $ such that
+    \begin{equation}
+        d_\infty\left( f_n, f \right) \text{ for all } n > N.
+    \end{equation}
+\end{definition}
+\begin{definition}{Fixed Points}{fixed-point}
+    A point $ x \in X $ is called a \emph{fixed point} of the mapping $ T \colon
+    X \to X $ if $ T(x) = x $.
+\end{definition}
+\begin{definition}{Lipschitz Function and Lipschitz Constants}{lipschitz}
+    Suppose that $ (X, d) $ and $ (Y, e) $ are metric spaces, and that $ f
+    \colon X \to y $. If there exists a $ k > 0 $ such that
+    \begin{equation}
+        e\left( f(a), f(b) \right) \leq kd(a, b) \text{ for all } a, b \in X,
+    \end{equation}
+    then $ f $ is called a \emph{Lipschitz function} on $ X $ with a
+    \emph{Lipschitz constant} of $ k $.
+\end{definition}
+\begin{definition}{Contractions}{contraction}
+    A \emph{strict contraction}, henceforth called a \emph{contraction}, is a
+    Lipschitz function for which the Lipschitz constant $ k $ lies in the range
+    $ [0, 1) $.
+\end{definition}
+\begin{theorem}{The Contraction Mapping Theorem}{cmt}
+    The \emph{Contraction Mapping Theorem}, also called \emph{Banach's
+    Fixed-Point Theorem}, considers a complete metric space $ (X, d) $ and a
+    contraction $ f \colon X \to X $. Then, $ f $ has a unique fixed point $ y
+    $. For each $ x \in X $, the sequence $ \left( f_n(x) \right)_{n=1}^\infty $
+    converges to $ y $; this is an example of a discrete-time dynamical system.
+    \begin{proof}
+        TODO: see lecture XIV.
     \end{proof}
 \end{theorem}
 
