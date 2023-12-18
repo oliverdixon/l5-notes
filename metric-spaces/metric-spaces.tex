@@ -16,7 +16,7 @@
 % three-dimensional meshes (e.g. the global continuity diagram). In these cases,
 % the tikzpicture environment should be encapsulated in a group with the
 % external/export key set to true. The library is also known to clash with
-% tcolorboxes, for which a fix was proposed by the author of the latter:
+% tcolorbox, for which a fix was proposed by the author of the latter:
 % https://tex.stackexchange.com/a/497136
 
 \documentclass{article}
@@ -53,7 +53,7 @@
 ]{hyperref}
 \usepackage[nameinlink]{cleveref}
 
-% BEGIN DOCUMENT METADATA
+% --- Document metadata configuration --- %
 
 \title{Metric Spaces}
 \author{Oliver Dixon}
@@ -61,41 +61,46 @@
 \newcommand*\internalname{metric-spaces}
 \newcommand*\modulecode{MAT00051I}
 
-% END DOCUMENT METADATA
+% --- Bibliography/extra hyperlinking configuration --- %
 
 \addbibresource{texts.bib}
 \nocite{*}
+\urlstyle{same}
 
-\ifdraft
-    \DraftwatermarkOptions{text={Warning: Incomplete notes; do not redistribute.
-        Check for \href{\githublink}{GitHub updates} periodically.}, stamp}
-\fi
+% --- Fixed document commands configuration --- %
 
 \newcommand*\githublink{https://github.com/oliverdixon/l5-notes/}
 \newcommand*\subtitle{Consolidated Lecture Notes}
 \newcommand*\licencetext{\ifdraft All rights reserved (draft
     copy)\else\href{\githublink blob/\gitBranch/LICENSE}{MIT Licence}\fi}
-\urlstyle{same}
-\newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 \renewcommand*\vec{\mathbf}
+\newcommand*\iffforward{\par\boxed\Longrightarrow\ }
+\newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
+\newcommand*\cauchyquotient{%
+    \ensuremath\mathcal{G}{\left(X\right)/\hspace{-.5ex}\sim}}
+\DeclareMathOperator\fcomp{\,\circ\,}
+\ifdraft
+    \DraftwatermarkOptions{text={Warning: Incomplete notes; do not redistribute.
+        Check for \href{\githublink}{GitHub updates} periodically.}, stamp}
+\fi
 
+% --- Fixed document lengths configurations --- %
+
+\newlength\iconsize
+\setlength\iconsize{16pt}
 \setlength\parskip{.8em}
 \setlength\parindent{0pt}
 \renewcommand*\baselinestretch{1.2}
-\captionsetup[figure]{justification=centering}
 
-\newcommand*\iffforward{\par\boxed\Longrightarrow\ }
-\newcommand*\iffbackward{\par\boxed\Longleftarrow\ }
-\DeclareMathOperator\fcomp{\,\circ\,}
-\newcommand*\cauchyquotient{%
-    \ensuremath\mathcal{G}{\left(X\right)/\hspace{-.5ex}\sim}}
+% --- TikZ Configuration --- %
+
 \definecolor{ballfill}{RGB}{242, 242, 242}
 \usetikzlibrary{decorations.pathreplacing, calc, shapes.geometric, arrows.meta,
     fadings, external}
 \pgfplotsset{compat=1.18, compat/show suggested version=false}
 \tikzexternalize[prefix=pgf-cache/]
 \tikzset{
-    external/export=false,
+    external/export=false, % Only enable on a case-by-case basis (for pgfplots)
     every node/.style={transform shape},
     unitaxes/.pic={
         \draw[->] (-1.5, 0)--(1.5, 0) node[right] {$x$};
@@ -106,15 +111,17 @@
         \draw[ultra thick] (-.1, -1) -- (.1, -1);
     },
     squarespace/.pic={
-        \draw plot[smooth cycle, tension=0.8] coordinates {(2,2)
-            (1.5,0) (2,-2) (0,-1.5) (-2,-2) (-1.5,0) (-2,2) (0,1.5)};
+        \draw plot[smooth cycle, tension=.8] coordinates {(2,2) (1.5,0) (2,-2)
+            (0,-1.5) (-2,-2) (-1.5,0) (-2,2) (0,1.5)};
     },
     longspace/.pic={
-        \draw plot[smooth cycle, tension=0.8] coordinates {(5,1)
-            (5,0) (5,-1) (0,-2) (-5,-1) (-5,0) (-5,1) (0,2)};
+        \draw plot[smooth cycle, tension=.8] coordinates {(5,1) (5,0) (5,-1)
+            (0,-2) (-5,-1) (-5,0) (-5,1) (0,2)};
     },
 }
 \tikzfading[name=fade, bottom color=transparent!50, top color=transparent!100]
+
+% --- tcolorbox configuration --- %
 
 \tcbuselibrary{theorems, breakable, skins}
 \tcbsetforeverylayer{shield externalize}
@@ -157,16 +164,37 @@
 }
 \makeatother
 
+% --- Margins, TOC, headers, and footers configuration --- %
+
+\renewcommand*\headrulewidth{0pt}
+\renewcommand*\footrulewidth{\headrulewidth}
+\newcommand*\draftmessage{%
+    \ifdraft\textbf{DRAFT/UNFINISHED\qquad All Rights Reserved}\fi}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[C]{\draftmessage}
+    \fancyfoot[C]{\thepage}
+}
+\makeatletter
+\fancypagestyle{mainbody}{
+	\fancyhf{}
+    \fancyhead[L]{\itshape \@title: \subtitle}
+    \fancyhead[R]{\itshape \@date}
+    \fancyfoot[L]{\itshape \@author}
+    \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
+    \fancyfoot[C]{\draftmessage}
+}
+\makeatother
+
 \renewcommand*\contentsname{Lecture Index}
-\let\Sectionmark\sectionmark
-\def\sectionmark#1{\def\sectionname{#1}\Sectionmark{#1}}
 \titleformat\section
     {\Large\bfseries}
     {Lecture \thesection: }{0pt}
     {#1\quad\leaders\hrule height .5ex depth -3pt\hfill}
 
-\newlength\iconsize
-\setlength\iconsize{16pt}
+% --- Helper commands configuration --- %
+
+\newcommand*\fclower[2]{\relax\lowercase{#1}#2}
 
 % \panoptostamp: occupy a two-column table row with a Panopto link
 %
@@ -215,6 +243,8 @@
     \vskip\baselineskip
 }
 
+% --- Lists, new environments, and pseudo-float configuration --- %
+
 \newtheoremtype{Definition}{definition}{black}
 \newtheoremtype{Example}{example}{blue}
 \newtheoremtype{Theorem}{theorem}{red}
@@ -226,6 +256,7 @@
 \numberwithin{equation}{section}
 \Crefname{figure}{Figure}{Figures}
 \crefname{figure}{figure}{figures}
+\captionsetup[figure]{justification=centering}
 \numberwithin{figure}{section}
 \Crefname{section}{Lecture}{Lectures}
 \crefname{section}{lecture}{lectures}
@@ -238,27 +269,7 @@
     \setlist[axioms]{label=#1\arabic*), ref=#1\arabic*}
 }
 
-\renewcommand*\headrulewidth{0pt}
-\renewcommand*\footrulewidth{\headrulewidth}
-\ifdraft
-    \fancypagestyle{plain}{
-        \fancyhf{}
-        \fancyhead[C]{\textbf{DRAFT/UNFINISHED\quad\today\quad
-            All rights reserved}}
-        \fancyfoot[C]{\thepage}
-    }
-\fi
-\makeatletter
-\fancypagestyle{mainbody}{
-	\fancyhf{}
-    \fancyhead[L]{\itshape \@title: \subtitle}
-    \fancyhead[R]{\itshape \@date}
-    \fancyfoot[L]{\itshape \@author}
-    \fancyfoot[R]{\itshape Page \thepage\ of \pageref*{LastPage}}
-    \ifdraft\fancyfoot[C]{\bfseries DRAFT/UNFINISHED\\\today\quad All rights
-        reserved}\fi
-}
-\makeatother
+% --- Document start --- %
 
 \begin{document}
 \thispagestyle{empty}
@@ -2415,7 +2426,7 @@ In no particular order:
     Consider $ f \colon \mathbb{R}^2 \to \mathbb{R} $ such that $ (x, y) \mapsto
     x^2 + e^y $ and a curve $ \Gamma $ such that
     \begin{equation}
-        \Gamma \coloneq \left\{ (x, y) \in \mathbb{R}^2 \colon f(x) = 1
+        \Gamma \coloneq \left\{ (x, y) \in \mathbb{R}^2 \colon f(x, y) = 1
         \right\}.
     \end{equation}
 
