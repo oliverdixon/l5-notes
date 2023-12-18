@@ -356,12 +356,13 @@ directed to the Author via the Author Contact as printed on the title page.
 
 In no particular order:
 \par\begin{itemize}
+    \item In progress: lecture XIII;
+    \item Add examples to lecture XII;
     \item Fix page boundaries/trailing under-filled vertical boxes;
     \item Add Shirali and S\&V book references;
     \item Improve the length and prose style of lecture-introduction paragraphs;
     \item Lectures:
         \begin{itemize}
-            \item XIII;
             \item XIV;
             \item XV;
             \item XVI;
@@ -2388,8 +2389,11 @@ In no particular order:
 \begin{definition}{Global continuity (topological perspective)}
         {global-continuity-topology}
     If $ V \subseteq Y $ is open, then $ f $ is \emph{globally continuous} if
-    and only if $ f^{-1}(V) \subseteq X $ is also open. We can eventually
-    restate this definition in terms of a closed set $ F \subseteq Y $:
+    and only if $ f^{-1}(V) \subseteq X $ is also open; this is justified
+    formally by \cref{theorem:global-continuity-open-preimage}. We can
+    eventually restate this definition in terms of a closed set $ F \subseteq Y
+    $, justified by justified by
+    \cref{theorem:global-continuity-closed-preimage}:
     \begin{align}
         f \text{ is globally continuous}
         &\iff V \in T_e \implies f^{-1}(V) \in T_d \\
@@ -2407,8 +2411,8 @@ In no particular order:
             \pic[rotate=80] at (leftspace) {squarespace};
             \pic[rotate=30] at (rightspace) {squarespace};
         \end{scope}
-        \node[below of=leftspace, yshift=-1cm] {$ (X, d) $};
-        \node[below of=rightspace, yshift=-1cm] {$ (Y, e) $};
+        \node[below of=leftspace, yshift=-1.2cm] {$ (X, d) $};
+        \node[below of=rightspace, yshift=-1.2cm] {$ (Y, e) $};
         \draw[thick, latex-] (leftspace) to [bend left=10] (rightspace)
             node[above, yshift=.5cm, pos=.5] {$ f^{-1} \colon Y \to X $};
         \draw[thick, latex-] (rightspace) to [bend left=10] (leftspace)
@@ -2476,6 +2480,134 @@ In no particular order:
         composition}{continuity-preserved-composition}
     Let $ f \colon X \to Y $ and $ g \colon Y \to Z $ be a pair of continuous
     functions. Then, $ g \fcomp f \colon X \to Z $ is also continuous.
+    \begin{proof}
+        Let $ V \subseteq Z $ be open. Given that $ f $ and $ g $ are
+        continuous, $ g^{-1}(V) \subseteq Y $ and $ f^{-1}\left(g^{-1}(V)\right)
+        \subseteq X $ are open in their respective spaces, by
+        \cref{definition:global-continuity-topology}. It is known from set
+        theory that
+        \begin{equation}
+            \left(g \fcomp f \right)^{-1}(V) = f^{-1}\left(g^{-1}(V)\right),
+        \end{equation}
+        and hence the composition is continuous. It follows immediately that $ g
+        \fcomp f $ is continuous.
+    \end{proof}
+\end{theorem}
+\begin{example}{Continuous Composition of Non-Continuous Constituents}
+        {cont-comp-non-cont}
+    Consider the pair of functions $ f $ and $ g $ from $ \mathbb{R} $ to $ [-1,
+    1] $ such that
+    \begin{align}
+        f(t) &\coloneq \begin{cases}
+            1 \text{ if } t \geq 0; \\
+            -1 \text{ otherwise.}
+        \end{cases} \\
+        g(t) &\coloneq 0 \text{ for all } t \in \mathbb{R}.
+    \end{align}
+    $ f $ is clearly non-continuous. Despite that, $ (g \fcomp f)(t) = 0 $ for
+    all $ t \in \mathbb{R} $, which is continuous. Therefore, continuity on a
+    composition does not generally imply continuity on the individual
+    components.
+\end{example}
+\begin{theorem}{Global continuity is equivalent to open
+        pre-images}{global-continuity-open-preimage}
+    Let $ f \colon X \to Y $. Then, $ f $ is globally continuous if and only if,
+    for any open set $ V \subseteq Y $, $ f^{-1}(V) $ is open in $ X $.
+    \begin{proof}
+        \iffforward \textbf{(Using fibres.)} Suppose that $ f \colon X \to Y $
+        is globally continuous, and consider an open set $ V \subseteq Y $.  If
+        $ V = \emptyset $, then $ f^{-1}(V) = \emptyset $, and we are done,
+        since the empty set is open.  Assuming that $ V \neq \emptyset $, take $
+        y \in V $, and note the multiple possibilities for the nature of $ y $:
+        \begin{itemize}
+            \item If $ y \not\in f(X) $, then $ F_y = \emptyset $, and we are
+                done.
+            \item If $ y \in f(X) $, then $ F_y \neq \emptyset $; that is, there
+                exists an $ x \in X $  such that $ f(x) = y $. Given that $ V $
+                is open and $ f $ is continuous, by
+                \cref{theorem:openness-open-balls}, there exists an open ball $
+                B \subseteq X $ such that $ x \in B $ and $ f(B) \subset V $.
+                Take the union over all such balls to acquire the entire inverse
+                image of $ V $ in $ X $:
+                \begin{equation}
+                    f^{-1}(V) = \bigcup_{\substack{y \in V \\ F_y \neq
+                        \emptyset}} F_y = \bigcup_{x \in f^{-1}(V)} B_x
+                \end{equation}
+        \end{itemize}
+        By \cref{theorem:open-union-open} with \cref{theorem:open-ball-open}, $
+        f^{-1}(V) $ is a union of open balls, and is therefore open, as
+        required. (This is an example of an \emph{open cover}.)
+
+        \iffbackward \textbf{(Using epsilon--deltas.)} Conversely, suppose that
+        $ f^{-1}(V) \subseteq X $ is open for all open sets $ V \subseteq V $.
+        Take an $ x \in X $, and note that $ B\left(f(x), \epsilon\right) $ is
+        open in $ Y $, and $ f^{-1}\left(B\left(f(x), \epsilon\right)\right) $
+        is open in $ X $. Since $ x \in f^{-1}\left(B\left(f(x),
+        \epsilon\right)\right) $, there exists a $ \delta(\epsilon) > 0 $ such
+        that $ B(x, \delta) \subseteq f^{-1}\left(B\left(f(x),
+        \epsilon\right)\right) $. Hence, $ f $ is continuous at $ x $. Given
+        that $ x \in X $ was chosen arbitrarily, $ f $ is globally continuous.
+    \end{proof}
+
+    \centering
+    \begin{tikzpicture}
+        \coordinate (leftspace) at (-4, 0);
+        \coordinate (rightspace) at (4, 0);
+        \coordinate (y1point) at (4, .5);
+        \coordinate (y2point) at (4.3, -.2);
+        \coordinate (x2point) at (-4.3, -.2);
+        \pic at (leftspace) {squarespace};
+        \pic at (rightspace) {squarespace};
+        \begin{scope}[every node/.style={scale=.4},
+                every path/.style={fill=ballfill, dashed}]
+            \pic[rotate=80] at (leftspace) {squarespace};
+            \pic[rotate=30, scale=1.2] at (rightspace) {squarespace};
+        \end{scope}
+
+        \filldraw[red] (y1point) circle (1pt) node[right, black] {$ y_1 $};
+        \foreach \pt/\name in {x2point/x, y2point/y}{
+            \draw[dashed, red] (\pt) circle (.25cm); % Open ball
+            \filldraw[red] (\pt) circle (1pt) node[right, black, xshift=7pt,
+                yshift=-2pt] {$ \name_2 $}; % Point
+        }
+
+        \node[red, above of=leftspace, yshift=1.2cm]
+            {$ f^{-1}\left(B_{y_2}\right) $};
+        \node[red, above of=rightspace, yshift=1.2cm] {$ B_{y_2} $};
+        \node[below of=leftspace, yshift=-1.2cm] {$ (X, d) $};
+        \node[below of=rightspace, yshift=-1.2cm] {$ (Y, e) $};
+
+        \draw[thick, latex-] (leftspace) to [bend left=10] (rightspace)
+            node[above, yshift=.5cm, pos=.5] {$ f^{-1} \colon Y \to X $};
+        \draw[thick, latex-] (rightspace) to [bend left=10] (leftspace)
+            node[below, yshift=-.5cm, pos=.5] {$ f \colon X \to Y $};
+        \node[right of=rightspace, yshift=-1cm] {$ V \in T_e $};
+        \node[right of=leftspace, yshift=1.1cm, xshift=-1em]
+            {$ f^{-1}(V) \in T_d $};
+    \end{tikzpicture}
+    \captionof{figure}{Mapping $ V $ with open balls in $ Y $, and their
+    respective pre-images in $ X $.}
+\end{theorem}
+\begin{theorem}{Global continuity is equivalent to closed
+        pre-images}{global-continuity-closed-preimage}
+    Let $ f \colon X \to Y $. Then, $ f $ is globally continuous if and only if,
+    for any closed set $ F \subseteq Y $, $ f^{-1}(F) $ is closed in $ X $.
+    \begin{proof}
+        Recall from \cref{theorem:global-continuity-open-preimage} that the
+        property of global continuity on $ f $ is equivalent to the openness of
+        $ V \subseteq Y $ implying the openness of $ f^{-1}(V) \subseteq X $.
+
+        \iffforward Suppose that $ F \subseteq Y $ is closed. By
+        \cref{theorem:open-subset-closed-complement}, $ F^c $ is closed, and by
+        standard results from set theory, for a globally continuous $ f $,
+        \begin{align}
+            F^c \text{ is closed } &\implies f^{-1}\left(F^c\right) \text{ is
+                open} \\
+            &\implies f^{-1}(F) \text{ is closed}.
+        \end{align}
+        \iffbackward Suppose that $ V $ is open, so $ V^c $ is closed. As above,
+        $ f^{-1}\left(V^c\right) $ is closed, and $ f^{-1}(V) $ is open.
+    \end{proof}
 \end{theorem}
 
 \clearpage
