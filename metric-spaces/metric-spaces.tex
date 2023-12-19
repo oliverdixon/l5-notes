@@ -47,10 +47,7 @@
     lastpage, enumitem, tikz, multirow, pgfplots}
 \usepackage[hypcap=false]{caption}
 \usepackage[explicit]{titlesec}
-\usepackage[
-    colorlinks,
-    allcolors=blue,
-]{hyperref}
+\usepackage[colorlinks, allcolors=blue]{hyperref}
 \usepackage[nameinlink]{cleveref}
 
 % --- Document metadata configuration --- %
@@ -326,8 +323,9 @@
         \end{tabular}
     \end{center}
 \end{titlepage}
-% Disable the watermark stamp once the first page has shipped out, otherwise it
-% will be included in the externalised PGF figure pages!
+% Disable the watermark stamp and cover images once the first page has shipped
+% out, otherwise they will be included in the externalised PGF figure pages!
+\ClearHookNext{shipout/background}
 \DraftwatermarkOptions{stamp=false}
 \stepcounter{page}
 
@@ -1757,7 +1755,7 @@ In no particular order:
         \begin{tikzpicture}
             \begin{axis}[xlabel=$ t $, ylabel=$ f_n(t) $, legend pos=north west]
                 \addplot[domain=0:1, color=red] {x};
-                    \addlegendentry{$ n=2 $}
+                    \addlegendentry{$ n=1 $}
                 \addplot[domain=0:1, color=green] {x^2};
                     \addlegendentry{$ n=2 $}
                 \addplot[domain=0:1, color=blue] {x^3};
@@ -2644,6 +2642,10 @@ In no particular order:
     \begin{equation}
         d_\infty\left( f_n, f \right) \text{ for all } n > N.
     \end{equation}
+    The central point of this definition is that we are using the $ d_\infty $
+    metric, sometimes called the \emph{uniform metric}, to measure distances
+    between continuous functions from $ X $ to $ \mathbb{K} $ and hence classify
+    convergence properties.
 \end{definition}
 \begin{definition}{Fixed Points}{fixed-point}
     A point $ x \in X $ is called a \emph{fixed point} of the mapping $ T \colon
@@ -2651,7 +2653,7 @@ In no particular order:
 \end{definition}
 \begin{definition}{Lipschitz Function and Lipschitz Constants}{lipschitz}
     Suppose that $ (X, d) $ and $ (Y, e) $ are metric spaces, and that $ f
-    \colon X \to y $. If there exists a $ k > 0 $ such that
+    \colon X \to Y $. If there exists a $ k > 0 $ such that
     \begin{equation}
         e\left( f(a), f(b) \right) \leq kd(a, b) \text{ for all } a, b \in X,
     \end{equation}
@@ -2660,15 +2662,23 @@ In no particular order:
 \end{definition}
 \begin{definition}{Contractions}{contraction}
     A \emph{strict contraction}, henceforth called a \emph{contraction}, is a
-    Lipschitz function for which the Lipschitz constant $ k $ lies in the range
-    $ [0, 1) $.
+    Lipschitz function for which the Lipschitz constant $ k $ is such that $ 0 <
+    k < 1 $. In such cases, the Lipschitz constant of the contraction map is
+    sometimes called the \emph{contraction factor}.
 \end{definition}
 \begin{theorem}{The Contraction Mapping Theorem}{cmt}
-    The \emph{Contraction Mapping Theorem}, also called \emph{Banach's
-    Fixed-Point Theorem}, considers a complete metric space $ (X, d) $ and a
-    contraction $ f \colon X \to X $. Then, $ f $ has a unique fixed point $ y
-    $. For each $ x \in X $, the sequence $ \left( f_n(x) \right)_{n=1}^\infty $
-    converges to $ y $; this is an example of a discrete-time dynamical system.
+    Let $ (X, d) $ be a complete metric space and consider a contraction $ f
+    \colon X \to X $. Then,
+    \begin{itemize}
+        \item $ f $ has a unique fixed point $ y \in X $; and
+        \item for any $ x_0 \in X $, the sequence $ \left( x_n
+            \right)_{n=1}^\infty $ converges to $ y $, where $ x_n =
+            f\left(x_{n-1}\right) $ for $ n \geq 1 $.
+    \end{itemize}
+    This result is due to Stefan Banach\footnote{1892--1945; responsible for the
+    discovery of \href{https://www.york.ac.uk/students/studying/manage/%
+    programmes/module-catalogue/module/MAT00107M/latest}{Functional Analysis}},
+    and is often called the Banach Fixed Point Theorem.
     \begin{proof}
         TODO: see lecture XIV.
     \end{proof}
