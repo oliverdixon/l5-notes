@@ -1,3 +1,6 @@
+**NOTE:** I am no longer a member of the Department of Mathematics at York. As
+such, these Notes are archived as of 16th January, 2024.
+
 # OWD's University of York Mathematics Notes
 
 This repository contains my personal collection of LaTeX-typeset notes based on
